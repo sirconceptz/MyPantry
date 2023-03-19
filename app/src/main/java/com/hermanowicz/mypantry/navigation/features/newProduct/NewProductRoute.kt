@@ -1,0 +1,10 @@
+package com.hermanowicz.mypantry.navigation.features
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import com.hermanowicz.mypantry.navigation.features.newProduct.ui.NewProductScreen
+
+@Composable
+fun NewProductRoute(navController: NavHostController) {
+    NewProductScreen()
+}

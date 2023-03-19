@@ -4,6 +4,7 @@ sealed class MyPantryScreens(
     val route: String
 ) {
     object MyPantry : MyPantryScreens("my_pantry")
+    object NewProduct : MyPantryScreens("new_product")
     object FilterProduct : MyPantryScreens("filter_product")
     object OwnCategories : MyPantryScreens("own_categories")
     object ScanProduct : MyPantryScreens("scan_product")
