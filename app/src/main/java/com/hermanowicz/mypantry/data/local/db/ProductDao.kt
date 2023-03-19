@@ -6,24 +6,21 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
-    @Query("SELECT * FROM product WHERE id = (:id)")
-    fun getProduct(id: Int): ProductEntity
+    @Query("SELECT * FROM Product WHERE id = (:id)")
+    fun observeById(id: Int): Flow<ProductEntity>
 
-    @get:Query("SELECT * FROM product ORDER BY expirationDate ASC")
-    val allProducts: Flow<List<ProductEntity>>
+    @Query("SELECT * FROM Product ORDER BY expirationDate ASC")
+    fun observeAll(): Flow<List<ProductEntity>>
 
     @Insert
-    fun insert(productList: List<ProductEntity>)
+    fun insert(products: List<ProductEntity>)
 
     @Delete
-    fun delete(productList: List<ProductEntity>)
+    fun delete(products: List<ProductEntity>)
 
     @Query("DELETE FROM product")
     fun deleteAll()
 
     @Update
-    fun update(productList: List<ProductEntity>)
-
-    @get:Query("SELECT * FROM product ORDER BY expirationDate ASC")
-    val allProductsAsList: List<ProductEntity>
+    fun update(products: List<ProductEntity>)
 }

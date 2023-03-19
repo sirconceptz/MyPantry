@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.hermanowicz.mypantry.data.local.db.LOCAL_DB_NAME
 import com.hermanowicz.mypantry.data.local.db.LocalDb
+import com.hermanowicz.mypantry.data.local.db.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,12 @@ class AppModule  {
         )
             .fallbackToDestructiveMigration()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(localDb: LocalDb): ProductDao {
+        return localDb.productDao()
     }
 
 }
