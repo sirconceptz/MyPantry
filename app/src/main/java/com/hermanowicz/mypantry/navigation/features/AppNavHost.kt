@@ -13,36 +13,36 @@ import com.hermanowicz.mypantry.navigation.features.settings.SettingsRoute
 import com.hermanowicz.mypantry.navigation.features.storageLocations.StorageLocationsRoute
 
 @Composable
-fun AppNavHost () {
-        val navController = rememberNavController()
+fun AppNavHost() {
+    val navController = rememberNavController()
 
-        NavHost(
-            navController = navController,
-            startDestination = MyPantryScreens.MyPantry.route
-        ) {
-            composable(route = MyPantryScreens.MyPantry.route) {
-                MyPantryRoute(navController)
-            }
-            composable(route = MyPantryScreens.FilterProduct.route) {
-                FilterProductRoute(navController)
-            }
-            composable(route = MyPantryScreens.EditProduct.route) {
-                EditProductRoute(navController)
-            }
-            composable(route = MyPantryScreens.NewProduct.route) {
-                NewProductRoute(navController)
-            }
-            composable(route = MyPantryScreens.OwnCategories.route) {
-                OwnCategoriesRoute(navController)
-            }
-            composable(route = MyPantryScreens.ScanProduct.route) {
-                ScanProductRoute(navController)
-            }
-            composable(route = MyPantryScreens.StorageLocations.route) {
-                StorageLocationsRoute(navController)
-            }
-            composable(route = MyPantryScreens.Settings.route) {
-                SettingsRoute(navController)
-            }
+    NavHost(
+        navController = navController,
+        startDestination = AppScreens.App.route
+    ) {
+        composable(route = AppScreens.App.route) {
+            MyPantryRoute(navController)
         }
+        composable(route = AppScreens.FilterProduct.route) {
+            FilterProductRoute(navController)
+        }
+        composable(route = AppScreens.EditProduct.route) {
+            EditProductRoute(navController)
+        }
+        composable(route = AppScreens.NewProduct.route) {
+            NewProductRoute(navController)
+        }
+        composable(route = AppScreens.OwnCategories.route) {
+            OwnCategoriesRoute(navController)
+        }
+        composable(route = AppScreens.ScanProduct.route) {
+            ScanProductRoute(navController)
+        }
+        composable(route = AppScreens.StorageLocations.route) {
+            StorageLocationsRoute(navController)
+        }
+        composable(route = AppScreens.Settings.route) {
+            SettingsRoute(navController)
+        }
+    }
 }
