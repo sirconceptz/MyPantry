@@ -1,7 +1,7 @@
 package com.hermanowicz.mypantry.data.repository
 
 import com.hermanowicz.mypantry.data.local.model.ProductEntity
-import com.hermanowicz.mypantry.di.local.ProductLocalDataSource
+import com.hermanowicz.mypantry.di.local.dataSource.ProductLocalDataSource
 import com.hermanowicz.mypantry.di.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

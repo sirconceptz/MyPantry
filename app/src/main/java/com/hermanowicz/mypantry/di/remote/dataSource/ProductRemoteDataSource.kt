@@ -1,14 +1,14 @@
-package com.hermanowicz.mypantry.di.local.dataSource
+package com.hermanowicz.mypantry.di.remote.dataSource
 
 import com.hermanowicz.mypantry.data.local.model.ProductEntity
-import com.hermanowicz.mypantry.data.local.dataSource.ProductLocalDataSourceImpl
+import com.hermanowicz.mypantry.data.remote.dataSource.ProductRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
-interface ProductLocalDataSource {
+interface ProductRemoteDataSource {
     fun observeAll() : Flow<List<ProductEntity>>
     fun observeById(id: Int) : Flow<ProductEntity>
     suspend fun insert(products: List<ProductEntity>)
@@ -19,10 +19,10 @@ interface ProductLocalDataSource {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ProductLocalDataSourceModule {
+abstract class ProductRemoteDataSourceModule {
 
     @Binds
-    abstract fun bindMProductLocalDataSource(
-        productLocalDataSourceImpl: ProductLocalDataSourceImpl
-    ): ProductLocalDataSource
+    abstract fun bindMProductRemoteDataSource(
+        productRemoteDataSourceImpl: ProductRemoteDataSourceImpl
+    ): ProductRemoteDataSource
 }
