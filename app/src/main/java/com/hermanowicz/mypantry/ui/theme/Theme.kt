@@ -6,6 +6,9 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Blue200,
@@ -14,11 +17,13 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
-    primary = Blue500,
-    primaryVariant = Blue700,
-    secondary = Blue200,
-    onPrimary = PrimaryColor,
-    background = Blue50
+    primary = PrimaryColor,
+    primaryVariant = PrimaryColor,
+    secondary = Blue700,
+    secondaryVariant = Color.Black,
+    onPrimary = Color.White,
+    background = Blue50,
+
 )
 
 @Composable
@@ -29,7 +34,17 @@ fun MyPantryTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         LightColorPalette
     }
 
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setNavigationBarColor(
+            color = PrimaryColor,
+            darkIcons = false
+        )
+    }
+
     CompositionLocalProvider(LocalSpacing provides Spacing()) {}
+
     MaterialTheme(
         colors = colors,
         typography = Typography,

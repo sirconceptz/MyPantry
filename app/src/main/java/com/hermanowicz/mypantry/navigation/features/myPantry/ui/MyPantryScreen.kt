@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
@@ -22,13 +22,13 @@ import com.hermanowicz.mypantry.ui.theme.Shapes
 @Composable
 fun MyPantryScreen(
     viewModel: MyPantryViewModel = viewModel(),
-    onNewProductClick: () -> Unit,
-    onOwnCategoriesClick: () -> Unit,
-    onStorageLocationsClick: () -> Unit,
+    onNewProduct: () -> Unit,
+    onOwnCategories: () -> Unit,
+    onStorageLocations: () -> Unit,
     onFilterProduct: () -> Unit,
     onEditProduct: () -> Unit,
     onScanProduct: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettings: () -> Unit
 ) {
     val products by viewModel.products.collectAsState()
 
@@ -46,39 +46,25 @@ fun MyPantryScreen(
             Text("MyPantry")
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onNewProductClick) {
-                Text("New product")
-            }
+            ButtonPrimary(text = "New product", onNewProduct)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onOwnCategoriesClick) {
-                Text("Own categories")
-            }
+            ButtonPrimary(text = "Own categories", onOwnCategories)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onStorageLocationsClick) {
-                Text("Storage locations")
-            }
+            ButtonPrimary(text = "Storage locations", onStorageLocations)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onFilterProduct) {
-                Text("Filter product")
-            }
+            ButtonPrimary(text = "Filter product", onFilterProduct)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onEditProduct) {
-                Text("Edit product")
-            }
+            ButtonPrimary(text = "Edit product", onEditProduct)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onScanProduct) {
-                Text("Scan product")
-            }
+            ButtonPrimary(text = "Scan product", onScanProduct)
         }
         item {
-            Button(modifier = Modifier.fillMaxWidth(), onClick = onSettingsClick) {
-                Text("Settings")
-            }
+            ButtonPrimary(text = "Settings", onSettings)
         }
     }
 }

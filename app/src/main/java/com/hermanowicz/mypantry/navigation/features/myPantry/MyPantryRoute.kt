@@ -8,12 +8,12 @@ import com.hermanowicz.mypantry.navigation.features.myPantry.ui.MyPantryScreen
 @Composable
 fun MyPantryRoute(navController: NavHostController) {
     MyPantryScreen(
-        onNewProductClick = { navController.navigate(AppScreens.NewProduct.route) },
-        onOwnCategoriesClick = { navController.navigate(AppScreens.OwnCategories.route) },
-        onStorageLocationsClick = { navController.navigate(AppScreens.StorageLocations.route) },
+        onNewProduct = { navController.navigate(AppScreens.NewProduct.route) },
+        onOwnCategories = { navController.navigate(AppScreens.OwnCategories.route) },
+        onStorageLocations = { navController.navigate(AppScreens.StorageLocations.route) },
         onFilterProduct = { navController.navigate(AppScreens.FilterProduct.route) },
         onEditProduct = { navController.navigate(AppScreens.EditProduct.route) },
-        onSettingsClick = { navController.navigate(AppScreens.Settings.route) },
+        onSettings = { navController.navigate(AppScreens.Settings.route) },
         onScanProduct = { navController.navigate(AppScreens.ScanProduct.route) }
     )
 }
