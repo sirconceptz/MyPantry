@@ -8,6 +8,5 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class BootDeviceReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-
     }
 }

@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-class AppModule  {
+class AppModule {
 
     @Provides
     @Singleton
@@ -32,5 +32,4 @@ class AppModule  {
     fun provideProductDao(localDb: LocalDb): ProductDao {
         return localDb.productDao()
     }
-
 }

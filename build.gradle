@@ -12,4 +12,22 @@ plugins {
     id 'com.android.library' version '7.4.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
     id 'com.google.dagger.hilt.android' version '2.44' apply false
+    id "org.jlleitschuh.gradle.ktlint" version '10.3.0' apply false
+
+}
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint" // Version should be inherited from parent
+
+    repositories {
+        // Required to download KtLint
+        mavenCentral()
+    }
+
+    // Optionally configure plugin
+    ktlint {
+        debug = true
+    }
+}
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

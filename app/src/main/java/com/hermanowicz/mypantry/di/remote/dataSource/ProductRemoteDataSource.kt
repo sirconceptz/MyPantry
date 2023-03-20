@@ -9,8 +9,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRemoteDataSource {
-    fun observeAll() : Flow<List<ProductEntity>>
-    fun observeById(id: Int) : Flow<ProductEntity>
+    fun observeAll(): Flow<List<ProductEntity>>
+    fun observeById(id: Int): Flow<ProductEntity>
     suspend fun insert(products: List<ProductEntity>)
     suspend fun update(products: List<ProductEntity>)
     suspend fun delete(products: List<ProductEntity>)

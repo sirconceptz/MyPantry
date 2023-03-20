@@ -5,7 +5,7 @@ import com.hermanowicz.mypantry.data.model.GroupProduct
 
 class GetGroupProductListUseCase : (List<ProductEntity>) -> List<GroupProduct> {
     override fun invoke(products: List<ProductEntity>): List<GroupProduct> {
-    val groupProductList: MutableList<GroupProduct> = ArrayList()
+        val groupProductList: MutableList<GroupProduct> = ArrayList()
         val toAddGroupProductList: MutableList<GroupProduct> = ArrayList()
         val toRemoveGroupProductList: MutableList<GroupProduct> = ArrayList()
         for (product in products) {

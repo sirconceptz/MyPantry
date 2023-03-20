@@ -12,5 +12,4 @@ class ObserveAllProductsUseCase @Inject constructor(
     override fun invoke(): Flow<List<ProductEntity>> {
         return productRepository.observeAll().distinctUntilChanged()
     }
-
 }
