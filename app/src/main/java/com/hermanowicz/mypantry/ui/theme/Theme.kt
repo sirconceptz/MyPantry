@@ -36,8 +36,7 @@ fun MyPantryTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         LightColorPalette
     }
 
-    CompositionLocalProvider(LocalSpacing provides Spacing()) {
-    }
+    CompositionLocalProvider(LocalSpacing provides Spacing()) {}
     MaterialTheme(
         colors = colors,
         typography = Typography,
