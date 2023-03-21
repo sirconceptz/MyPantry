@@ -1,19 +1,44 @@
 package com.hermanowicz.mypantry.navigation.features.myPantry.ui
 
 import androidx.lifecycle.ViewModel
-import com.hermanowicz.mypantry.data.local.model.ProductEntity
-import com.hermanowicz.mypantry.data.model.GroupProduct
+import androidx.lifecycle.viewModelScope
+import com.hermanowicz.mypantry.di.repository.ProductRepository
+import com.hermanowicz.mypantry.domain.GetGroupProductListUseCase
+import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
+import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class MyPantryViewModel @Inject constructor() : ViewModel() {
-    private val _products = MutableStateFlow<List<GroupProduct>>(
-        listOf(
-            GroupProduct(ProductEntity(id = 0, name = "Test 1"), 5),
-            GroupProduct(ProductEntity(id = 1, name = "Test 2"), 3),
-            GroupProduct(ProductEntity(id = 2, name = "Test 3"), 1)
-        )
-    )
-    val products: StateFlow<List<GroupProduct>> = _products
+@HiltViewModel
+class MyPantryViewModel @Inject constructor(
+    val getGroupProductListUseCase: GetGroupProductListUseCase,
+    val productRepository: ProductRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<MyPantryUiState>(MyPantryUiState.Empty)
+    val uiState: StateFlow<MyPantryUiState> = _uiState
+
+    init {
+        fetchProducts()
+    }
+
+    private fun fetchProducts() {
+        _uiState.value = MyPantryUiState.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                productRepository.observeAll().collect { products ->
+                    _uiState.value = MyPantryUiState.Loaded(
+                        MyPantryModel(
+                            products
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.value = MyPantryUiState.Error(e.toString())
+            }
+        }
+    }
 }

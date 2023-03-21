@@ -2,9 +2,12 @@ package com.hermanowicz.mypantry.domain
 
 import com.hermanowicz.mypantry.data.local.model.ProductEntity
 import com.hermanowicz.mypantry.data.model.GroupProduct
+import timber.log.Timber
+import javax.inject.Inject
 
-class GetGroupProductListUseCase : (List<ProductEntity>) -> List<GroupProduct> {
+class GetGroupProductListUseCase @Inject constructor() : (List<ProductEntity>) -> List<GroupProduct> {
     override fun invoke(products: List<ProductEntity>): List<GroupProduct> {
+        Timber.d("Use case get group size: " + products.size)
         val groupProductList: MutableList<GroupProduct> = ArrayList()
         val toAddGroupProductList: MutableList<GroupProduct> = ArrayList()
         val toRemoveGroupProductList: MutableList<GroupProduct> = ArrayList()
@@ -12,7 +15,8 @@ class GetGroupProductListUseCase : (List<ProductEntity>) -> List<GroupProduct> {
             var testedGroupProduct: GroupProduct? = getGroupIfOnList(product, groupProductList)
             if (testedGroupProduct != null) {
                 toRemoveGroupProductList.add(testedGroupProduct)
-                testedGroupProduct = testedGroupProduct.copy(quantity = testedGroupProduct.quantity + 1)
+                testedGroupProduct =
+                    testedGroupProduct.copy(quantity = testedGroupProduct.quantity + 1)
                 toAddGroupProductList.add(testedGroupProduct)
             } else {
                 val newGroupProduct = GroupProduct(product, 1)
