@@ -1,7 +1,8 @@
 package com.hermanowicz.mypantry.navigation.features.myPantry.state
 
-import com.hermanowicz.mypantry.data.local.model.ProductEntity
+import com.hermanowicz.mypantry.data.model.GroupProduct
 
 data class MyPantryModel(
-    val products: List<ProductEntity> = emptyList()
+    val groupsProduct: List<GroupProduct> = emptyList(),
+    val loadingVisible: Boolean = true
 )

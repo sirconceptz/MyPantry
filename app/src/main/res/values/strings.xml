@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">MyPantry</string>
+    <string name="app_name">My Pantry</string>
+    <string name="loading">Loading…</string>
+    <string name="quantity">Quantity</string>
 </resources>
