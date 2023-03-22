@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.cards.GroupProductItemCard
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
@@ -41,28 +43,31 @@ fun MyPantryScreen(
             ShowProducts(uiModel.groupsProduct)
         }
         item {
-            Text("MyPantry")
+            Text(stringResource(id = R.string.app_name)) // Just for testing, will be delete whole menu below
         }
         item {
-            ButtonPrimary(text = "New product", onNewProduct)
+            ButtonPrimary(text = stringResource(id = R.string.new_product), onNewProduct)
         }
         item {
-            ButtonPrimary(text = "Own categories", onOwnCategories)
+            ButtonPrimary(text = stringResource(id = R.string.own_categories), onOwnCategories)
         }
         item {
-            ButtonPrimary(text = "Storage locations", onStorageLocations)
+            ButtonPrimary(
+                text = stringResource(id = R.string.storage_locations),
+                onStorageLocations
+            )
         }
         item {
-            ButtonPrimary(text = "Filter product", onFilterProduct)
+            ButtonPrimary(text = stringResource(id = R.string.filter_product), onFilterProduct)
         }
         item {
-            ButtonPrimary(text = "Edit product", onEditProduct)
+            ButtonPrimary(text = stringResource(id = R.string.edit_product), onEditProduct)
         }
         item {
-            ButtonPrimary(text = "Scan product", onScanProduct)
+            ButtonPrimary(text = stringResource(id = R.string.scan_product), onScanProduct)
         }
         item {
-            ButtonPrimary(text = "Settings", onSettings)
+            ButtonPrimary(text = stringResource(id = R.string.settings), onSettings)
         }
     }
 }
