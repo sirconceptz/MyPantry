@@ -32,7 +32,7 @@ fun GroupProductItemCard(
         Column(modifier = Modifier.padding(LocalSpacing.current.small)) {
             Text(text = groupProduct.product.name, fontSize = 20.sp)
             Text(
-                text = stringResource(id = R.string.quantity) + groupProduct.quantity.toString(),
+                text = stringResource(id = R.string.quantity) + ": " + groupProduct.quantity.toString(),
                 fontSize = 15.sp
             )
             Row() {

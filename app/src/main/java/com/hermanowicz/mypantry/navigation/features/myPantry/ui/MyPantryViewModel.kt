@@ -8,7 +8,6 @@ import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -30,7 +29,6 @@ class MyPantryViewModel @Inject constructor(
         _uiState.value = MyPantryUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                delay(2000)
                 observeAllProductsUseCase().collect { products ->
                     _uiState.value = MyPantryUiState.Loaded(
                         MyPantryModel(

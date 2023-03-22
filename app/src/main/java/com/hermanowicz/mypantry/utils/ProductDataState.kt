@@ -4,6 +4,7 @@ data class ProductDataState(
     val name: String = "",
     val mainCategory: String = "",
     val detailCategory: String = "",
+    val quantity: String = "",
     val storageLocation: String = "",
     val expirationDate: String = "",
     val productionDate: String = "",
