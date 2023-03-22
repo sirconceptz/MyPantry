@@ -12,7 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.cards.GroupProductItemCard
-import com.hermanowicz.mypantry.components.common.loading.DialogBoxLoading
+import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
+import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
@@ -20,6 +21,7 @@ import timber.log.Timber
 
 @Composable
 fun MyPantryScreen(
+    viewModel: MyPantryViewModel = hiltViewModel(),
     onNewProduct: () -> Unit,
     onOwnCategories: () -> Unit,
     onStorageLocations: () -> Unit,
@@ -28,7 +30,7 @@ fun MyPantryScreen(
     onScanProduct: () -> Unit,
     onSettings: () -> Unit
 ) {
-    val uiModel = updateUi()
+    val uiModel = updateUi(viewModel)
 
     LazyColumn(
         modifier = Modifier
@@ -36,7 +38,7 @@ fun MyPantryScreen(
             .padding(horizontal = LocalSpacing.current.medium)
     ) {
         item {
-            ShowProducts(uiModel)
+            ShowProducts(uiModel.groupsProduct)
         }
         item {
             Text("MyPantry")
@@ -67,7 +69,7 @@ fun MyPantryScreen(
 
 @Composable
 private fun updateUi(
-    viewModel: MyPantryViewModel = hiltViewModel()
+    viewModel: MyPantryViewModel
 ): MyPantryModel {
     when (val state = viewModel.uiState.collectAsState().value) {
         is MyPantryUiState.Empty -> {
@@ -76,7 +78,7 @@ private fun updateUi(
         }
         is MyPantryUiState.Loading -> {
             Timber.d("My Pantry UI State - Loading")
-            DialogBoxLoading()
+            LoadingDialog()
             return MyPantryModel()
         }
         is MyPantryUiState.Loaded -> {
@@ -92,8 +94,8 @@ private fun updateUi(
 }
 
 @Composable
-fun ShowProducts(uiModel: MyPantryModel) {
-    uiModel.groupsProduct.forEach { groupProduct ->
+fun ShowProducts(groupsProduct: List<GroupProduct>) {
+    groupsProduct.forEach { groupProduct ->
         GroupProductItemCard(groupProduct = groupProduct)
     }
 }

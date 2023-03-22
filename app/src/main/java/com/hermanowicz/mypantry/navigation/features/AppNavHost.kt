@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hermanowicz.mypantry.navigation.features.editProduct.EditProductRoute
 import com.hermanowicz.mypantry.navigation.features.filterProduct.FilterProductRoute
 import com.hermanowicz.mypantry.navigation.features.myPantry.MyPantryRoute
+import com.hermanowicz.mypantry.navigation.features.newProduct.NewProductRoute
 import com.hermanowicz.mypantry.navigation.features.ownCategories.OwnCategoriesRoute
 import com.hermanowicz.mypantry.navigation.features.scanProduct.ScanProductRoute
 import com.hermanowicz.mypantry.navigation.features.settings.SettingsRoute

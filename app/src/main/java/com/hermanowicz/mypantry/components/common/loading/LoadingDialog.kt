@@ -32,9 +32,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.ui.theme.Blue500
+import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 
 @Composable
-fun DialogBoxLoading(
+fun LoadingDialog(
     cornerRadius: Dp = 16.dp,
     paddingStart: Dp = 56.dp,
     paddingEnd: Dp = 56.dp,
@@ -48,12 +49,16 @@ fun DialogBoxLoading(
         }
     ) {
         Surface(
-            elevation = 4.dp,
+            elevation = LocalSpacing.current.small,
             shape = RoundedCornerShape(cornerRadius)
         ) {
             Column(
                 modifier = Modifier
-                    .padding(start = paddingStart, end = paddingEnd, top = paddingTop),
+                    .padding(
+                        start = paddingStart,
+                        end = paddingEnd,
+                        top = paddingTop
+                    ),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -103,7 +108,7 @@ fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: 
                 12.dp,
                 brush = Brush.sweepGradient(
                     listOf(
-                        Color.White, // add background color first
+                        Color.White,
                         progressIndicatorColor.copy(alpha = 0.1f),
                         progressIndicatorColor
                     )
@@ -119,6 +124,6 @@ fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: 
 @Composable
 private fun Preview() {
     Column {
-        DialogBoxLoading()
+        LoadingDialog()
     }
 }

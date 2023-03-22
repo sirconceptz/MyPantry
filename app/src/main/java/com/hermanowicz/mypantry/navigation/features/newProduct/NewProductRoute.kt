@@ -1,4 +1,4 @@
-package com.hermanowicz.mypantry.navigation.features
+package com.hermanowicz.mypantry.navigation.features.newProduct
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

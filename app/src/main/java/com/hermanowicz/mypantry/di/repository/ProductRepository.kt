@@ -1,6 +1,6 @@
 package com.hermanowicz.mypantry.di.repository
 
-import com.hermanowicz.mypantry.data.local.model.ProductEntity
+import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.data.repository.ProductRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -9,11 +9,11 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
-    fun observeById(id: Int): Flow<ProductEntity>
-    fun observeAll(): Flow<List<ProductEntity>>
-    suspend fun insert(products: List<ProductEntity>)
-    suspend fun update(products: List<ProductEntity>)
-    suspend fun delete(products: List<ProductEntity>)
+    fun observeById(id: Int): Flow<Product>
+    fun observeAll(): Flow<List<Product>>
+    suspend fun insert(products: List<Product>)
+    suspend fun update(products: List<Product>)
+    suspend fun delete(products: List<Product>)
     suspend fun deleteAll()
 }
 

@@ -1,12 +1,12 @@
 package com.hermanowicz.mypantry.domain
 
-import com.hermanowicz.mypantry.data.local.model.ProductEntity
 import com.hermanowicz.mypantry.data.model.GroupProduct
+import com.hermanowicz.mypantry.data.model.Product
 import timber.log.Timber
 import javax.inject.Inject
 
-class GetGroupProductListUseCase @Inject constructor() : (List<ProductEntity>) -> List<GroupProduct> {
-    override fun invoke(products: List<ProductEntity>): List<GroupProduct> {
+class GetGroupProductListUseCase @Inject constructor() : (List<Product>) -> List<GroupProduct> {
+    override fun invoke(products: List<Product>): List<GroupProduct> {
         Timber.d("Use case get group size: " + products.size)
         val groupProductList: MutableList<GroupProduct> = ArrayList()
         val toAddGroupProductList: MutableList<GroupProduct> = ArrayList()
@@ -32,12 +32,12 @@ class GetGroupProductListUseCase @Inject constructor() : (List<ProductEntity>) -
     }
 
     private fun getGroupIfOnList(
-        product: ProductEntity,
+        product: Product,
         groupProductList: List<GroupProduct>
     ): GroupProduct? {
         var groupProductReturned: GroupProduct? = null
         for (groupProduct in groupProductList) {
-            if (product.copy(id = groupProduct.product.id) == groupProduct.product)
+            if (product == groupProduct.product)
                 groupProductReturned = groupProduct
         }
         return groupProductReturned

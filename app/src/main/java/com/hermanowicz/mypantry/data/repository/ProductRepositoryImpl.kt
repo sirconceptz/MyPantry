@@ -1,9 +1,13 @@
 package com.hermanowicz.mypantry.data.repository
 
-import com.hermanowicz.mypantry.data.local.model.ProductEntity
+import com.hermanowicz.mypantry.data.mapper.toDomainModel
+import com.hermanowicz.mypantry.data.mapper.toEntityModel
+import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.di.local.dataSource.ProductLocalDataSource
 import com.hermanowicz.mypantry.di.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,24 +15,28 @@ import javax.inject.Singleton
 class ProductRepositoryImpl @Inject constructor(
     private val localDataSource: ProductLocalDataSource
 ) : ProductRepository {
-    override fun observeById(id: Int): Flow<ProductEntity> {
-        return localDataSource.observeById(id)
+    override fun observeById(id: Int): Flow<Product> {
+        return localDataSource.observeById(id).filterNotNull().map { productEntity ->
+            productEntity.toDomainModel()
+        }
     }
 
-    override fun observeAll(): Flow<List<ProductEntity>> {
-        return localDataSource.observeAll()
+    override fun observeAll(): Flow<List<Product>> {
+        return localDataSource.observeAll().map { productEntities ->
+            productEntities.map { productEntity -> productEntity.toDomainModel() }
+        }
     }
 
-    override suspend fun insert(products: List<ProductEntity>) {
-        localDataSource.insert(products)
+    override suspend fun insert(products: List<Product>) {
+        localDataSource.insert(products.map { product -> product.toEntityModel() })
     }
 
-    override suspend fun update(products: List<ProductEntity>) {
-        localDataSource.update(products)
+    override suspend fun update(products: List<Product>) {
+        localDataSource.update(products.map { product -> product.toEntityModel() })
     }
 
-    override suspend fun delete(products: List<ProductEntity>) {
-        localDataSource.delete(products)
+    override suspend fun delete(products: List<Product>) {
+        localDataSource.delete(products.map { product -> product.toEntityModel() })
     }
 
     override suspend fun deleteAll() {

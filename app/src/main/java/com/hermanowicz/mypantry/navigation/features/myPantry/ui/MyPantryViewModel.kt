@@ -2,8 +2,8 @@ package com.hermanowicz.mypantry.navigation.features.myPantry.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hermanowicz.mypantry.di.repository.ProductRepository
 import com.hermanowicz.mypantry.domain.GetGroupProductListUseCase
+import com.hermanowicz.mypantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPantryViewModel @Inject constructor(
     val getGroupProductListUseCase: GetGroupProductListUseCase,
-    val productRepository: ProductRepository
+    val observeAllProductsUseCase: ObserveAllProductsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MyPantryUiState>(MyPantryUiState.Empty)
     val uiState: StateFlow<MyPantryUiState> = _uiState
@@ -31,7 +31,7 @@ class MyPantryViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 delay(2000)
-                productRepository.observeAll().collect { products ->
+                observeAllProductsUseCase().collect { products ->
                     _uiState.value = MyPantryUiState.Loaded(
                         MyPantryModel(
                             groupsProduct = getGroupProductListUseCase(products),
