@@ -5,6 +5,6 @@ import androidx.navigation.NavHostController
 import com.hermanowicz.mypantry.navigation.features.newProduct.ui.NewProductScreen
 
 @Composable
-fun NewProductRoute(navController: NavHostController) {
-    NewProductScreen()
+fun NewProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
+    NewProductScreen(openDrawer)
 }

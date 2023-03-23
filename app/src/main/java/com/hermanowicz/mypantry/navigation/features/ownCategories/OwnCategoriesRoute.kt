@@ -5,6 +5,6 @@ import androidx.navigation.NavHostController
 import com.hermanowicz.mypantry.navigation.features.ownCategories.ui.OwnCategoriesScreen
 
 @Composable
-fun OwnCategoriesRoute(navController: NavHostController) {
-    OwnCategoriesScreen()
+fun OwnCategoriesRoute(navController: NavHostController, openDrawer: () -> Unit) {
+    OwnCategoriesScreen(openDrawer)
 }

@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.components.common.cards
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,28 +16,35 @@ import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
+import timber.log.Timber
 
 @Composable
 fun GroupProductItemCard(
-    groupProduct: GroupProduct
+    groupProduct: GroupProduct,
+    onClickGroupProduct: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shapes.medium)
             .padding(
-                vertical = LocalSpacing.current.small,
-                horizontal = LocalSpacing.current.tiny
+                vertical = LocalSpacing.current.small, horizontal = LocalSpacing.current.tiny
             )
     ) {
-        Column(modifier = Modifier.padding(LocalSpacing.current.small)) {
+        Column(
+            modifier = Modifier
+                .padding(LocalSpacing.current.small)
+                .clickable {
+                    Timber.d("group id: " + groupProduct.product.id.toString())
+                    onClickGroupProduct(groupProduct.product.id)
+                }
+        ) {
             Text(text = groupProduct.product.name, fontSize = 20.sp)
             Text(
                 text = stringResource(id = R.string.quantity) + ": " + groupProduct.quantity.toString(),
                 fontSize = 15.sp
             )
-            Row() {
-            }
+            Row() {}
         }
     }
 }

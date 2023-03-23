@@ -6,6 +6,7 @@ sealed class AppScreens(
     object App : AppScreens("my_pantry")
     object NewProduct : AppScreens("new_product")
     object FilterProduct : AppScreens("filter_product")
+    object ProductDetails : AppScreens("filter_product")
     object OwnCategories : AppScreens("own_categories")
     object ScanProduct : AppScreens("scan_product")
     object Settings : AppScreens("settings")

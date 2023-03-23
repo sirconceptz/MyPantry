@@ -5,6 +5,6 @@ import androidx.navigation.NavHostController
 import com.hermanowicz.mypantry.navigation.features.settings.ui.SettingsScreen
 
 @Composable
-fun SettingsRoute(navController: NavHostController) {
-    SettingsScreen()
+fun SettingsRoute(navController: NavHostController, openDrawer: () -> Unit) {
+    SettingsScreen(openDrawer)
 }

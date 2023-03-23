@@ -1,4 +1,4 @@
-package com.hermanowicz.mypantry.navigation.features.settings.ui
+package com.hermanowicz.mypantry.navigation.features.productDetails.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
@@ -8,13 +8,13 @@ import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 
 @Composable
-fun SettingsScreen(openDrawer: () -> Unit) {
+fun ProductDetailsScreen(productId: Int, openDrawer: () -> Unit) {
     TopBarScaffold(
-        topBarText = stringResource(id = R.string.settings),
+        topBarText = stringResource(id = R.string.product_details),
         openDrawer = openDrawer
     ) {
         Column() {
-            Text(text = stringResource(id = R.string.settings))
+            Text(text = productId.toString())
         }
     }
 }

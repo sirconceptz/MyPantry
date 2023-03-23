@@ -18,4 +18,5 @@
     <string name="scan_product">Scan product</string>
     <string name="own_categories">Own categories</string>
     <string name="storage_locations">Storage locations</string>
+    <string name="product_details">Product details</string>
 </resources>

@@ -5,6 +5,6 @@ import androidx.navigation.NavHostController
 import com.hermanowicz.mypantry.navigation.features.scanProduct.ui.ScanProductScreen
 
 @Composable
-fun ScanProductRoute(navController: NavHostController) {
-    ScanProductScreen()
+fun ScanProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
+    ScanProductScreen(openDrawer)
 }
