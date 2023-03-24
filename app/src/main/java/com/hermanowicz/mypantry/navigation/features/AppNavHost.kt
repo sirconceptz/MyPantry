@@ -1,6 +1,5 @@
 package com.hermanowicz.mypantry.navigation.features
 
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalDrawer
@@ -11,6 +10,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.hermanowicz.mypantry.components.common.drawer.AppDrawerView
 import com.hermanowicz.mypantry.navigation.features.editProduct.EditProductRoute
 import com.hermanowicz.mypantry.navigation.features.filterProduct.FilterProductRoute
 import com.hermanowicz.mypantry.navigation.features.myPantry.MyPantryRoute
@@ -38,15 +38,21 @@ fun AppNavHost() {
             drawerState = drawerState,
             gesturesEnabled = true,
             drawerContent = {
-                LazyColumn() {
-                }
+                AppDrawerView(
+                    onMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
+                    onNewProduct = { navController.navigate(AppScreens.NewProduct.route) },
+                    onOwnCategories = { navController.navigate(AppScreens.OwnCategories.route) },
+                    onStorageLocations = { navController.navigate(AppScreens.StorageLocations.route) },
+                    onSettings = { navController.navigate(AppScreens.Settings.route) },
+                    onScanProduct = { navController.navigate(AppScreens.ScanProduct.route) }
+                )
             }
         ) {
             NavHost(
                 navController = navController,
-                startDestination = AppScreens.App.route
+                startDestination = AppScreens.MyPantry.route
             ) {
-                composable(route = AppScreens.App.route) {
+                composable(route = AppScreens.MyPantry.route) {
                     MyPantryRoute(
                         navController = navController,
                         openDrawer = { openDrawer() }
@@ -54,45 +60,51 @@ fun AppNavHost() {
                 }
                 composable(route = AppScreens.FilterProduct.route) {
                     FilterProductRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") { backStackEntry ->
                     ProductDetailsRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = "${AppScreens.EditProduct.route}/{id}") { backStackEntry ->
                     EditProductRoute(
-                        navController,
+                        navController = navController,
                         openDrawer = { openDrawer() }
                     )
                 }
                 composable(route = AppScreens.NewProduct.route) {
                     NewProductRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = AppScreens.OwnCategories.route) {
                     OwnCategoriesRoute(
-                        navController,
+                        navController = navController,
                         openDrawer = { openDrawer() }
                     )
                 }
                 composable(route = AppScreens.ScanProduct.route) {
                     ScanProductRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = AppScreens.StorageLocations.route) {
                     StorageLocationsRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = AppScreens.Settings.route) {
                     SettingsRoute(
-                        navController
-                    ) { openDrawer() }
+                        navController = navController,
+                        openDrawer = { openDrawer() }
+                    )
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.hermanowicz.mypantry.navigation.features
 sealed class AppScreens(
     val route: String
 ) {
-    object App : AppScreens("my_pantry")
+    object MyPantry : AppScreens("my_pantry") // home screen
     object NewProduct : AppScreens("new_product")
     object FilterProduct : AppScreens("filter_product")
     object ProductDetails : AppScreens("filter_product")

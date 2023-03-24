@@ -12,6 +12,7 @@
     <string name="volume">Volume</string>
     <string name="save_products">Save products</string>
     <string name="settings">Settings</string>
+    <string name="my_pantry">My Pantry</string>
     <string name="new_product">New product</string>
     <string name="filter_product">Filter product</string>
     <string name="edit_product">Edit product</string>
@@ -19,4 +20,5 @@
     <string name="own_categories">Own categories</string>
     <string name="storage_locations">Storage locations</string>
     <string name="product_details">Product details</string>
+    <string name="what_do_you_want_to_do">What do you want to do?</string>
 </resources>

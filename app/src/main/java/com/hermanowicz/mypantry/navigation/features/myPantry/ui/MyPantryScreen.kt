@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -12,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
-import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.cards.GroupProductItemCard
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
@@ -26,12 +24,6 @@ import timber.log.Timber
 fun MyPantryScreen(
     viewModel: MyPantryViewModel = hiltViewModel(),
     onClickGroupProduct: (Int) -> Unit,
-    onNewProduct: () -> Unit,
-    onOwnCategories: () -> Unit,
-    onStorageLocations: () -> Unit,
-    onFilterProduct: () -> Unit,
-    onScanProduct: () -> Unit,
-    onSettings: () -> Unit,
     openDrawer: () -> Unit
 ) {
     val uiModel = updateUi(viewModel)
@@ -44,39 +36,6 @@ fun MyPantryScreen(
         ) {
             item {
                 ShowProducts(uiModel.groupsProduct, onClickGroupProduct)
-            }
-            item {
-                Text(stringResource(id = R.string.app_name)) // Just for testing, will be delete whole menu below
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.new_product), onNewProduct
-                )
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.own_categories), onOwnCategories
-                )
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.storage_locations), onStorageLocations
-                )
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.filter_product), onFilterProduct
-                )
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.scan_product), onScanProduct
-                )
-            }
-            item {
-                ButtonPrimary(
-                    text = stringResource(id = R.string.settings), onSettings
-                )
             }
         }
     }

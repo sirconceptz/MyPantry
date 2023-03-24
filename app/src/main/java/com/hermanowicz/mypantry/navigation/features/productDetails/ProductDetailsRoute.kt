@@ -6,7 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.productDetails.ui.ProductDet
 
 @Composable
 fun ProductDetailsRoute(
-    navHostController: NavHostController,
+    navController: NavHostController,
     openDrawer: () -> Unit
 ) {
     ProductDetailsScreen(openDrawer)
