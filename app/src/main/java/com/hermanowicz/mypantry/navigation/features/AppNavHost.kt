@@ -21,7 +21,6 @@ import com.hermanowicz.mypantry.navigation.features.scanProduct.ScanProductRoute
 import com.hermanowicz.mypantry.navigation.features.settings.SettingsRoute
 import com.hermanowicz.mypantry.navigation.features.storageLocations.StorageLocationsRoute
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun AppNavHost() {
@@ -59,17 +58,13 @@ fun AppNavHost() {
                     ) { openDrawer() }
                 }
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") { backStackEntry ->
-                    val productId = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
-                    Timber.d("Received id: $productId")
                     ProductDetailsRoute(
-                        navController,
-                        productId
+                        navController
                     ) { openDrawer() }
                 }
                 composable(route = "${AppScreens.EditProduct.route}/{id}") { backStackEntry ->
-                    val productId = backStackEntry.arguments?.getString("id")?.toInt() ?: 0
                     EditProductRoute(
-                        navController, productId,
+                        navController,
                         openDrawer = { openDrawer() }
                     )
                 }

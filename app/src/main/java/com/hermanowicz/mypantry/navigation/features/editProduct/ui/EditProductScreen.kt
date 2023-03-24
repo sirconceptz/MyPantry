@@ -19,7 +19,6 @@ import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 
 @Composable
 fun EditProductScreen(
-    productId: Int,
     openDrawer: () -> Unit,
     viewModel: EditProductViewModel = hiltViewModel()
 ) {

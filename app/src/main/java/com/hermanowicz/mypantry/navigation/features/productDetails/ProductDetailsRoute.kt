@@ -7,8 +7,7 @@ import com.hermanowicz.mypantry.navigation.features.productDetails.ui.ProductDet
 @Composable
 fun ProductDetailsRoute(
     navHostController: NavHostController,
-    productId: Int,
     openDrawer: () -> Unit
 ) {
-    ProductDetailsScreen(productId, openDrawer)
+    ProductDetailsScreen(openDrawer)
 }

@@ -33,7 +33,6 @@ import timber.log.Timber
 
 @Composable
 fun ProductDetailsScreen(
-    productId: Int,
     openDrawer: () -> Unit,
     viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
@@ -48,9 +47,6 @@ fun ProductDetailsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
-            item {
-                Text(text = productId.toString())
-            }
             item {
                 ProductDetailsView(uiModel.groupProduct)
             }
