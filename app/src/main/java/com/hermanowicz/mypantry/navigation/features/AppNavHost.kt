@@ -6,9 +6,11 @@ import androidx.compose.material.ModalDrawer
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hermanowicz.mypantry.components.common.drawer.AppDrawerView
 import com.hermanowicz.mypantry.navigation.features.editProduct.EditProductRoute
@@ -34,77 +36,69 @@ fun AppNavHost() {
                 drawerState.open()
             }
         }
-        ModalDrawer(
-            drawerState = drawerState,
-            gesturesEnabled = true,
-            drawerContent = {
-                AppDrawerView(
-                    onMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
-                    onNewProduct = { navController.navigate(AppScreens.NewProduct.route) },
-                    onOwnCategories = { navController.navigate(AppScreens.OwnCategories.route) },
-                    onStorageLocations = { navController.navigate(AppScreens.StorageLocations.route) },
-                    onSettings = { navController.navigate(AppScreens.Settings.route) },
-                    onScanProduct = { navController.navigate(AppScreens.ScanProduct.route) }
-                )
+        val closeDrawer = {
+            scope.launch {
+                drawerState.close()
             }
-        ) {
+        }
+        
+        ModalDrawer(drawerState = drawerState, gesturesEnabled = true, drawerContent = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination?.route ?: ""
+
+            AppDrawerView(selected = currentDestination, onMyPantry = {
+                navController.navigate(AppScreens.MyPantry.route)
+                closeDrawer()
+            }, onNewProduct = {
+                navController.navigate(AppScreens.NewProduct.route)
+                closeDrawer()
+            }, onOwnCategories = {
+                navController.navigate(AppScreens.OwnCategories.route)
+                closeDrawer()
+            }, onStorageLocations = {
+                navController.navigate(AppScreens.StorageLocations.route)
+                closeDrawer()
+            }, onSettings = {
+                navController.navigate(AppScreens.Settings.route)
+                closeDrawer()
+            }, onScanProduct = {
+                navController.navigate(AppScreens.ScanProduct.route)
+                closeDrawer()
+            })
+        }) {
             NavHost(
-                navController = navController,
-                startDestination = AppScreens.MyPantry.route
+                navController = navController, startDestination = AppScreens.MyPantry.route
             ) {
                 composable(route = AppScreens.MyPantry.route) {
-                    MyPantryRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    MyPantryRoute(navController = navController, openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.FilterProduct.route) {
-                    FilterProductRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    FilterProductRoute(navController = navController, openDrawer = { openDrawer() })
                 }
-                composable(route = "${AppScreens.ProductDetails.route}/{id}") { backStackEntry ->
+                composable(route = "${AppScreens.ProductDetails.route}/{id}") {
                     ProductDetailsRoute(
                         navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                        openDrawer = { openDrawer() })
                 }
-                composable(route = "${AppScreens.EditProduct.route}/{id}") { backStackEntry ->
-                    EditProductRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                composable(route = "${AppScreens.EditProduct.route}/{id}") {
+                    EditProductRoute(navController = navController, openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.NewProduct.route) {
-                    NewProductRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    NewProductRoute(navController = navController, openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.OwnCategories.route) {
-                    OwnCategoriesRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    OwnCategoriesRoute(navController = navController, openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.ScanProduct.route) {
-                    ScanProductRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    ScanProductRoute(navController = navController, openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.StorageLocations.route) {
                     StorageLocationsRoute(
                         navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                        openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.Settings.route) {
-                    SettingsRoute(
-                        navController = navController,
-                        openDrawer = { openDrawer() }
-                    )
+                    SettingsRoute(navController = navController, openDrawer = { openDrawer() })
                 }
             }
         }

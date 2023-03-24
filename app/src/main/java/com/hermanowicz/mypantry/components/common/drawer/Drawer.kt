@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.navigation.features.AppScreens
+import com.hermanowicz.mypantry.ui.theme.Blue200
 import com.hermanowicz.mypantry.ui.theme.GradientCenter
 import com.hermanowicz.mypantry.ui.theme.GradientStart
 import com.hermanowicz.mypantry.ui.theme.GradientStop
@@ -34,6 +38,7 @@ import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 
 @Composable
 fun AppDrawerView(
+    selected: String,
     onMyPantry: () -> Unit,
     onNewProduct: () -> Unit,
     onOwnCategories: () -> Unit,
@@ -41,54 +46,81 @@ fun AppDrawerView(
     onSettings: () -> Unit,
     onScanProduct: () -> Unit
 ) {
+    val itemList = listOf(
+        DrawerMenuItemModel(
+            route = AppScreens.MyPantry.route,
+            iconDrawableId = R.drawable.ic_my_pantry_shortcut,
+            text = stringResource(id = R.string.my_pantry),
+            onItemClick = onMyPantry
+        ),
+        DrawerMenuItemModel(
+            route = AppScreens.NewProduct.route,
+            iconDrawableId = R.drawable.ic_add_item,
+            text = stringResource(id = R.string.new_product),
+            onItemClick = onNewProduct
+        ),
+        DrawerMenuItemModel(
+            route = AppScreens.ScanProduct.route,
+            iconDrawableId = R.drawable.ic_scan_qr_code,
+            text = stringResource(id = R.string.scan_product),
+            onItemClick = onScanProduct
+        ),
+        DrawerMenuItemModel(
+            route = AppScreens.OwnCategories.route,
+            iconDrawableId = R.drawable.ic_categories_storages,
+            text = stringResource(id = R.string.own_categories),
+            onItemClick = onOwnCategories
+        ),
+        DrawerMenuItemModel(
+            route = AppScreens.StorageLocations.route,
+            iconDrawableId = R.drawable.ic_categories_storages,
+            text = stringResource(id = R.string.storage_locations),
+            onItemClick = onStorageLocations
+        ),
+        DrawerMenuItemModel(
+            route = AppScreens.Settings.route,
+            iconDrawableId = R.drawable.ic_app_settings,
+            text = stringResource(id = R.string.settings),
+            onItemClick = onSettings
+        )
+    )
+
     LazyColumn() {
         item {
             DrawerHeader()
         }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_my_pantry_shortcut,
-                text = stringResource(id = R.string.my_pantry),
-                onItemClick = onMyPantry
-            )
-        }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_add_item,
-                text = stringResource(id = R.string.new_product),
-                onItemClick = onNewProduct
-            )
-        }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_scan_qr_code,
-                text = stringResource(id = R.string.scan_product),
-                onItemClick = onScanProduct
-            )
-        }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_categories_storages,
-                text = stringResource(id = R.string.own_categories),
-                onItemClick = onOwnCategories
-            )
-        }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_categories_storages,
-                text = stringResource(id = R.string.storage_locations),
-                onItemClick = onStorageLocations
-            )
-        }
-        item {
-            DrawerMenuItem(
-                iconDrawableId = R.drawable.ic_app_settings,
-                text = stringResource(id = R.string.settings),
-                onItemClick = onSettings
-            )
+        itemList.forEach { item ->
+            val isSelected = selected.contains(item.route)
+
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                        .clickable {
+                            item.onItemClick
+                        },
+                    backgroundColor = if (isSelected) Blue200 else Color.White,
+                    elevation = 0.dp,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    DrawerMenuItem(
+                        iconDrawableId = item.iconDrawableId,
+                        text = item.text,
+                        onItemClick = item.onItemClick
+                    )
+                }
+            }
         }
     }
 }
+
+data class DrawerMenuItemModel(
+    val route: String,
+    val iconDrawableId: Int,
+    val text: String,
+    val onItemClick: () -> Unit
+)
 
 @Composable
 private fun DrawerHeader() {
