@@ -36,7 +36,7 @@ fun CircleCheckbox(
         Icon(
             imageVector = imageVector, tint = tint,
             modifier = Modifier.background(White, shape = CircleShape),
-            contentDescription = "checkbox"
+            contentDescription = null
         )
     }
 }

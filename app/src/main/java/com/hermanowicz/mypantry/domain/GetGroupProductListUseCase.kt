@@ -2,12 +2,10 @@ package com.hermanowicz.mypantry.domain
 
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.data.model.Product
-import timber.log.Timber
 import javax.inject.Inject
 
 class GetGroupProductListUseCase @Inject constructor() : (List<Product>) -> List<GroupProduct> {
     override fun invoke(products: List<Product>): List<GroupProduct> {
-        Timber.d("Use case get group size: " + products.size)
         val groupProductList: MutableList<GroupProduct> = ArrayList()
         val toAddGroupProductList: MutableList<GroupProduct> = ArrayList()
         val toRemoveGroupProductList: MutableList<GroupProduct> = ArrayList()
