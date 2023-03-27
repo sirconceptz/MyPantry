@@ -25,4 +25,9 @@
     <string name="salt">Salt</string>
     <string name="vege">Vege</string>
     <string name="bio">Bio</string>
+    <string name="product_attributes">Product attributes</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="main_category">Main category</string>
+    <string name="detail_category">Detail category</string>
 </resources>

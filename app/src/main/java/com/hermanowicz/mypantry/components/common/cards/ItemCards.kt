@@ -9,15 +9,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.components.common.checkbox.CircleCheckbox
+import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
-import timber.log.Timber
+import com.hermanowicz.mypantry.utils.ProductDataState
 
 @Composable
 fun GroupProductItemCard(
@@ -28,15 +31,12 @@ fun GroupProductItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(Shapes.medium)
-            .padding(
-                vertical = LocalSpacing.current.small, horizontal = LocalSpacing.current.tiny
-            )
+            .padding(vertical = LocalSpacing.current.small, horizontal = LocalSpacing.current.tiny)
     ) {
         Column(
             modifier = Modifier
                 .padding(LocalSpacing.current.small)
                 .clickable {
-                    Timber.d("group id: " + groupProduct.product.id.toString())
                     onClickGroupProduct(groupProduct.product.id)
                 }
         ) {
@@ -46,29 +46,95 @@ fun GroupProductItemCard(
                 fontSize = 15.sp
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
             ) {
-                if (groupProduct.product.hasSugar)
-                    Text(
-                        text = stringResource(R.string.sugar),
-                        fontSize = 14.sp
+                if (groupProduct.product.hasSugar) Text(
+                    text = stringResource(R.string.sugar), fontSize = 14.sp
+                )
+                if (groupProduct.product.hasSalt) Text(
+                    text = stringResource(R.string.salt), fontSize = 14.sp
+                )
+                if (groupProduct.product.isVege) Text(
+                    text = stringResource(R.string.vege), fontSize = 14.sp
+                )
+                if (groupProduct.product.isBio) Text(
+                    text = stringResource(R.string.bio), fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductDetailsAttributesCard(
+    productDataState: ProductDataState,
+    onIsVegeChange: (Boolean) -> Unit,
+    onIsBioChange: (Boolean) -> Unit,
+    onHasSugarChange: (Boolean) -> Unit,
+    onHasSaltChange: (Boolean) -> Unit
+) {
+    Column() {
+        Text(text = stringResource(id = R.string.product_attributes))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(Shapes.medium)
+                .padding(horizontal = LocalSpacing.current.tiny)
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    vertical = LocalSpacing.current.small,
+                    horizontal = LocalSpacing.current.medium
+                ),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = stringResource(R.string.vege))
+                    CircleCheckbox(
+                        selected = productDataState.isVege,
+                        onChecked = { onIsVegeChange(!productDataState.isVege) }
                     )
-                if (groupProduct.product.hasSalt)
-                    Text(
-                        text = stringResource(R.string.salt),
-                        fontSize = 14.sp
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = stringResource(R.string.bio))
+                    CircleCheckbox(
+                        selected = productDataState.isBio,
+                        onChecked = { onIsBioChange(!productDataState.isBio) }
                     )
-                if (groupProduct.product.isVege)
-                    Text(
-                        text = stringResource(R.string.vege),
-                        fontSize = 14.sp
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = stringResource(R.string.sugar))
+                    CircleCheckbox(
+                        selected = productDataState.hasSugar,
+                        onChecked = { onHasSugarChange(!productDataState.isVege) }
                     )
-                if (groupProduct.product.isBio)
-                    Text(
-                        text = stringResource(R.string.bio),
-                        fontSize = 14.sp
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = stringResource(R.string.salt))
+                    CircleCheckbox(
+                        selected = productDataState.hasSalt,
+                        onChecked = { onHasSaltChange(!productDataState.hasSalt) }
                     )
+                }
             }
         }
     }

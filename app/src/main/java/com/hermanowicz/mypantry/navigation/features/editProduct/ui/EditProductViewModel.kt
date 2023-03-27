@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
-import com.hermanowicz.mypantry.domain.SaveProductsUseCase
+import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.mypantry.utils.ProductDataState
 import com.hermanowicz.mypantry.utils.RegexFormats
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
     private val observeProductByIdUseCase: ObserveProductByIdUseCase,
-    private val updateProductsUseCase: SaveProductsUseCase
+    private val updateProductsUseCase: UpdateProductsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -114,5 +114,21 @@ class EditProductViewModel @Inject constructor(
     fun onVolumeChange(volume: String) {
         if (volume.matches(RegexFormats.NUMBER.regex))
             _productDataState.update { it.copy(volume = volume) }
+    }
+
+    fun onIsVegeChange(isVege: Boolean) {
+        _productDataState.update { it.copy(isVege = isVege) }
+    }
+
+    fun onIsBioChange(isBio: Boolean) {
+        _productDataState.update { it.copy(isBio = isBio) }
+    }
+
+    fun onHasSugarChange(hasSugar: Boolean) {
+        _productDataState.update { it.copy(hasSugar = hasSugar) }
+    }
+
+    fun onHasSaltChange(hasSalt: Boolean) {
+        _productDataState.update { it.copy(hasSalt = hasSalt) }
     }
 }

@@ -90,4 +90,20 @@ class NewProductViewModel @Inject constructor(
         if (volume.matches(numberPattern))
             _productDataState.update { it.copy(volume = volume) }
     }
+
+    fun onIsVegeChange(isVege: Boolean) {
+        _productDataState.update { it.copy(isVege = isVege) }
+    }
+
+    fun onIsBioChange(isBio: Boolean) {
+        _productDataState.update { it.copy(isBio = isBio) }
+    }
+
+    fun onHasSugarChange(hasSugar: Boolean) {
+        _productDataState.update { it.copy(hasSugar = hasSugar) }
+    }
+
+    fun onHasSaltChange(hasSalt: Boolean) {
+        _productDataState.update { it.copy(hasSalt = hasSalt) }
+    }
 }

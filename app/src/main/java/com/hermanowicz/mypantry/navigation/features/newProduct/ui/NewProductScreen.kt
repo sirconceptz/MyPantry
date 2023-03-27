@@ -44,7 +44,11 @@ fun NewProductScreen(
                     onHealingPropertiesChange = { viewModel.onHealingPropertiesChange(it) },
                     onDosageChange = { viewModel.onDosageChange(it) },
                     onWeightChange = { viewModel.onWeightChange(it) },
-                    onVolumeChange = { viewModel.onVolumeChange(it) }
+                    onVolumeChange = { viewModel.onVolumeChange(it) },
+                    onIsVegeChange = { viewModel.onIsVegeChange(it) },
+                    onIsBioChange = { viewModel.onIsBioChange(it) },
+                    onHasSugarChange = { viewModel.onHasSugarChange(it) },
+                    onHasSaltChange = { viewModel.onHasSaltChange(it) }
                 )
             }
             item {

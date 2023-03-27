@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.utils.ProductDataState
@@ -24,7 +25,11 @@ fun ProductForm(
     onHealingPropertiesChange: (String) -> Unit,
     onDosageChange: (String) -> Unit,
     onWeightChange: (String) -> Unit,
-    onVolumeChange: (String) -> Unit
+    onVolumeChange: (String) -> Unit,
+    onIsVegeChange: (Boolean) -> Unit,
+    onIsBioChange: (Boolean) -> Unit,
+    onHasSugarChange: (Boolean) -> Unit,
+    onHasSaltChange: (Boolean) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -86,6 +91,13 @@ fun ProductForm(
             textEvent = onVolumeChange,
             placeholder = stringResource(id = R.string.volume),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+        )
+        ProductDetailsAttributesCard(
+            productDataState = productDataState,
+            onIsVegeChange = onIsVegeChange,
+            onIsBioChange = onIsBioChange,
+            onHasSugarChange = onHasSugarChange,
+            onHasSaltChange = onHasSaltChange
         )
     }
 }

@@ -69,8 +69,88 @@ fun ProductDetailsView(groupProduct: GroupProduct) {
                 value = groupProduct.product.name
             )
             DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.main_category),
+                value = groupProduct.product.mainCategory
+            )
             DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.detail_category),
+                value = groupProduct.product.detailCategory
+            )
             DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.expiration_date),
+                value = groupProduct.product.expirationDate
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.production_date),
+                value = groupProduct.product.productionDate
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.production_date),
+                value = groupProduct.product.productionDate
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.storage_locations),
+                value = groupProduct.product.storageLocation
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.composition),
+                value = groupProduct.product.composition
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.healing_properties),
+                value = groupProduct.product.healingProperties
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.dosage),
+                value = groupProduct.product.dosage
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.volume),
+                value = if (groupProduct.product.volume == 0) "" else groupProduct.product.volume.toString()
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.weight),
+                value = if (groupProduct.product.weight == 0) "" else groupProduct.product.weight.toString()
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.vege),
+                value = if (groupProduct.product.isVege) stringResource(id = R.string.yes) else stringResource(
+                    id = R.string.no
+                )
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.bio),
+                value = if (groupProduct.product.isBio) stringResource(id = R.string.yes) else stringResource(
+                    id = R.string.no
+                )
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.sugar),
+                value = if (groupProduct.product.hasSugar) stringResource(id = R.string.yes) else stringResource(
+                    id = R.string.no
+                )
+            )
+            DividerCardInside()
+            ProductDetailItem(
+                label = stringResource(id = R.string.salt),
+                value = if (groupProduct.product.hasSalt) stringResource(id = R.string.yes) else stringResource(
+                    id = R.string.no
+                )
+            )
         }
     }
 }
