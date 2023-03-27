@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.navigation.features
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalDrawer
@@ -41,31 +42,36 @@ fun AppNavHost() {
                 drawerState.close()
             }
         }
-        
-        ModalDrawer(drawerState = drawerState, gesturesEnabled = true, drawerContent = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination?.route ?: ""
 
-            AppDrawerView(selected = currentDestination, onMyPantry = {
-                navController.navigate(AppScreens.MyPantry.route)
-                closeDrawer()
-            }, onNewProduct = {
-                navController.navigate(AppScreens.NewProduct.route)
-                closeDrawer()
-            }, onOwnCategories = {
-                navController.navigate(AppScreens.OwnCategories.route)
-                closeDrawer()
-            }, onStorageLocations = {
-                navController.navigate(AppScreens.StorageLocations.route)
-                closeDrawer()
-            }, onSettings = {
-                navController.navigate(AppScreens.Settings.route)
-                closeDrawer()
-            }, onScanProduct = {
-                navController.navigate(AppScreens.ScanProduct.route)
-                closeDrawer()
-            })
-        }) {
+        ModalDrawer(
+            drawerState = drawerState,
+            drawerShape = RoundedCornerShape(0),
+            gesturesEnabled = true,
+            drawerContent = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination?.route ?: ""
+
+                AppDrawerView(selected = currentDestination, onMyPantry = {
+                    navController.navigate(AppScreens.MyPantry.route)
+                    closeDrawer()
+                }, onNewProduct = {
+                    navController.navigate(AppScreens.NewProduct.route)
+                    closeDrawer()
+                }, onOwnCategories = {
+                    navController.navigate(AppScreens.OwnCategories.route)
+                    closeDrawer()
+                }, onStorageLocations = {
+                    navController.navigate(AppScreens.StorageLocations.route)
+                    closeDrawer()
+                }, onSettings = {
+                    navController.navigate(AppScreens.Settings.route)
+                    closeDrawer()
+                }, onScanProduct = {
+                    navController.navigate(AppScreens.ScanProduct.route)
+                    closeDrawer()
+                })
+            }
+        ) {
             NavHost(
                 navController = navController, startDestination = AppScreens.MyPantry.route
             ) {
@@ -78,7 +84,8 @@ fun AppNavHost() {
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") {
                     ProductDetailsRoute(
                         navController = navController,
-                        openDrawer = { openDrawer() })
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = "${AppScreens.EditProduct.route}/{id}") {
                     EditProductRoute(navController = navController, openDrawer = { openDrawer() })
@@ -95,7 +102,8 @@ fun AppNavHost() {
                 composable(route = AppScreens.StorageLocations.route) {
                     StorageLocationsRoute(
                         navController = navController,
-                        openDrawer = { openDrawer() })
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = AppScreens.Settings.route) {
                     SettingsRoute(navController = navController, openDrawer = { openDrawer() })

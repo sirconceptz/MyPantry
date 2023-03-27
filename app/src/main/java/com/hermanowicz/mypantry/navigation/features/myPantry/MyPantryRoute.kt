@@ -11,6 +11,9 @@ fun MyPantryRoute(navController: NavHostController, openDrawer: () -> Unit) {
         onClickGroupProduct = {
             navController.navigate("${AppScreens.ProductDetails.route}/$it")
         },
+        onClickFilterProduct = {
+            navController.navigate(AppScreens.FilterProduct.route)
+        },
         openDrawer = openDrawer
     )
 }

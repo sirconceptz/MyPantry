@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.components.common.topBarScaffold
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 fun TopBarScaffold(
     topBarText: String,
     openDrawer: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
     Scaffold(topBar = {
@@ -28,6 +30,7 @@ fun TopBarScaffold(
                     Icon(Icons.Filled.Menu, null)
                 }
             },
+            actions = actions,
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = Color.White,
             elevation = 10.dp

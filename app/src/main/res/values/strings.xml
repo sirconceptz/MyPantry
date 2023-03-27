@@ -21,4 +21,8 @@
     <string name="storage_locations">Storage locations</string>
     <string name="product_details">Product details</string>
     <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="sugar">Sugar</string>
+    <string name="salt">Salt</string>
+    <string name="vege">Vege</string>
+    <string name="bio">Bio</string>
 </resources>

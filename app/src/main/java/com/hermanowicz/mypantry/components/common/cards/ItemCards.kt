@@ -1,6 +1,7 @@
 package com.hermanowicz.mypantry.components.common.cards
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +45,31 @@ fun GroupProductItemCard(
                 text = stringResource(id = R.string.quantity) + ": " + groupProduct.quantity.toString(),
                 fontSize = 15.sp
             )
-            Row() {}
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (groupProduct.product.hasSugar)
+                    Text(
+                        text = stringResource(R.string.sugar),
+                        fontSize = 14.sp
+                    )
+                if (groupProduct.product.hasSalt)
+                    Text(
+                        text = stringResource(R.string.salt),
+                        fontSize = 14.sp
+                    )
+                if (groupProduct.product.isVege)
+                    Text(
+                        text = stringResource(R.string.vege),
+                        fontSize = 14.sp
+                    )
+                if (groupProduct.product.isBio)
+                    Text(
+                        text = stringResource(R.string.bio),
+                        fontSize = 14.sp
+                    )
+            }
         }
     }
 }

@@ -4,9 +4,14 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,11 +29,24 @@ import timber.log.Timber
 fun MyPantryScreen(
     viewModel: MyPantryViewModel = hiltViewModel(),
     onClickGroupProduct: (Int) -> Unit,
+    onClickFilterProduct: () -> Unit,
     openDrawer: () -> Unit
 ) {
     val uiModel = updateUi(viewModel)
 
-    TopBarScaffold(topBarText = stringResource(id = R.string.app_name), openDrawer = openDrawer) {
+    TopBarScaffold(
+        topBarText = stringResource(id = R.string.app_name),
+        openDrawer = openDrawer,
+        actions = {
+            IconButton(onClick = onClickFilterProduct, content = {
+                Icon(
+                    imageVector = Icons.Rounded.Search,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            })
+        }
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
