@@ -3,7 +3,7 @@ package com.hermanowicz.mypantry.data.local.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Product")
+@Entity(tableName = "products")
 data class ProductEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
