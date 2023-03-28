@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.hermanowicz.mypantry.data.local.model.CategoriesEntity
-import com.hermanowicz.mypantry.data.local.model.StorageLocationEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

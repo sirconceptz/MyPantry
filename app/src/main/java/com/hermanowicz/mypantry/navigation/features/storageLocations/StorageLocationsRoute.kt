@@ -6,5 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.storageLocations.ui.StorageL
 
 @Composable
 fun StorageLocationsRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    StorageLocationsScreen(openDrawer)
+    StorageLocationsScreen(
+        openDrawer = openDrawer
+    )
 }

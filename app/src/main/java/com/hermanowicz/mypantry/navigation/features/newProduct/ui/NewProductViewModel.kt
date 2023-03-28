@@ -25,7 +25,7 @@ class NewProductViewModel @Inject constructor(
     private val _productDataState = MutableStateFlow(ProductDataState())
     var productDataState: StateFlow<ProductDataState> = _productDataState.asStateFlow()
 
-    val numberPattern = Regex("^\\d+\$")
+    private val numberPattern = Regex("^\\d+\$")
 
     fun onSaveClick() {
         val product = Product(
@@ -44,8 +44,9 @@ class NewProductViewModel @Inject constructor(
         )
         viewModelScope.launch(Dispatchers.IO) {
             val products: MutableList<Product> = mutableListOf()
-            val quantity = productDataState.value.quantity.toInt()
-            for (i in 0..quantity) {
+            val quantity =
+                if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
+            for (i in 1..quantity) {
                 products.add(product)
             }
             saveProductsUseCase(products)
