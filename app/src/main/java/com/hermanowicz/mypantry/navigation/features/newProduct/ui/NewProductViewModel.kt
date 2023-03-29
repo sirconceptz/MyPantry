@@ -107,4 +107,17 @@ class NewProductViewModel @Inject constructor(
     fun onHasSaltChange(hasSalt: Boolean) {
         _productDataState.update { it.copy(hasSalt = hasSalt) }
     }
+
+    fun showMainCategoryDropdown(show: Boolean) {
+        _productDataState.update { it.copy(showMainCategoryDropdown = show) }
+    }
+
+    fun onMainCategoryChange(mainCategory: String) {
+        _productDataState.update {
+            it.copy(
+                mainCategory = mainCategory,
+                showMainCategoryDropdown = false
+            )
+        }
+    }
 }

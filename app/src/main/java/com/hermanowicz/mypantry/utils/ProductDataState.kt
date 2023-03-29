@@ -2,7 +2,8 @@ package com.hermanowicz.mypantry.utils
 
 data class ProductDataState(
     val name: String = "",
-    val mainCategory: String = "",
+    var showMainCategoryDropdown: Boolean = false,
+    var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
     val detailCategory: String = "",
     val quantity: String = "",
     val storageLocation: String = "",

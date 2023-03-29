@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
+import com.hermanowicz.mypantry.components.common.dropdown.DropdownMainCategory
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.utils.ProductDataState
@@ -18,6 +19,8 @@ import com.hermanowicz.mypantry.utils.ProductDataState
 fun ProductForm(
     productDataState: ProductDataState,
     onNameChange: (String) -> Unit,
+    showMainCategoryDropdown: (Boolean) -> Unit,
+    onMainCategoryChange: (String) -> Unit,
     onExpirationDateChange: (String) -> Unit,
     onProductionDateChange: (String) -> Unit,
     onQuantityChange: (String) -> Unit,
@@ -40,6 +43,13 @@ fun ProductForm(
             labelText = stringResource(id = R.string.name),
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name)
+        )
+        DropdownMainCategory(
+            textRight = productDataState.mainCategory,
+            onClick = { showMainCategoryDropdown(true) },
+            onChange = onMainCategoryChange,
+            visibleDropdown = productDataState.showMainCategoryDropdown,
+            onDismiss = { showMainCategoryDropdown(false) }
         )
         TextFieldAndLabel(
             textfieldText = productDataState.expirationDate,

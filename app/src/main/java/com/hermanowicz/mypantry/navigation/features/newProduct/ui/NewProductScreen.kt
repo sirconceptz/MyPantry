@@ -37,6 +37,8 @@ fun NewProductScreen(
                 ProductForm(
                     productDataState,
                     onNameChange = { viewModel.onNameChange(it) },
+                    showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(!productDataState.showMainCategoryDropdown) },
+                    onMainCategoryChange = { viewModel.onMainCategoryChange(it) },
                     onExpirationDateChange = { viewModel.onExpirationDateChange(it) },
                     onProductionDateChange = { viewModel.onProductionDateChange(it) },
                     onQuantityChange = { viewModel.onQuantityChange(it) },

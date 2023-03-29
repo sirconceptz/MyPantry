@@ -37,6 +37,7 @@ fun EditProductScreen(
                 ProductForm(
                     productDataState,
                     onNameChange = { viewModel.onNameChange(it) },
+                    onMainCategoryChange = { viewModel.onMainCategoryChange(it) },
                     onExpirationDateChange = { viewModel.onExpirationDateChange(it) },
                     onProductionDateChange = { viewModel.onProductionDateChange(it) },
                     onQuantityChange = { viewModel.onQuantityChange(it) },
@@ -48,7 +49,8 @@ fun EditProductScreen(
                     onIsVegeChange = { viewModel.onIsVegeChange(it) },
                     onIsBioChange = { viewModel.onIsBioChange(it) },
                     onHasSugarChange = { viewModel.onHasSugarChange(it) },
-                    onHasSaltChange = { viewModel.onHasSaltChange(it) }
+                    onHasSaltChange = { viewModel.onHasSaltChange(it) },
+                    showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(it) }
                 )
             }
             item {
