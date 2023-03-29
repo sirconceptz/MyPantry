@@ -23,6 +23,7 @@ import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonTransparent
 import com.hermanowicz.mypantry.components.common.checkbox.CircleCheckbox
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
+import com.hermanowicz.mypantry.data.model.Category
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
@@ -105,6 +106,45 @@ fun StorageLocationItemCard(
                 Spacer(modifier = Modifier.height(30.dp))
                 ButtonTransparent(text = stringResource(id = R.string.delete)) {
                     onClickDeleteStorageLocation(storageLocation)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CategoryItemCard(
+    category: Category,
+    isEditMode: Boolean,
+    onClickDeleteCategory: (Category) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(Shapes.medium)
+            .padding(vertical = LocalSpacing.current.small, horizontal = LocalSpacing.current.tiny)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(LocalSpacing.current.small)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = category.name,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = category.description,
+                fontSize = 15.sp,
+                textAlign = TextAlign.Justify
+            )
+            if (isEditMode) {
+                Spacer(modifier = Modifier.height(30.dp))
+                ButtonTransparent(text = stringResource(id = R.string.delete)) {
+                    onClickDeleteCategory(category)
                 }
             }
         }

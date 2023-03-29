@@ -6,6 +6,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.hermanowicz.mypantry.data.local.db.CategoriesDao
 import com.hermanowicz.mypantry.data.local.db.LOCAL_DB_NAME
 import com.hermanowicz.mypantry.data.local.db.LocalDb
 import com.hermanowicz.mypantry.data.local.db.ProductDao
@@ -43,6 +44,12 @@ class AppModule {
     @Singleton
     fun provideStorageLocationDao(localDb: LocalDb): StorageLocationDao {
         return localDb.storageLocationDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoriesDao(localDb: LocalDb): CategoriesDao {
+        return localDb.categoriesDao()
     }
 
     @ViewModelScoped

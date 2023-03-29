@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CategoriesDao {
     @Query("SELECT * FROM categories WHERE id = (:id)")
-    fun getCategory(id: Int): CategoriesEntity?
+    fun observeById(id: Int): Flow<CategoriesEntity>
 
-    @get:Query("SELECT * FROM categories")
-    val allOwnCategories: Flow<List<CategoriesEntity>>
+    @Query("SELECT * FROM categories")
+    fun observeAll(): Flow<List<CategoriesEntity>>
 
     @Insert
     fun insert(vararg categories: CategoriesEntity)

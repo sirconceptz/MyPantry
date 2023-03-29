@@ -56,7 +56,8 @@ fun StorageLocationsScreen(
                         contentDescription = null,
                         tint = Color.White
                     )
-                }
+                },
+                enabled = storageLocationModel.storageLocations.isNotEmpty()
             )
         }
     ) {
@@ -68,7 +69,7 @@ fun StorageLocationsScreen(
                 description = storageLocationState.description,
                 onNameChange = { viewModel.onNameChange(it) },
                 onDescriptionChange = { viewModel.onDescriptionChange(it) },
-                onAddClick = { viewModel.onClickSaveStorageLocations() }
+                onAddClick = { viewModel.onClickSaveStorageLocation() }
             )
         }
         LazyColumn(
@@ -90,7 +91,7 @@ fun StorageLocationsScreen(
 }
 
 @Composable
-fun ShowStorageLocations(
+private fun ShowStorageLocations(
     storageLocationList: List<StorageLocation>,
     onClickDeleteStorageLocation: (StorageLocation) -> Unit,
     isEditMode: Boolean
@@ -101,7 +102,7 @@ fun ShowStorageLocations(
 }
 
 @Composable
-fun updateStorageLocationsModel(
+private fun updateStorageLocationsModel(
     viewModel: StorageLocationsViewModel
 ): StorageLocationsModel {
     when (val state = viewModel.uiState.collectAsState().value) {

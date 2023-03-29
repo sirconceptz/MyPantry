@@ -36,4 +36,16 @@
     <string name="add_new_storage_location">Add new storage location</string>
     <string name="add_new_category">Add new category</string>
     <string name="delete">Delete</string>
+    <string name="choose">Choose</string>
+    <string name="store_products">Store_products</string>
+    <string name="ready_meals">Ready meals</string>
+    <string name="vegetables">Vegetables</string>
+    <string name="fruits">Fruits</string>
+    <string name="herbs">Herbs</string>
+    <string name="liquors">Liquors</string>
+    <string name="wines">Wines</string>
+    <string name="mushrooms">Mushrooms</string>
+    <string name="vinegars">Vinegars</string>
+    <string name="chemical_products">Chemical products</string>
+    <string name="other">Other</string>
 </resources>

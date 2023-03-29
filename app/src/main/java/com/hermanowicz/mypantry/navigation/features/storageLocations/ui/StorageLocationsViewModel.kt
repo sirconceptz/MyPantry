@@ -61,7 +61,7 @@ class StorageLocationsViewModel @Inject constructor(
         _storageLocationsState.update { it.copy(description = description) }
     }
 
-    fun onClickSaveStorageLocations() {
+    fun onClickSaveStorageLocation() {
         val storageLocation = StorageLocation(
             name = storageLocationState.value.name,
             description = storageLocationState.value.description

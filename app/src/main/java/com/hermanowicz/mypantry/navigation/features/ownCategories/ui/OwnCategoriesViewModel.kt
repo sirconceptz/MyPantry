@@ -1,20 +1,68 @@
 package com.hermanowicz.mypantry.navigation.features.ownCategories.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.hermanowicz.mypantry.data.model.Category
+import com.hermanowicz.mypantry.domain.DeleteCategoryUseCase
+import com.hermanowicz.mypantry.domain.ObserveAllOwnCategoriesUseCase
+import com.hermanowicz.mypantry.domain.SaveCategoryUseCase
+import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesState
+import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OwnCategoriesViewModel @Inject constructor() : ViewModel() {
+class OwnCategoriesViewModel @Inject constructor(
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
+    private val saveCategoryUseCase: SaveCategoryUseCase,
+    private val deleteCategoryUseCase: DeleteCategoryUseCase
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Empty)
+    val uiState: StateFlow<CategoriesUiState> = _uiState
 
     private val _categoriesState = MutableStateFlow(CategoriesState())
     var categoriesState: StateFlow<CategoriesState> =
         _categoriesState.asStateFlow()
+
+    init {
+        fetchCategories()
+    }
+
+    fun fetchCategories() {
+        _uiState.value = CategoriesUiState.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                observeAllOwnCategoriesUseCase().collect { categoryList ->
+                    _uiState.value = CategoriesUiState.Loaded(
+                        CategoriesModel(
+                            categories = categoryList,
+                            loadingVisible = false
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.value = CategoriesUiState.Error(e.toString())
+            }
+        }
+    }
+
+    fun onClickSaveCategory() {
+        val category = Category(
+            name = categoriesState.value.name,
+            description = categoriesState.value.description
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            saveCategoryUseCase(category)
+        }
+        _categoriesState.update { it.copy(showDialogAddNewCategory = false) }
+    }
 
     fun onNameChange(name: String) {
         _categoriesState.update { it.copy(name = name) }
@@ -24,11 +72,17 @@ class OwnCategoriesViewModel @Inject constructor() : ViewModel() {
         _categoriesState.update { it.copy(description = description) }
     }
 
-    fun onClickSaveStorageLocations() {
-        // todo: impelement saving
-    }
-
     fun onShowDialogAddNewCategory(isActive: Boolean) {
         _categoriesState.update { it.copy(showDialogAddNewCategory = isActive) }
+    }
+
+    fun onEditMode(isEditMode: Boolean) {
+        _categoriesState.update { it.copy(isEditMode = isEditMode) }
+    }
+
+    fun onDeleteCategory(category: Category) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteCategoryUseCase(category)
+        }
     }
 }
