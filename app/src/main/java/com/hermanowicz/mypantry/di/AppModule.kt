@@ -9,6 +9,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.hermanowicz.mypantry.data.local.db.LOCAL_DB_NAME
 import com.hermanowicz.mypantry.data.local.db.LocalDb
 import com.hermanowicz.mypantry.data.local.db.ProductDao
+import com.hermanowicz.mypantry.data.local.db.StorageLocationDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +37,12 @@ class AppModule {
     @Singleton
     fun provideProductDao(localDb: LocalDb): ProductDao {
         return localDb.productDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideStorageLocationDao(localDb: LocalDb): StorageLocationDao {
+        return localDb.storageLocationDao()
     }
 
     @ViewModelScoped

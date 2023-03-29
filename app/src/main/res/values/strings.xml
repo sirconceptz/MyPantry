@@ -2,6 +2,7 @@
     <string name="app_name">My Pantry</string>
     <string name="loading">Loading…</string>
     <string name="name">Name</string>
+    <string name="description">Description</string>
     <string name="expiration_date">Expiration date</string>
     <string name="production_date">Production date</string>
     <string name="quantity">Quantity</string>
@@ -11,6 +12,7 @@
     <string name="weight">Weight</string>
     <string name="volume">Volume</string>
     <string name="save_products">Save products</string>
+    <string name="save">Save</string>
     <string name="settings">Settings</string>
     <string name="my_pantry">My Pantry</string>
     <string name="new_product">New product</string>
@@ -30,4 +32,7 @@
     <string name="no">No</string>
     <string name="main_category">Main category</string>
     <string name="detail_category">Detail category</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_new_storage_location">Add new storage location</string>
+    <string name="add_new_category">Add new category</string>
 </resources>

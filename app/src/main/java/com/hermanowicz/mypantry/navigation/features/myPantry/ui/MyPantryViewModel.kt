@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.domain.GetGroupProductListUseCase
 import com.hermanowicz.mypantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
+import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,19 +18,19 @@ class MyPantryViewModel @Inject constructor(
     val getGroupProductListUseCase: GetGroupProductListUseCase,
     val observeAllProductsUseCase: ObserveAllProductsUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<MyPantryUiState>(MyPantryUiState.Empty)
-    val uiState: StateFlow<MyPantryUiState> = _uiState
+    private val _uiState = MutableStateFlow<MyPantryProductsUiState>(MyPantryProductsUiState.Empty)
+    val uiState: StateFlow<MyPantryProductsUiState> = _uiState
 
     init {
         fetchProducts()
     }
 
     fun fetchProducts() {
-        _uiState.value = MyPantryUiState.Loading
+        _uiState.value = MyPantryProductsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 observeAllProductsUseCase().collect { products ->
-                    _uiState.value = MyPantryUiState.Loaded(
+                    _uiState.value = MyPantryProductsUiState.Loaded(
                         MyPantryModel(
                             groupsProduct = getGroupProductListUseCase(products),
                             loadingVisible = false
@@ -38,7 +38,7 @@ class MyPantryViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _uiState.value = MyPantryUiState.Error(e.toString())
+                _uiState.value = MyPantryProductsUiState.Error(e.toString())
             }
         }
     }

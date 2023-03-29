@@ -20,4 +20,5 @@ const val LOCAL_DB_NAME = "MyPantry.db"
 )
 abstract class LocalDb : RoomDatabase() {
     abstract fun productDao(): ProductDao
+    abstract fun storageLocationDao(): StorageLocationDao
 }

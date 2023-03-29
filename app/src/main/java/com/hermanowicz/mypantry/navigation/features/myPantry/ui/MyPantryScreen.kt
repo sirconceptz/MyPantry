@@ -21,7 +21,7 @@ import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
+import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import timber.log.Timber
 
@@ -64,20 +64,20 @@ private fun updateUi(
     viewModel: MyPantryViewModel
 ): MyPantryModel {
     when (val state = viewModel.uiState.collectAsState().value) {
-        is MyPantryUiState.Empty -> {
+        is MyPantryProductsUiState.Empty -> {
             Timber.d("My Pantry UI State - Empty")
             return MyPantryModel()
         }
-        is MyPantryUiState.Loading -> {
+        is MyPantryProductsUiState.Loading -> {
             Timber.d("My Pantry UI State - Loading")
             LoadingDialog()
             return MyPantryModel()
         }
-        is MyPantryUiState.Loaded -> {
+        is MyPantryProductsUiState.Loaded -> {
             Timber.d("My Pantry UI State - Success")
             return state.data
         }
-        is MyPantryUiState.Error -> {
+        is MyPantryProductsUiState.Error -> {
             Timber.d("My Pantry UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()
             return MyPantryModel()

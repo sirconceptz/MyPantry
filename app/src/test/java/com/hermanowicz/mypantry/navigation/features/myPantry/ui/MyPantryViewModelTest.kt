@@ -5,8 +5,7 @@ import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.domain.GetGroupProductListUseCase
 import com.hermanowicz.mypantry.domain.GetGroupProductUseCase
 import com.hermanowicz.mypantry.domain.ObserveAllProductsUseCase
-import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryUiState
-import com.nhaarman.mockitokotlin2.any
+import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertTrue
@@ -52,7 +51,7 @@ class MyPantryViewModelTest {
         val uiState = viewModel.uiState.value
 
         // then
-        assertTrue(uiState is MyPantryUiState.Loading)
+        assertTrue(uiState is MyPantryProductsUiState.Loading)
     }
 //
 //    @Test

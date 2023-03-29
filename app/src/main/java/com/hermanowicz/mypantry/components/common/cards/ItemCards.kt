@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.checkbox.CircleCheckbox
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
 import com.hermanowicz.mypantry.data.model.GroupProduct
+import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
 import com.hermanowicz.mypantry.utils.ProductDataState
@@ -61,6 +63,36 @@ fun GroupProductItemCard(
                     text = stringResource(R.string.bio), fontSize = 14.sp
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun StorageLocationItemCard(
+    storageLocation: StorageLocation,
+    onClickDeleteStorageLocation: (Int) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(Shapes.medium)
+            .padding(vertical = LocalSpacing.current.small, horizontal = LocalSpacing.current.tiny)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(LocalSpacing.current.small)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = storageLocation.name,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = storageLocation.description,
+                fontSize = 15.sp, textAlign = TextAlign.Center
+            )
         }
     }
 }

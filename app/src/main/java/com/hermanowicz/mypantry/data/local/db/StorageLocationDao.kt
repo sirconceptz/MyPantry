@@ -11,19 +11,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StorageLocationDao {
     @Query("SELECT * FROM storage_locations WHERE id = (:id)")
-    fun getStorageLocation(id: Int): StorageLocationEntity?
+    fun observeById(id: Int): Flow<StorageLocationEntity>
 
-    @get:Query("SELECT * FROM storage_locations")
-    val allStorageLocations: Flow<List<StorageLocationEntity>>
+    @Query("SELECT * FROM storage_locations")
+    fun observeAll(): Flow<List<StorageLocationEntity>>
 
     @Insert
-    fun insert(vararg storageLocations: StorageLocationEntity)
+    fun insert(storageLocation: StorageLocationEntity)
 
     @Delete
-    fun delete(vararg storageLocations: StorageLocationEntity)
+    fun delete(storageLocation: StorageLocationEntity)
 
     @Update
-    fun update(vararg storageLocations: StorageLocationEntity)
+    fun update(storageLocation: StorageLocationEntity)
 
     @Query("DELETE FROM storage_locations")
     fun deleteAll()
