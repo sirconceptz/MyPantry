@@ -32,9 +32,10 @@ fun StorageLocationsScreen(
 ) {
     val viewModel: StorageLocationsViewModel = hiltViewModel()
     val storageLocationState by viewModel.storageLocationState.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
-
     val storageLocationModel = updateStorageLocationsModel(viewModel)
+
+    if (storageLocationModel.storageLocations.isEmpty() && storageLocationState.isEditMode)
+        viewModel.onEditMode(false)
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.storage_locations),
@@ -47,6 +48,16 @@ fun StorageLocationsScreen(
                     tint = Color.White
                 )
             })
+            IconButton(
+                onClick = { viewModel.onEditMode(!storageLocationState.isEditMode) },
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            )
         }
     ) {
         if (storageLocationState.showDialogAddNewStorageLocation) {
@@ -69,8 +80,9 @@ fun StorageLocationsScreen(
                 ShowStorageLocations(
                     storageLocationList = storageLocationModel.storageLocations,
                     onClickDeleteStorageLocation = {
-                        // todo
-                    }
+                        viewModel.onDeleteStorageLocation(it)
+                    },
+                    isEditMode = storageLocationState.isEditMode
                 )
             }
         }
@@ -80,11 +92,11 @@ fun StorageLocationsScreen(
 @Composable
 fun ShowStorageLocations(
     storageLocationList: List<StorageLocation>,
-    onClickDeleteStorageLocation: (Int) -> Unit,
-    isEditMode: Boolean = false // todo
+    onClickDeleteStorageLocation: (StorageLocation) -> Unit,
+    isEditMode: Boolean
 ) {
     storageLocationList.forEach { storageLocation ->
-        StorageLocationItemCard(storageLocation) { onClickDeleteStorageLocation(it) }
+        StorageLocationItemCard(storageLocation, isEditMode) { onClickDeleteStorageLocation(it) }
     }
 }
 
@@ -94,20 +106,20 @@ fun updateStorageLocationsModel(
 ): StorageLocationsModel {
     when (val state = viewModel.uiState.collectAsState().value) {
         is StorageLocationsUiState.Empty -> {
-            Timber.d("My Pantry UI State - Empty")
+            Timber.d("Storage Locations UI State - Empty")
             return StorageLocationsModel()
         }
         is StorageLocationsUiState.Loading -> {
-            Timber.d("My Pantry UI State - Loading")
+            Timber.d("Storage Locations UI State - Loading")
             LoadingDialog()
             return StorageLocationsModel()
         }
         is StorageLocationsUiState.Loaded -> {
-            Timber.d("My Pantry UI State - Success")
+            Timber.d("Storage Locations UI State - Success")
             return state.data
         }
         is StorageLocationsUiState.Error -> {
-            Timber.d("My Pantry UI State - Error")
+            Timber.d("Storage Locations UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()
             return StorageLocationsModel()
         }

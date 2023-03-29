@@ -4,7 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -13,9 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.components.common.button.ButtonTransparent
 import com.hermanowicz.mypantry.components.common.checkbox.CircleCheckbox
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
 import com.hermanowicz.mypantry.data.model.GroupProduct
@@ -70,7 +75,8 @@ fun GroupProductItemCard(
 @Composable
 fun StorageLocationItemCard(
     storageLocation: StorageLocation,
-    onClickDeleteStorageLocation: (Int) -> Unit
+    isEditMode: Boolean,
+    onClickDeleteStorageLocation: (StorageLocation) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -86,13 +92,21 @@ fun StorageLocationItemCard(
                 modifier = Modifier.fillMaxWidth(),
                 text = storageLocation.name,
                 fontSize = 20.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = storageLocation.description,
-                fontSize = 15.sp, textAlign = TextAlign.Center
+                fontSize = 15.sp,
+                textAlign = TextAlign.Justify
             )
+            if (isEditMode) {
+                Spacer(modifier = Modifier.height(30.dp))
+                ButtonTransparent(text = stringResource(id = R.string.delete)) {
+                    onClickDeleteStorageLocation(storageLocation)
+                }
+            }
         }
     }
 }

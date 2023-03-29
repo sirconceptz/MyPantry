@@ -3,6 +3,7 @@ package com.hermanowicz.mypantry.navigation.features.storageLocations.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.StorageLocation
+import com.hermanowicz.mypantry.domain.DeleteStorageLocationUseCase
 import com.hermanowicz.mypantry.domain.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.mypantry.domain.SaveStorageLocationsUseCase
 import com.hermanowicz.mypantry.navigation.features.storageLocations.state.StorageLocationsModel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class StorageLocationsViewModel @Inject constructor(
     private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
-    private val saveStorageLocationsUseCase: SaveStorageLocationsUseCase
+    private val saveStorageLocationsUseCase: SaveStorageLocationsUseCase,
+    private val deleteStorageLocationUseCase: DeleteStorageLocationUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<StorageLocationsUiState>(StorageLocationsUiState.Empty)
     val uiState: StateFlow<StorageLocationsUiState> = _uiState
@@ -72,5 +74,15 @@ class StorageLocationsViewModel @Inject constructor(
 
     fun onShowDialogAddNewStorageLocation(isActive: Boolean) {
         _storageLocationsState.update { it.copy(showDialogAddNewStorageLocation = isActive) }
+    }
+
+    fun onEditMode(isEditMode: Boolean) {
+        _storageLocationsState.update { it.copy(isEditMode = isEditMode) }
+    }
+
+    fun onDeleteStorageLocation(storageLocation: StorageLocation) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteStorageLocationUseCase(storageLocation)
+        }
     }
 }
