@@ -1,10 +1,14 @@
 package com.hermanowicz.mypantry.utils
 
+import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
+
 data class ProductDataState(
     val name: String = "",
     var showMainCategoryDropdown: Boolean = false,
+    var showDetailCategoryDropdown: Boolean = false,
     var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
-    val detailCategory: String = "",
+    val detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
     val quantity: String = "",
     val storageLocation: String = "",
     val expirationDate: String = "",

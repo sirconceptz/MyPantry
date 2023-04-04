@@ -3,9 +3,12 @@ package com.hermanowicz.mypantry.navigation.features.newProduct.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
+import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
+import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.mypantry.domain.SaveProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.mypantry.utils.ProductDataState
+import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewProductViewModel @Inject constructor(
-    private val saveProductsUseCase: SaveProductsUseCase
+    private val saveProductsUseCase: SaveProductsUseCase,
+    private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
+    private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
@@ -51,6 +56,14 @@ class NewProductViewModel @Inject constructor(
             }
             saveProductsUseCase(products)
         }
+    }
+
+    fun getMainCategories(): Map<String, Int> {
+        return getMainCategoriesUseCase()
+    }
+
+    fun getDetailCategories(): Map<String, Int> {
+        return getDetailCategoriesUseCase(productDataState.value.mainCategory)
     }
 
     fun onNameChange(name: String) {
@@ -112,11 +125,25 @@ class NewProductViewModel @Inject constructor(
         _productDataState.update { it.copy(showMainCategoryDropdown = show) }
     }
 
+    fun showDetailCategoryDropdown(show: Boolean) {
+        _productDataState.update { it.copy(showDetailCategoryDropdown = show) }
+    }
+
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
                 mainCategory = mainCategory,
+                detailCategory = ChooseCategoryTypes.CHOOSE.name,
                 showMainCategoryDropdown = false
+            )
+        }
+    }
+
+    fun onDetailCategoryChange(detailCategory: String) {
+        _productDataState.update {
+            it.copy(
+                detailCategory = detailCategory,
+                showDetailCategoryDropdown = false
             )
         }
     }

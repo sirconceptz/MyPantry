@@ -39,6 +39,8 @@ fun NewProductScreen(
                     onNameChange = { viewModel.onNameChange(it) },
                     showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(!productDataState.showMainCategoryDropdown) },
                     onMainCategoryChange = { viewModel.onMainCategoryChange(it) },
+                    showDetailCategoryDropdown = { viewModel.showDetailCategoryDropdown(!productDataState.showDetailCategoryDropdown) },
+                    onDetailCategoryChange = { viewModel.onDetailCategoryChange(it) },
                     onExpirationDateChange = { viewModel.onExpirationDateChange(it) },
                     onProductionDateChange = { viewModel.onProductionDateChange(it) },
                     onQuantityChange = { viewModel.onQuantityChange(it) },
@@ -50,7 +52,9 @@ fun NewProductScreen(
                     onIsVegeChange = { viewModel.onIsVegeChange(it) },
                     onIsBioChange = { viewModel.onIsBioChange(it) },
                     onHasSugarChange = { viewModel.onHasSugarChange(it) },
-                    onHasSaltChange = { viewModel.onHasSaltChange(it) }
+                    onHasSaltChange = { viewModel.onHasSaltChange(it) },
+                    mainCategoryItemList = viewModel.getMainCategories(),
+                    detailCategoryItemList = viewModel.getDetailCategories()
                 )
             }
             item {

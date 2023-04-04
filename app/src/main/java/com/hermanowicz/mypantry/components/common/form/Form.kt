@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
-import com.hermanowicz.mypantry.components.common.dropdown.DropdownMainCategory
+import com.hermanowicz.mypantry.components.common.dropdown.DropdownPrimary
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.utils.ProductDataState
@@ -21,6 +21,8 @@ fun ProductForm(
     onNameChange: (String) -> Unit,
     showMainCategoryDropdown: (Boolean) -> Unit,
     onMainCategoryChange: (String) -> Unit,
+    showDetailCategoryDropdown: (Boolean) -> Unit,
+    onDetailCategoryChange: (String) -> Unit,
     onExpirationDateChange: (String) -> Unit,
     onProductionDateChange: (String) -> Unit,
     onQuantityChange: (String) -> Unit,
@@ -33,6 +35,8 @@ fun ProductForm(
     onIsBioChange: (Boolean) -> Unit,
     onHasSugarChange: (Boolean) -> Unit,
     onHasSaltChange: (Boolean) -> Unit,
+    mainCategoryItemList: Map<String, Int>,
+    detailCategoryItemList: Map<String, Int>
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -44,12 +48,23 @@ fun ProductForm(
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name)
         )
-        DropdownMainCategory(
-            textRight = productDataState.mainCategory,
+        DropdownPrimary(
+            textLeft = stringResource(id = R.string.main_category),
+            mapKey = productDataState.mainCategory,
+            itemList = mainCategoryItemList,
             onClick = { showMainCategoryDropdown(true) },
             onChange = onMainCategoryChange,
             visibleDropdown = productDataState.showMainCategoryDropdown,
             onDismiss = { showMainCategoryDropdown(false) }
+        )
+        DropdownPrimary(
+            textLeft = stringResource(id = R.string.detail_category),
+            mapKey = productDataState.detailCategory,
+            itemList = detailCategoryItemList,
+            onClick = { showDetailCategoryDropdown(true) },
+            onChange = onDetailCategoryChange,
+            visibleDropdown = productDataState.showDetailCategoryDropdown,
+            onDismiss = { showDetailCategoryDropdown(false) }
         )
         TextFieldAndLabel(
             textfieldText = productDataState.expirationDate,

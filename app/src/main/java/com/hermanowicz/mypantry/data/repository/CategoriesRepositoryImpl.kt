@@ -5,6 +5,7 @@ import com.hermanowicz.mypantry.data.mapper.toEntityModel
 import com.hermanowicz.mypantry.data.model.Category
 import com.hermanowicz.mypantry.di.local.dataSource.CategoriesLocalDataSource
 import com.hermanowicz.mypantry.di.repository.CategoriesRepository
+import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -25,6 +26,14 @@ class CategoriesRepositoryImpl @Inject constructor(
         return localDataSource.observeAll().map { categoriesEntities ->
             categoriesEntities.map { categoryEntity -> categoryEntity.toDomainModel() }
         }
+    }
+
+    override fun getMainCategories(): Map<String, Int> {
+        val map: MutableMap<String, Int> = mutableMapOf()
+        enumValues<MainCategoriesTypes>().forEach { category ->
+            map[category.name] = category.nameResId
+        }
+        return map
     }
 
     override suspend fun insert(category: Category) {

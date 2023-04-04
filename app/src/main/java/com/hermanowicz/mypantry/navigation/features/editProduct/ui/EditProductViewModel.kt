@@ -3,6 +3,8 @@ package com.hermanowicz.mypantry.navigation.features.editProduct.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
+import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
+import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
 import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
@@ -22,7 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
     private val observeProductByIdUseCase: ObserveProductByIdUseCase,
-    private val updateProductsUseCase: UpdateProductsUseCase
+    private val updateProductsUseCase: UpdateProductsUseCase,
+    private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
+    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -136,6 +140,10 @@ class EditProductViewModel @Inject constructor(
         _productDataState.update { it.copy(showMainCategoryDropdown = show) }
     }
 
+    fun showDetailCategoryDropdown(show: Boolean) {
+        _productDataState.update { it.copy(showDetailCategoryDropdown = show) }
+    }
+
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
@@ -143,5 +151,22 @@ class EditProductViewModel @Inject constructor(
                 showMainCategoryDropdown = false
             )
         }
+    }
+
+    fun onDetailCategoryChange(detailCategory: String) {
+        _productDataState.update {
+            it.copy(
+                detailCategory = detailCategory,
+                showDetailCategoryDropdown = false
+            )
+        }
+    }
+
+    fun getMainCategories(): Map<String, Int> {
+        return getMainCategoriesUseCase()
+    }
+
+    fun getDetailCategories(): Map<String, Int> {
+        return getDetailsCategoriesUseCase(productDataState.value.mainCategory)
     }
 }

@@ -18,23 +18,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
-import com.hermanowicz.mypantry.utils.MainCategoriesTypes
 
 @Composable
-fun DropdownMainCategory(
-    textRight: String,
+fun DropdownPrimary(
+    textLeft: String,
+    mapKey: String,
+    itemList: Map<String, Int>,
     onClick: () -> Unit,
     onChange: (String) -> Unit,
     visibleDropdown: Boolean,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    val category = enumValueOf<MainCategoriesTypes>(textRight)
+    val textRes = itemList.getValue(mapKey)
+
     Column() {
-        Text(text = stringResource(id = R.string.main_category))
+        Text(text = textLeft)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -49,15 +50,15 @@ fun DropdownMainCategory(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = stringResource(id = category.nameResId),
+                        text = stringResource(id = textRes),
                     )
                     DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
-                        enumValues<MainCategoriesTypes>().forEachIndexed { _, itemValue ->
+                        itemList.forEach { item ->
                             DropdownMenuItem(onClick = {
-                                onChange(itemValue.name)
+                                onChange(item.key)
                                 onDismiss()
                             }) {
-                                Text(text = context.getString(itemValue.nameResId))
+                                Text(text = context.getString(item.value))
                             }
                         }
                     }

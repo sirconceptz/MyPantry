@@ -1,4 +1,4 @@
-package com.hermanowicz.mypantry.utils
+package com.hermanowicz.mypantry.utils.category
 
 import com.hermanowicz.mypantry.R
 
