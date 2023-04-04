@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.StorageLocationItemCard
-import com.hermanowicz.mypantry.components.common.dialog.DialogAddNewItem
+import com.hermanowicz.mypantry.components.common.dialog.DialogItem
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.data.model.StorageLocation
@@ -62,14 +62,14 @@ fun StorageLocationsScreen(
         }
     ) {
         if (storageLocationState.showDialogAddNewStorageLocation) {
-            DialogAddNewItem(
+            DialogItem(
                 onDismissRequest = { viewModel.onShowDialogAddNewStorageLocation(false) },
                 label = stringResource(id = R.string.add_new_storage_location),
                 name = storageLocationState.name,
                 description = storageLocationState.description,
                 onNameChange = { viewModel.onNameChange(it) },
                 onDescriptionChange = { viewModel.onDescriptionChange(it) },
-                onAddClick = { viewModel.onClickSaveStorageLocation() }
+                onSaveClick = { viewModel.onClickSaveStorageLocation() }
             )
         }
         LazyColumn(

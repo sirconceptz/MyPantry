@@ -72,4 +72,6 @@
     <string name="cleaning_products">Cleaning products</string>
     <string name="liquids">Liquids</string>
     <string name="powders">Powders</string>
+    <string name="edit">Edit</string>
+    <string name="edit_category">Edit category</string>
 </resources>

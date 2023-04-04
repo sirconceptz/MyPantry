@@ -116,6 +116,7 @@ fun StorageLocationItemCard(
 fun CategoryItemCard(
     category: Category,
     isEditMode: Boolean,
+    onClickEditCategory: (Category) -> Unit,
     onClickDeleteCategory: (Category) -> Unit
 ) {
     Card(
@@ -143,6 +144,9 @@ fun CategoryItemCard(
             )
             if (isEditMode) {
                 Spacer(modifier = Modifier.height(30.dp))
+                ButtonTransparent(text = stringResource(id = R.string.edit)) {
+                    onClickEditCategory(category)
+                }
                 ButtonTransparent(text = stringResource(id = R.string.delete)) {
                     onClickDeleteCategory(category)
                 }

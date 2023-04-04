@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.CategoryItemCard
-import com.hermanowicz.mypantry.components.common.dialog.DialogAddNewItem
+import com.hermanowicz.mypantry.components.common.dialog.DialogItem
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.data.model.Category
@@ -61,14 +61,25 @@ fun OwnCategoriesScreen(openDrawer: () -> Unit) {
         }
     ) {
         if (categoriesState.showDialogAddNewCategory) {
-            DialogAddNewItem(
+            DialogItem(
                 onDismissRequest = { viewModel.onShowDialogAddNewCategory(false) },
                 label = stringResource(id = R.string.add_new_category),
                 name = categoriesState.name,
                 description = categoriesState.description,
-                onNameChange = { viewModel.onNameChange(it) },
-                onDescriptionChange = { viewModel.onDescriptionChange(it) },
-                onAddClick = { viewModel.onClickSaveCategory() }
+                onNameChange = { viewModel.onAddCategoryNameChange(it) },
+                onDescriptionChange = { viewModel.onAddCategoryDescriptionChange(it) },
+                onSaveClick = { viewModel.onClickSaveCategory() }
+            )
+        }
+        if (categoriesState.showDialogEditCategory) {
+            DialogItem(
+                onDismissRequest = { viewModel.onHideDialogEditCategory() },
+                label = stringResource(id = R.string.edit_category),
+                name = categoriesState.editedCategory.name,
+                description = categoriesState.editedCategory.description,
+                onNameChange = { viewModel.onEditCategoryNameChange(it) },
+                onDescriptionChange = { viewModel.onEditCategoryDescriptionChange(it) },
+                onSaveClick = { viewModel.onSaveEditedCategory() }
             )
         }
         LazyColumn(
@@ -79,6 +90,9 @@ fun OwnCategoriesScreen(openDrawer: () -> Unit) {
             item {
                 ShowCategories(
                     categoryList = categoriesModel.categories,
+                    onClickEditCategory = {
+                        viewModel.onShowEditCategory(it)
+                    },
                     onClickDeleteCategory = {
                         viewModel.onDeleteCategory(it)
                     },
@@ -92,11 +106,17 @@ fun OwnCategoriesScreen(openDrawer: () -> Unit) {
 @Composable
 private fun ShowCategories(
     categoryList: List<Category>,
+    onClickEditCategory: (Category) -> Unit,
     onClickDeleteCategory: (Category) -> Unit,
     isEditMode: Boolean
 ) {
     categoryList.forEach { category ->
-        CategoryItemCard(category, isEditMode) { onClickDeleteCategory(it) }
+        CategoryItemCard(
+            category,
+            isEditMode,
+            onClickEditCategory = onClickEditCategory,
+            onClickDeleteCategory = onClickDeleteCategory
+        )
     }
 }
 

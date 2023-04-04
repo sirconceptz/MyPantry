@@ -6,6 +6,7 @@ import com.hermanowicz.mypantry.data.model.Category
 import com.hermanowicz.mypantry.domain.DeleteCategoryUseCase
 import com.hermanowicz.mypantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.SaveCategoryUseCase
+import com.hermanowicz.mypantry.domain.UpdateCategoryUseCase
 import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.mypantry.navigation.features.ownCategories.state.CategoriesUiState
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class OwnCategoriesViewModel @Inject constructor(
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
+    private val updateCategoryUseCase: UpdateCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Empty)
@@ -64,12 +66,36 @@ class OwnCategoriesViewModel @Inject constructor(
         _categoriesState.update { it.copy(showDialogAddNewCategory = false) }
     }
 
-    fun onNameChange(name: String) {
+    fun onAddCategoryNameChange(name: String) {
         _categoriesState.update { it.copy(name = name) }
     }
 
-    fun onDescriptionChange(description: String) {
+    fun onEditCategoryNameChange(name: String) {
+        _categoriesState.update {
+            it.copy(
+                editedCategory = Category(
+                    id = categoriesState.value.editedCategory.id,
+                    name = name,
+                    description = categoriesState.value.editedCategory.description
+                )
+            )
+        }
+    }
+
+    fun onAddCategoryDescriptionChange(description: String) {
         _categoriesState.update { it.copy(description = description) }
+    }
+
+    fun onEditCategoryDescriptionChange(description: String) {
+        _categoriesState.update {
+            it.copy(
+                editedCategory = Category(
+                    id = categoriesState.value.editedCategory.id,
+                    name = categoriesState.value.editedCategory.name,
+                    description = description
+                )
+            )
+        }
     }
 
     fun onShowDialogAddNewCategory(isActive: Boolean) {
@@ -78,6 +104,26 @@ class OwnCategoriesViewModel @Inject constructor(
 
     fun onEditMode(isEditMode: Boolean) {
         _categoriesState.update { it.copy(isEditMode = isEditMode) }
+    }
+
+    fun onShowEditCategory(category: Category) {
+        _categoriesState.update {
+            it.copy(
+                showDialogEditCategory = true,
+                editedCategory = category
+            )
+        }
+    }
+
+    fun onHideDialogEditCategory() {
+        _categoriesState.update { it.copy(showDialogEditCategory = false) }
+    }
+
+    fun onSaveEditedCategory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateCategoryUseCase(categoriesState.value.editedCategory)
+        }
+        onHideDialogEditCategory()
     }
 
     fun onDeleteCategory(category: Category) {

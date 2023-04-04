@@ -17,13 +17,13 @@ import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 
 @Composable
-fun DialogAddNewItem(
+fun DialogItem(
     label: String,
     name: String,
     description: String,
     onNameChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
-    onAddClick: () -> Unit,
+    onSaveClick: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
     Dialog(
@@ -57,7 +57,7 @@ fun DialogAddNewItem(
                     placeholder = stringResource(id = R.string.description)
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.save), onClick = onAddClick
+                    text = stringResource(id = R.string.save), onClick = onSaveClick
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.cancel), onClick = onDismissRequest
