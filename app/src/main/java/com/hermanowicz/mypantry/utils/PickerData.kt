@@ -14,5 +14,5 @@ data class DatePickerData(
 )
 
 enum class PickerType {
-    FROM, TO
+    FROM, TO, ALL
 }

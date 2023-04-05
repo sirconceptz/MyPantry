@@ -6,7 +6,7 @@
     <string name="expiration_date">Expiration date</string>
     <string name="production_date">Production date</string>
     <string name="quantity">Quantity</string>
-    <string name="composition">Production date</string>
+    <string name="composition">Composition</string>
     <string name="healing_properties">Healing properties</string>
     <string name="dosage">Dosage</string>
     <string name="weight">Weight</string>

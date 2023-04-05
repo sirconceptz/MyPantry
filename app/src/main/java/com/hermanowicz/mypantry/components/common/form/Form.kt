@@ -11,8 +11,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
 import com.hermanowicz.mypantry.components.common.dropdown.DropdownPrimary
+import com.hermanowicz.mypantry.components.common.picker.DatePickerPrimary
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
+import com.hermanowicz.mypantry.utils.DatePickerData
+import com.hermanowicz.mypantry.utils.PickerType
 import com.hermanowicz.mypantry.utils.ProductDataState
 
 @Composable
@@ -23,8 +26,8 @@ fun ProductForm(
     onMainCategoryChange: (String) -> Unit,
     showDetailCategoryDropdown: (Boolean) -> Unit,
     onDetailCategoryChange: (String) -> Unit,
-    onExpirationDateChange: (String) -> Unit,
-    onProductionDateChange: (String) -> Unit,
+    onExpirationDateChange: (DatePickerData) -> Unit,
+    onProductionDateChange: (DatePickerData) -> Unit,
     onQuantityChange: (String) -> Unit,
     onCompositionChange: (String) -> Unit,
     onHealingPropertiesChange: (String) -> Unit,
@@ -66,17 +69,19 @@ fun ProductForm(
             visibleDropdown = productDataState.showDetailCategoryDropdown,
             onDismiss = { showDetailCategoryDropdown(false) }
         )
-        TextFieldAndLabel(
-            textfieldText = productDataState.expirationDate,
+        DatePickerPrimary(
             labelText = stringResource(id = R.string.expiration_date),
-            textEvent = onExpirationDateChange,
-            placeholder = stringResource(id = R.string.expiration_date)
+            dateToDisplay = productDataState.expirationDate,
+            datePickerData = productDataState.expirationDatePickerData,
+            onChangeDate = onExpirationDateChange,
+            pickerType = PickerType.ALL
         )
-        TextFieldAndLabel(
-            textfieldText = productDataState.productionDate,
+        DatePickerPrimary(
             labelText = stringResource(id = R.string.production_date),
-            textEvent = onProductionDateChange,
-            placeholder = stringResource(id = R.string.production_date)
+            dateToDisplay = productDataState.productionDate,
+            datePickerData = productDataState.productionDatePickerData,
+            onChangeDate = onProductionDateChange,
+            pickerType = PickerType.ALL
         )
         TextFieldAndLabel(
             textfieldText = productDataState.quantity,

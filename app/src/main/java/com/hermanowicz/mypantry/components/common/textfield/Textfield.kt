@@ -2,6 +2,8 @@ package com.hermanowicz.mypantry.components.common.textfield
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -66,6 +68,56 @@ fun TextFieldAndLabel(
             keyboardActions = keyboardActions,
             visualTransformation = visualTransformation
         )
+    }
+}
+
+@Composable
+fun TextFieldAndLabelDate(
+    textfieldText: String,
+    labelText: String,
+    onClickTextfield: () -> Unit,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = true,
+    maxLines: Int = 1,
+) {
+    Column() {
+        Text(text = labelText)
+        Box(modifier = Modifier.clickable { onClickTextfield() }) {
+            TextField(
+                value = textfieldText,
+                onValueChange = {
+                },
+                enabled = false,
+                modifier = Modifier
+                    .background(
+                        color = Color.White,
+                        shape = Shapes.medium,
+                    )
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = Shapes.medium,
+                    ),
+                shape = Shapes.medium,
+                maxLines = maxLines,
+                singleLine = singleLine,
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent
+                ),
+                textStyle = TextStyle(
+                    fontSize = 15.sp
+                ),
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                visualTransformation = visualTransformation
+            )
+        }
     }
 }
 

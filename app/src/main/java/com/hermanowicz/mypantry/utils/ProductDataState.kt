@@ -8,6 +8,8 @@ data class ProductDataState(
     val name: String = "",
     var showMainCategoryDropdown: Boolean = false,
     var showDetailCategoryDropdown: Boolean = false,
+    var expirationDatePickerData: DatePickerData = DatePickerData(),
+    var productionDatePickerData: DatePickerData = DatePickerData(),
     var ownCategories: List<Category> = emptyList(),
     var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
     val detailCategory: String = ChooseCategoryTypes.CHOOSE.name,

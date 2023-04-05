@@ -29,6 +29,7 @@ import com.hermanowicz.mypantry.navigation.features.productDetails.state.Product
 import com.hermanowicz.mypantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
+import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import timber.log.Timber
 
 @Composable
@@ -81,17 +82,12 @@ fun ProductDetailsView(groupProduct: GroupProduct) {
             DividerCardInside()
             ProductDetailItem(
                 label = stringResource(id = R.string.expiration_date),
-                value = groupProduct.product.expirationDate
+                value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.expirationDate)
             )
             DividerCardInside()
             ProductDetailItem(
                 label = stringResource(id = R.string.production_date),
-                value = groupProduct.product.productionDate
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.production_date),
-                value = groupProduct.product.productionDate
+                value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.productionDate)
             )
             DividerCardInside()
             ProductDetailItem(
@@ -161,20 +157,20 @@ private fun updateUi(
 ): ProductDetailsModel {
     when (val state = viewModel.uiState.collectAsState().value) {
         is ProductDetailsUiState.Empty -> {
-            Timber.d("My Pantry UI State - Empty")
+            Timber.d("Product Details UI State - Empty")
             return ProductDetailsModel()
         }
         is ProductDetailsUiState.Loading -> {
-            Timber.d("My Pantry UI State - Loading")
+            Timber.d("Product Details UI State - Loading")
             LoadingDialog()
             return ProductDetailsModel()
         }
         is ProductDetailsUiState.Loaded -> {
-            Timber.d("My Pantry UI State - Success")
+            Timber.d("Product Details UI State - Success")
             return state.data
         }
         is ProductDetailsUiState.Error -> {
-            Timber.d("My Pantry UI State - Error")
+            Timber.d("Product Details UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()
             return ProductDetailsModel()
         }

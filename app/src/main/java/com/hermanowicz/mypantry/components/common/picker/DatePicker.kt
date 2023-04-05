@@ -4,7 +4,7 @@ import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.hermanowicz.mypantry.components.common.button.ButtonPicker
+import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabelDate
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
 import com.hermanowicz.mypantry.utils.PickerType
@@ -12,6 +12,8 @@ import com.hermanowicz.mypantry.utils.PickerType
 @Composable
 fun DatePickerPrimary(
     datePickerData: DatePickerData,
+    labelText: String,
+    dateToDisplay: String,
     onChangeDate: (DatePickerData) -> Unit,
     pickerType: PickerType
 ) {
@@ -27,12 +29,9 @@ fun DatePickerPrimary(
     if (pickerType == PickerType.TO)
         datePickerDialog.datePicker.minDate = now
 
-//    ButtonPicker(
-//        text =  DateAndTimeConverter.dateToVisibleWithYear(
-//            datePickerData.day,
-//            datePickerData.month,
-//            datePickerData.year
-//        ),
-//        onClick = { datePickerDialog.show() },
-//    )
+    TextFieldAndLabelDate(
+        textfieldText = DateAndTimeConverter.dateToVisibleWithYear(dateToDisplay),
+        labelText = labelText,
+        onClickTextfield = { datePickerDialog.show() }
+    )
 }

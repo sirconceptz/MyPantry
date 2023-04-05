@@ -9,6 +9,8 @@ import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
 import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
+import com.hermanowicz.mypantry.utils.DateAndTimeConverter
+import com.hermanowicz.mypantry.utils.DatePickerData
 import com.hermanowicz.mypantry.utils.ProductDataState
 import com.hermanowicz.mypantry.utils.RegexFormats
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -97,12 +99,26 @@ class EditProductViewModel @Inject constructor(
         _productDataState.update { it.copy(name = name) }
     }
 
-    fun onExpirationDateChange(expirationDate: String) {
-        _productDataState.update { it.copy(expirationDate = expirationDate) }
+    fun onExpirationDateChange(expirationDatePickerData: DatePickerData) {
+        _productDataState.update {
+            it.copy(
+                expirationDatePickerData = expirationDatePickerData,
+                expirationDate = DateAndTimeConverter.getDateToDbFromDatePickerData(
+                    expirationDatePickerData
+                )
+            )
+        }
     }
 
-    fun onProductionDateChange(productionDate: String) {
-        _productDataState.update { it.copy(productionDate = productionDate) }
+    fun onProductionDateChange(productionDatePickerData: DatePickerData) {
+        _productDataState.update {
+            it.copy(
+                productionDatePickerData = productionDatePickerData,
+                productionDate = DateAndTimeConverter.getDateToDbFromDatePickerData(
+                    productionDatePickerData
+                )
+            )
+        }
     }
 
     fun onQuantityChange(quantity: String) {
