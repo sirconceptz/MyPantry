@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CategoriesLocalDataSource {
     fun observeAll(): Flow<List<CategoriesEntity>>
+    fun getAll(): List<CategoriesEntity>
     fun observeById(id: Int): Flow<CategoriesEntity>
     suspend fun insert(category: CategoriesEntity)
     suspend fun update(category: CategoriesEntity)

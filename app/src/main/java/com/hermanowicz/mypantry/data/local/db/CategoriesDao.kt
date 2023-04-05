@@ -16,6 +16,9 @@ interface CategoriesDao {
     @Query("SELECT * FROM categories")
     fun observeAll(): Flow<List<CategoriesEntity>>
 
+    @Query("SELECT * FROM categories")
+    fun getAll(): List<CategoriesEntity>
+
     @Insert
     fun insert(vararg categories: CategoriesEntity)
 

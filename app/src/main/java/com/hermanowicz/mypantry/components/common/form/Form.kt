@@ -35,8 +35,8 @@ fun ProductForm(
     onIsBioChange: (Boolean) -> Unit,
     onHasSugarChange: (Boolean) -> Unit,
     onHasSaltChange: (Boolean) -> Unit,
-    mainCategoryItemList: Map<String, Int>,
-    detailCategoryItemList: Map<String, Int>
+    mainCategoryItemList: Map<String, String>,
+    detailCategoryItemList: Map<String, String>
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),

@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
+import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.SaveProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.mypantry.utils.ProductDataState
+import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,8 @@ import javax.inject.Inject
 class NewProductViewModel @Inject constructor(
     private val saveProductsUseCase: SaveProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase
+    private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
@@ -32,9 +35,27 @@ class NewProductViewModel @Inject constructor(
 
     private val numberPattern = Regex("^\\d+\$")
 
+    init {
+        fetchOwnCategories()
+    }
+
+    private fun fetchOwnCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _productDataState.update { it.copy(ownCategories = getOwnCategoriesUseCase()) }
+        }
+    }
+
     fun onSaveClick() {
+        var mainCategory = ""
+        var detailCategory = ""
+        if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
+            mainCategory = productDataState.value.mainCategory
+        if (productDataState.value.detailCategory != MainCategoriesTypes.CHOOSE.name)
+            detailCategory = productDataState.value.detailCategory
         val product = Product(
             name = productDataState.value.name,
+            mainCategory = mainCategory,
+            detailCategory = detailCategory,
             expirationDate = productDataState.value.expirationDate,
             productionDate = productDataState.value.productionDate,
             composition = productDataState.value.composition,
@@ -58,12 +79,15 @@ class NewProductViewModel @Inject constructor(
         }
     }
 
-    fun getMainCategories(): Map<String, Int> {
+    fun getMainCategories(): Map<String, String> {
         return getMainCategoriesUseCase()
     }
 
-    fun getDetailCategories(): Map<String, Int> {
-        return getDetailCategoriesUseCase(productDataState.value.mainCategory)
+    fun getDetailCategories(): Map<String, String> {
+        return getDetailCategoriesUseCase(
+            productDataState.value.ownCategories,
+            productDataState.value.mainCategory
+        )
     }
 
     fun onNameChange(name: String) {

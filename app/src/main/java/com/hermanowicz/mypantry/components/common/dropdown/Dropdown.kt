@@ -15,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
@@ -25,14 +23,13 @@ import com.hermanowicz.mypantry.ui.theme.Shapes
 fun DropdownPrimary(
     textLeft: String,
     mapKey: String,
-    itemList: Map<String, Int>,
+    itemList: Map<String, String>,
     onClick: () -> Unit,
     onChange: (String) -> Unit,
     visibleDropdown: Boolean,
     onDismiss: () -> Unit
 ) {
-    val context = LocalContext.current
-    val textRes = itemList.getValue(mapKey)
+    val textRight = itemList.getValue(mapKey)
 
     Column() {
         Text(text = textLeft)
@@ -50,7 +47,7 @@ fun DropdownPrimary(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = stringResource(id = textRes),
+                        text = textRight,
                     )
                     DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
                         itemList.forEach { item ->
@@ -58,7 +55,7 @@ fun DropdownPrimary(
                                 onChange(item.key)
                                 onDismiss()
                             }) {
-                                Text(text = context.getString(item.value))
+                                Text(text = item.value)
                             }
                         }
                     }

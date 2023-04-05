@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
+import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
 import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
@@ -26,7 +27,8 @@ class EditProductViewModel @Inject constructor(
     private val observeProductByIdUseCase: ObserveProductByIdUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase
+    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -34,6 +36,16 @@ class EditProductViewModel @Inject constructor(
 
     private val _productDataState = MutableStateFlow(ProductDataState())
     var productDataState: StateFlow<ProductDataState> = _productDataState.asStateFlow()
+
+    init {
+        fetchOwnCategories()
+    }
+
+    private fun fetchOwnCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _productDataState.update { it.copy(ownCategories = getOwnCategoriesUseCase()) }
+        }
+    }
 
     private fun fetchProductData(productId: Int) {
         viewModelScope.launch {
@@ -94,8 +106,7 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (quantity.matches(RegexFormats.NUMBER.regex))
-            _productDataState.update { it.copy(quantity = quantity) }
+        if (quantity.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(quantity = quantity) }
     }
 
     fun onCompositionChange(composition: String) {
@@ -111,13 +122,11 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onWeightChange(weight: String) {
-        if (weight.matches(RegexFormats.NUMBER.regex))
-            _productDataState.update { it.copy(weight = weight) }
+        if (weight.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(weight = weight) }
     }
 
     fun onVolumeChange(volume: String) {
-        if (volume.matches(RegexFormats.NUMBER.regex))
-            _productDataState.update { it.copy(volume = volume) }
+        if (volume.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(volume = volume) }
     }
 
     fun onIsVegeChange(isVege: Boolean) {
@@ -147,8 +156,7 @@ class EditProductViewModel @Inject constructor(
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
-                mainCategory = mainCategory,
-                showMainCategoryDropdown = false
+                mainCategory = mainCategory, showMainCategoryDropdown = false
             )
         }
     }
@@ -156,17 +164,18 @@ class EditProductViewModel @Inject constructor(
     fun onDetailCategoryChange(detailCategory: String) {
         _productDataState.update {
             it.copy(
-                detailCategory = detailCategory,
-                showDetailCategoryDropdown = false
+                detailCategory = detailCategory, showDetailCategoryDropdown = false
             )
         }
     }
 
-    fun getMainCategories(): Map<String, Int> {
+    fun getMainCategories(): Map<String, String> {
         return getMainCategoriesUseCase()
     }
 
-    fun getDetailCategories(): Map<String, Int> {
-        return getDetailsCategoriesUseCase(productDataState.value.mainCategory)
+    fun getDetailCategories(): Map<String, String> {
+        return getDetailsCategoriesUseCase(
+            productDataState.value.ownCategories, productDataState.value.mainCategory
+        )
     }
 }

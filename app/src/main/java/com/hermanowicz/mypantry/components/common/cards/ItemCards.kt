@@ -77,6 +77,7 @@ fun GroupProductItemCard(
 fun StorageLocationItemCard(
     storageLocation: StorageLocation,
     isEditMode: Boolean,
+    onClickEditStorageLocation: (StorageLocation) -> Unit,
     onClickDeleteStorageLocation: (StorageLocation) -> Unit
 ) {
     Card(
@@ -104,6 +105,9 @@ fun StorageLocationItemCard(
             )
             if (isEditMode) {
                 Spacer(modifier = Modifier.height(30.dp))
+                ButtonTransparent(text = stringResource(id = R.string.edit)) {
+                    onClickEditStorageLocation(storageLocation)
+                }
                 ButtonTransparent(text = stringResource(id = R.string.delete)) {
                     onClickDeleteStorageLocation(storageLocation)
                 }

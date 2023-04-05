@@ -27,12 +27,12 @@ fun DatePickerPrimary(
     if (pickerType == PickerType.TO)
         datePickerDialog.datePicker.minDate = now
 
-    ButtonPicker(
-        text = DateAndTimeConverter.dateToVisibleWithYear(
-            datePickerData.day,
-            datePickerData.month,
-            datePickerData.year
-        ),
-        onClick = { datePickerDialog.show() },
-    )
+//    ButtonPicker(
+//        text =  DateAndTimeConverter.dateToVisibleWithYear(
+//            datePickerData.day,
+//            datePickerData.month,
+//            datePickerData.year
+//        ),
+//        onClick = { datePickerDialog.show() },
+//    )
 }

@@ -15,6 +15,10 @@ class CategoriesLocalDataSourceImpl @Inject constructor(
         return categoriesDao.observeAll()
     }
 
+    override fun getAll(): List<CategoriesEntity> {
+        return categoriesDao.getAll()
+    }
+
     override fun observeById(id: Int): Flow<CategoriesEntity> {
         return categoriesDao.observeById(id)
     }

@@ -6,6 +6,7 @@ import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.domain.DeleteStorageLocationUseCase
 import com.hermanowicz.mypantry.domain.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.mypantry.domain.SaveStorageLocationsUseCase
+import com.hermanowicz.mypantry.domain.UpdateStorageLocationUseCase
 import com.hermanowicz.mypantry.navigation.features.storageLocations.state.StorageLocationsModel
 import com.hermanowicz.mypantry.navigation.features.storageLocations.state.StorageLocationsState
 import com.hermanowicz.mypantry.navigation.features.storageLocations.state.StorageLocationsUiState
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class StorageLocationsViewModel @Inject constructor(
     private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
     private val saveStorageLocationsUseCase: SaveStorageLocationsUseCase,
-    private val deleteStorageLocationUseCase: DeleteStorageLocationUseCase
+    private val deleteStorageLocationUseCase: DeleteStorageLocationUseCase,
+    private val updateStorageLocationUseCase: UpdateStorageLocationUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<StorageLocationsUiState>(StorageLocationsUiState.Empty)
     val uiState: StateFlow<StorageLocationsUiState> = _uiState
@@ -57,8 +59,32 @@ class StorageLocationsViewModel @Inject constructor(
         _storageLocationsState.update { it.copy(name = name) }
     }
 
+    fun onEditStorageLocationNameChange(name: String) {
+        _storageLocationsState.update {
+            it.copy(
+                editedStorageLocation = StorageLocation(
+                    id = storageLocationState.value.editedStorageLocation.id,
+                    name = name,
+                    description = storageLocationState.value.editedStorageLocation.description
+                )
+            )
+        }
+    }
+
     fun onDescriptionChange(description: String) {
         _storageLocationsState.update { it.copy(description = description) }
+    }
+
+    fun onEditStorageLocationDescriptionChange(description: String) {
+        _storageLocationsState.update {
+            it.copy(
+                editedStorageLocation = StorageLocation(
+                    id = storageLocationState.value.editedStorageLocation.id,
+                    name = storageLocationState.value.editedStorageLocation.name,
+                    description = description
+                )
+            )
+        }
     }
 
     fun onClickSaveStorageLocation() {
@@ -80,9 +106,29 @@ class StorageLocationsViewModel @Inject constructor(
         _storageLocationsState.update { it.copy(isEditMode = isEditMode) }
     }
 
+    fun onShowEditStorageLocation(storageLocation: StorageLocation) {
+        _storageLocationsState.update {
+            it.copy(
+                showDialogEditStorageLocation = true,
+                editedStorageLocation = storageLocation
+            )
+        }
+    }
+
+    fun onHideDialogEditStorageLocation() {
+        _storageLocationsState.update { it.copy(showDialogEditStorageLocation = false) }
+    }
+
     fun onDeleteStorageLocation(storageLocation: StorageLocation) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteStorageLocationUseCase(storageLocation)
         }
+    }
+
+    fun onSaveEditedStorageLocation() {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateStorageLocationUseCase(storageLocationState.value.editedStorageLocation)
+        }
+        onHideDialogEditStorageLocation()
     }
 }

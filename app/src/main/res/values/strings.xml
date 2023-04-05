@@ -74,4 +74,5 @@
     <string name="powders">Powders</string>
     <string name="edit">Edit</string>
     <string name="edit_category">Edit category</string>
+    <string name="edit_storage_location">Edit storage location</string>
 </resources>

@@ -72,6 +72,17 @@ fun StorageLocationsScreen(
                 onSaveClick = { viewModel.onClickSaveStorageLocation() }
             )
         }
+        if (storageLocationState.showDialogEditStorageLocation) {
+            DialogItem(
+                onDismissRequest = { viewModel.onHideDialogEditStorageLocation() },
+                label = stringResource(id = R.string.edit_storage_location),
+                name = storageLocationState.editedStorageLocation.name,
+                description = storageLocationState.editedStorageLocation.description,
+                onNameChange = { viewModel.onEditStorageLocationNameChange(it) },
+                onDescriptionChange = { viewModel.onEditStorageLocationDescriptionChange(it) },
+                onSaveClick = { viewModel.onSaveEditedStorageLocation() }
+            )
+        }
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,10 +91,13 @@ fun StorageLocationsScreen(
             item {
                 ShowStorageLocations(
                     storageLocationList = storageLocationModel.storageLocations,
+                    onClickEditStorageLocation = {
+                        viewModel.onShowEditStorageLocation(it)
+                    },
                     onClickDeleteStorageLocation = {
                         viewModel.onDeleteStorageLocation(it)
                     },
-                    isEditMode = storageLocationState.isEditMode
+                    isEditMode = storageLocationState.isEditMode,
                 )
             }
         }
@@ -93,11 +107,17 @@ fun StorageLocationsScreen(
 @Composable
 private fun ShowStorageLocations(
     storageLocationList: List<StorageLocation>,
+    onClickEditStorageLocation: (StorageLocation) -> Unit,
     onClickDeleteStorageLocation: (StorageLocation) -> Unit,
     isEditMode: Boolean
 ) {
     storageLocationList.forEach { storageLocation ->
-        StorageLocationItemCard(storageLocation, isEditMode) { onClickDeleteStorageLocation(it) }
+        StorageLocationItemCard(
+            storageLocation,
+            isEditMode,
+            onClickEditStorageLocation = onClickEditStorageLocation,
+            onClickDeleteStorageLocation = onClickDeleteStorageLocation
+        )
     }
 }
 

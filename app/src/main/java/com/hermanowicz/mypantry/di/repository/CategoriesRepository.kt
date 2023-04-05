@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface CategoriesRepository {
     fun observeById(id: Int): Flow<Category>
     fun observeAll(): Flow<List<Category>>
-    fun getMainCategories(): Map<String, Int>
+    fun getMainCategories(): Map<String, String>
+    fun getOwnCategories(): List<Category>
     suspend fun insert(category: Category)
     suspend fun update(category: Category)
     suspend fun delete(category: Category)
