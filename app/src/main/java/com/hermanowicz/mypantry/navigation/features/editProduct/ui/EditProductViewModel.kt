@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.navigation.features.editProduct.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
@@ -13,6 +14,7 @@ import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
 import com.hermanowicz.mypantry.utils.ProductDataState
 import com.hermanowicz.mypantry.utils.RegexFormats
+import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +32,8 @@ class EditProductViewModel @Inject constructor(
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
-    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase
+    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -39,8 +42,11 @@ class EditProductViewModel @Inject constructor(
     private val _productDataState = MutableStateFlow(ProductDataState())
     var productDataState: StateFlow<ProductDataState> = _productDataState.asStateFlow()
 
+    private val productId = savedStateHandle.get<String>("productId")?.toInt() ?: 0
+
     init {
         fetchOwnCategories()
+        fetchProductData(productId)
     }
 
     private fun fetchOwnCategories() {
@@ -71,8 +77,30 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onSaveClick() {
+        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
+            _productDataState.update { it.copy(showErrorWrongName = true) }
+        else {
+            updateProducts()
+            cleanErrors()
+        }
+    }
+
+    private fun cleanErrors() {
+        _productDataState.update { it.copy(showErrorWrongName = false) }
+    }
+
+    private fun updateProducts() {
+        var mainCategory = ""
+        var detailCategory = ""
+        if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
+            mainCategory = productDataState.value.mainCategory
+        if (productDataState.value.detailCategory != MainCategoriesTypes.CHOOSE.name)
+            detailCategory = productDataState.value.detailCategory
         val product = Product(
+            id = productId,
             name = productDataState.value.name,
+            mainCategory = mainCategory,
+            detailCategory = detailCategory,
             expirationDate = productDataState.value.expirationDate,
             productionDate = productDataState.value.productionDate,
             composition = productDataState.value.composition,
@@ -87,8 +115,9 @@ class EditProductViewModel @Inject constructor(
         )
         viewModelScope.launch(Dispatchers.IO) {
             val products: MutableList<Product> = mutableListOf()
-            val quantity = productDataState.value.quantity.toInt()
-            for (i in 0..quantity) {
+            val quantity =
+                if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
+            for (i in 1..quantity) {
                 products.add(product)
             }
             updateProductsUseCase(products)
@@ -122,7 +151,11 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (quantity.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(quantity = quantity) }
+        if (quantity.matches(RegexFormats.NUMBER.regex)) _productDataState.update {
+            it.copy(
+                quantity = quantity
+            )
+        }
     }
 
     fun onCompositionChange(composition: String) {

@@ -29,5 +29,8 @@ data class ProductDataState(
     val taste: String = "",
     val photoName: String = "",
     val photoDescription: String = "",
-    val barcode: String = ""
+    val barcode: String = "",
+    var showErrorWrongName: Boolean = false,
+    var showErrorWrongQuantity: Boolean = false,
+    var onNavigateToMyPantry: Boolean = false
 )

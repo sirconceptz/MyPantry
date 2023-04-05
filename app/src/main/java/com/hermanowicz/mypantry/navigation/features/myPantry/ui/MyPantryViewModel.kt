@@ -25,7 +25,7 @@ class MyPantryViewModel @Inject constructor(
         fetchProducts()
     }
 
-    fun fetchProducts() {
+    private fun fetchProducts() {
         _uiState.value = MyPantryProductsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {

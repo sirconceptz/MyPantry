@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -20,9 +21,17 @@ import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 @Composable
 fun NewProductScreen(
     openDrawer: () -> Unit,
-    viewModel: NewProductViewModel = hiltViewModel()
+    viewModel: NewProductViewModel = hiltViewModel(),
+    onNavigateToMyPantry: () -> Unit
 ) {
     val productDataState by viewModel.productDataState.collectAsState()
+
+    LaunchedEffect(key1 = productDataState.onNavigateToMyPantry) {
+        if (productDataState.onNavigateToMyPantry) {
+            onNavigateToMyPantry()
+            viewModel.onNavigateToMyPantry(false)
+        }
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.new_product),

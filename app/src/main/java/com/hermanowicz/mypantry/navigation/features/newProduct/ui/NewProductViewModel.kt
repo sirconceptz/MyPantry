@@ -48,6 +48,20 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onSaveClick() {
+        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
+            _productDataState.update { it.copy(showErrorWrongName = true) }
+        else {
+            saveProducts()
+            cleanErrors()
+            onNavigateToMyPantry(true)
+        }
+    }
+
+    private fun cleanErrors() {
+        _productDataState.update { it.copy(showErrorWrongName = false) }
+    }
+
+    private fun saveProducts() {
         var mainCategory = ""
         var detailCategory = ""
         if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
@@ -184,6 +198,14 @@ class NewProductViewModel @Inject constructor(
             it.copy(
                 detailCategory = detailCategory,
                 showDetailCategoryDropdown = false
+            )
+        }
+    }
+
+    fun onNavigateToMyPantry(bool: Boolean) {
+        _productDataState.update {
+            it.copy(
+                onNavigateToMyPantry = bool
             )
         }
     }
