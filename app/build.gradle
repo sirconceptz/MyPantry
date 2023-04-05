@@ -14,8 +14,8 @@ android {
         applicationId "com.hermanowicz.mypantry"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 70
+        versionName "4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -91,6 +91,11 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //zxing - qr codes
+    implementation 'com.google.zxing:core:3.5.0'
+    implementation 'com.google.zxing:javase:3.5.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
     //Tests
     testImplementation "junit:junit:4.13.2"
