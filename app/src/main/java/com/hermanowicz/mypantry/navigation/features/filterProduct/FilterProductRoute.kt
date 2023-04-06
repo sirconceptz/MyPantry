@@ -6,5 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.filterProduct.ui.FilterProdu
 
 @Composable
 fun FilterProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    FilterProductScreen(openDrawer)
+    FilterProductScreen(
+        openDrawer = openDrawer
+    )
 }

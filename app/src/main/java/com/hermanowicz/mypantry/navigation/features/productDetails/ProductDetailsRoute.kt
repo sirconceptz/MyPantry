@@ -11,7 +11,7 @@ fun ProductDetailsRoute(
     openDrawer: () -> Unit
 ) {
     ProductDetailsScreen(
-        openDrawer,
+        openDrawer = openDrawer,
         onClickEditProducts = { navController.navigate("${AppScreens.EditProduct.route}/$it") }
     )
 }

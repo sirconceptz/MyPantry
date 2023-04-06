@@ -27,10 +27,11 @@ import timber.log.Timber
 
 @Composable
 fun MyPantryScreen(
-    viewModel: MyPantryViewModel = hiltViewModel(),
+    openDrawer: () -> Unit,
     onClickGroupProduct: (Int) -> Unit,
     onClickFilterProduct: () -> Unit,
-    openDrawer: () -> Unit
+    viewModel: MyPantryViewModel = hiltViewModel(),
+
 ) {
     val uiModel = updateUi(viewModel)
 

@@ -67,7 +67,8 @@ class EditProductViewModel @Inject constructor(
                     expirationDate = groupProduct.product.expirationDate,
                     productionDate = groupProduct.product.productionDate,
                     composition = groupProduct.product.composition,
-                    quantity = groupProduct.quantity.toString(),
+                    oldQuantity = groupProduct.quantity.toString(),
+                    newQuantity = groupProduct.quantity.toString(),
                     healingProperties = groupProduct.product.healingProperties,
                     dosage = groupProduct.product.dosage,
                     hasSugar = groupProduct.product.hasSugar,
@@ -121,11 +122,15 @@ class EditProductViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val products: MutableList<Product> = mutableListOf()
             val quantity =
-                if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
+                if (productDataState.value.newQuantity == "") 1 else productDataState.value.newQuantity.toInt()
             for (i in 1..quantity) {
                 products.add(product)
             }
-            updateProductsUseCase(products)
+            updateProductsUseCase(
+                products,
+                productDataState.value.oldQuantity.toInt(),
+                productDataState.value.newQuantity.toInt()
+            )
         }
     }
 
@@ -156,9 +161,9 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (quantity.matches(RegexFormats.NUMBER.regex)) _productDataState.update {
+        if (quantity.matches(RegexFormats.NUMBER.regex) || quantity.isEmpty()) _productDataState.update {
             it.copy(
-                quantity = quantity
+                newQuantity = quantity
             )
         }
     }
@@ -176,11 +181,19 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onWeightChange(weight: String) {
-        if (weight.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(weight = weight) }
+        if (weight.matches(RegexFormats.NUMBER.regex) || productDataState.value.weight.isEmpty()) _productDataState.update {
+            it.copy(
+                weight = weight
+            )
+        }
     }
 
     fun onVolumeChange(volume: String) {
-        if (volume.matches(RegexFormats.NUMBER.regex)) _productDataState.update { it.copy(volume = volume) }
+        if (volume.matches(RegexFormats.NUMBER.regex) || productDataState.value.volume.isEmpty()) _productDataState.update {
+            it.copy(
+                volume = volume
+            )
+        }
     }
 
     fun onIsVegeChange(isVege: Boolean) {

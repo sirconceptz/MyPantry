@@ -14,7 +14,8 @@ data class EditProductDataState(
     var ownCategories: List<Category> = emptyList(),
     var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
     val detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
-    val quantity: String = "",
+    val newQuantity: String = "",
+    val oldQuantity: String = "0",
     val storageLocation: String = "",
     val expirationDate: String = "",
     val productionDate: String = "",
@@ -33,5 +34,5 @@ data class EditProductDataState(
     val barcode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
-    var onNavigateToMyPantry: Boolean = false
+    var onNavigateBack: Boolean = false
 )

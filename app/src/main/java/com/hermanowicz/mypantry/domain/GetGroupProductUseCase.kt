@@ -7,13 +7,13 @@ import javax.inject.Inject
 class GetGroupProductUseCase @Inject constructor() : (Int, List<Product>) -> GroupProduct {
     override fun invoke(productId: Int, products: List<Product>): GroupProduct {
         var product = Product()
-        for (mProduct in products) {
-            if (mProduct.id == productId)
-                product = mProduct
+        products.forEach {
+            if (it.id == productId)
+                product = it
         }
         var groupProductReturned = GroupProduct(product, 0)
-        for (mProduct in products) {
-            if (product == mProduct.copy(id = product.id))
+        products.forEach {
+            if (product == it.copy(id = product.id))
                 groupProductReturned =
                     groupProductReturned.copy(quantity = groupProductReturned.quantity + 1)
         }

@@ -6,5 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.ownCategories.ui.OwnCategori
 
 @Composable
 fun OwnCategoriesRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    OwnCategoriesScreen(openDrawer)
+    OwnCategoriesScreen(
+        openDrawer = openDrawer
+    )
 }

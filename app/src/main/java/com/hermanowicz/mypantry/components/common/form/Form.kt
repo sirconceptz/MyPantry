@@ -202,7 +202,7 @@ fun EditProductForm(
             pickerType = PickerType.ALL
         )
         TextFieldAndLabel(
-            textfieldText = productDataState.quantity,
+            textfieldText = productDataState.newQuantity,
             labelText = stringResource(id = R.string.quantity),
             textEvent = onQuantityChange,
             placeholder = stringResource(id = R.string.quantity),

@@ -6,5 +6,8 @@ import com.hermanowicz.mypantry.navigation.features.editProduct.ui.EditProductSc
 
 @Composable
 fun EditProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    EditProductScreen(openDrawer)
+    EditProductScreen(
+        openDrawer = openDrawer,
+        onNavigateBack = { navController.popBackStack() }
+    )
 }

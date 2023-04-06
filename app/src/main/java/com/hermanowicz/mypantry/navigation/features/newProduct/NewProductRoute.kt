@@ -8,7 +8,7 @@ import com.hermanowicz.mypantry.navigation.features.newProduct.ui.NewProductScre
 @Composable
 fun NewProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
     NewProductScreen(
-        openDrawer,
+        openDrawer = openDrawer,
         onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) }
     )
 }

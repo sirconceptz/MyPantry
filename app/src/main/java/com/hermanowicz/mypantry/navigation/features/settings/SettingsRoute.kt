@@ -6,5 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.settings.ui.SettingsScreen
 
 @Composable
 fun SettingsRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    SettingsScreen(openDrawer)
+    SettingsScreen(
+        openDrawer = openDrawer
+    )
 }

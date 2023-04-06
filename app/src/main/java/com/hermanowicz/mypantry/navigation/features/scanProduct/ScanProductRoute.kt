@@ -6,5 +6,7 @@ import com.hermanowicz.mypantry.navigation.features.scanProduct.ui.ScanProductSc
 
 @Composable
 fun ScanProductRoute(navController: NavHostController, openDrawer: () -> Unit) {
-    ScanProductScreen(openDrawer)
+    ScanProductScreen(
+        openDrawer = openDrawer
+    )
 }
