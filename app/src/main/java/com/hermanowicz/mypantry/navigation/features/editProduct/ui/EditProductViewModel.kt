@@ -9,10 +9,10 @@ import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
 import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
+import com.hermanowicz.mypantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
-import com.hermanowicz.mypantry.utils.ProductDataState
 import com.hermanowicz.mypantry.utils.RegexFormats
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,10 +39,11 @@ class EditProductViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
 
-    private val _productDataState = MutableStateFlow(ProductDataState())
-    var productDataState: StateFlow<ProductDataState> = _productDataState.asStateFlow()
+    private val _productDataState = MutableStateFlow(EditProductDataState())
+    var productDataState: StateFlow<EditProductDataState> = _productDataState.asStateFlow()
 
-    private val productId = savedStateHandle.get<String>("productId")?.toInt() ?: 0
+    private val stringId: String = savedStateHandle["id"] ?: "0"
+    private val productId = stringId.toInt()
 
     init {
         fetchOwnCategories()
@@ -58,7 +59,7 @@ class EditProductViewModel @Inject constructor(
     private fun fetchProductData(productId: Int) {
         viewModelScope.launch {
             observeProductByIdUseCase(productId).map { product ->
-                _productDataState.value = ProductDataState(
+                _productDataState.value = EditProductDataState(
                     name = product.name,
                     expirationDate = product.expirationDate,
                     productionDate = product.productionDate,

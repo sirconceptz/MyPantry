@@ -16,16 +16,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
-    private val getGroupProductUseCase: GetGroupProductUseCase
+    private val getGroupProductUseCase: GetGroupProductUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Empty)
     val uiState: StateFlow<ProductDetailsUiState> = _uiState
 
+    private val stringId: String = savedStateHandle["id"] ?: "0"
+    val productId = stringId.toInt()
+
     init {
-        val productId: String = savedStateHandle["id"] ?: "0"
-        fetchProducts(productId.toInt())
+        fetchProducts(productId)
     }
 
     private fun fetchProducts(productId: Int) {

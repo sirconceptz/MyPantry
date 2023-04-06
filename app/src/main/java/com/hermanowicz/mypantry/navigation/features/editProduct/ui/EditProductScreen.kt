@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
-import com.hermanowicz.mypantry.components.common.form.ProductForm
+import com.hermanowicz.mypantry.components.common.form.EditProductForm
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 
@@ -34,7 +34,7 @@ fun EditProductScreen(
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
             item {
-                ProductForm(
+                EditProductForm(
                     productDataState,
                     onNameChange = { viewModel.onNameChange(it) },
                     onMainCategoryChange = { viewModel.onMainCategoryChange(it) },

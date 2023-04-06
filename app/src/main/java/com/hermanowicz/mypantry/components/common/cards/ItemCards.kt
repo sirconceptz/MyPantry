@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.components.common.cards
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -28,7 +30,6 @@ import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
-import com.hermanowicz.mypantry.utils.ProductDataState
 
 @Composable
 fun GroupProductItemCard(
@@ -161,7 +162,10 @@ fun CategoryItemCard(
 
 @Composable
 fun ProductDetailsAttributesCard(
-    productDataState: ProductDataState,
+    isVege: Boolean,
+    isBio: Boolean,
+    hasSugar: Boolean,
+    hasSalt: Boolean,
     onIsVegeChange: (Boolean) -> Unit,
     onIsBioChange: (Boolean) -> Unit,
     onHasSugarChange: (Boolean) -> Unit,
@@ -172,8 +176,9 @@ fun ProductDetailsAttributesCard(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(Shapes.medium)
-                .padding(horizontal = LocalSpacing.current.tiny)
+                .padding(horizontal = LocalSpacing.current.tiny),
+            border = BorderStroke(width = LocalSpacing.current.line, color = Color.Black),
+            shape = Shapes.medium
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -189,8 +194,8 @@ fun ProductDetailsAttributesCard(
                 ) {
                     Text(text = stringResource(R.string.vege))
                     CircleCheckbox(
-                        selected = productDataState.isVege,
-                        onChecked = { onIsVegeChange(!productDataState.isVege) }
+                        selected = isVege,
+                        onChecked = { onIsVegeChange(!isVege) }
                     )
                 }
                 DividerCardInside()
@@ -201,8 +206,8 @@ fun ProductDetailsAttributesCard(
                 ) {
                     Text(text = stringResource(R.string.bio))
                     CircleCheckbox(
-                        selected = productDataState.isBio,
-                        onChecked = { onIsBioChange(!productDataState.isBio) }
+                        selected = isBio,
+                        onChecked = { onIsBioChange(!isBio) }
                     )
                 }
                 DividerCardInside()
@@ -213,8 +218,8 @@ fun ProductDetailsAttributesCard(
                 ) {
                     Text(text = stringResource(R.string.sugar))
                     CircleCheckbox(
-                        selected = productDataState.hasSugar,
-                        onChecked = { onHasSugarChange(!productDataState.isVege) }
+                        selected = hasSugar,
+                        onChecked = { onHasSugarChange(!isVege) }
                     )
                 }
                 DividerCardInside()
@@ -225,8 +230,8 @@ fun ProductDetailsAttributesCard(
                 ) {
                     Text(text = stringResource(R.string.salt))
                     CircleCheckbox(
-                        selected = productDataState.hasSalt,
-                        onChecked = { onHasSaltChange(!productDataState.hasSalt) }
+                        selected = hasSalt,
+                        onChecked = { onHasSaltChange(!hasSalt) }
                     )
                 }
             }

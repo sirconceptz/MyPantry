@@ -77,7 +77,14 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 
     //Barcode
-    implementation 'com.google.android.gms:play-services-code-scanner:16.0.0-beta3'
+    implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.4.0')
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+    implementation 'com.google.firebase:firebase-auth:21.2.0'
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"

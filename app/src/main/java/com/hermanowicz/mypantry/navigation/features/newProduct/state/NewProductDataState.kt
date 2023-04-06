@@ -1,10 +1,11 @@
-package com.hermanowicz.mypantry.utils
+package com.hermanowicz.mypantry.navigation.features.newProduct.state
 
 import com.hermanowicz.mypantry.data.model.Category
+import com.hermanowicz.mypantry.utils.DatePickerData
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
 
-data class ProductDataState(
+data class NewProductDataState(
     val name: String = "",
     var showMainCategoryDropdown: Boolean = false,
     var showDetailCategoryDropdown: Boolean = false,

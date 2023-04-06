@@ -7,10 +7,10 @@ import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.mypantry.domain.SaveProductsUseCase
+import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductDataState
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
-import com.hermanowicz.mypantry.utils.ProductDataState
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,8 +32,8 @@ class NewProductViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
 
-    private val _productDataState = MutableStateFlow(ProductDataState())
-    var productDataState: StateFlow<ProductDataState> = _productDataState.asStateFlow()
+    private val _productDataState = MutableStateFlow(NewProductDataState())
+    var productDataState: StateFlow<NewProductDataState> = _productDataState.asStateFlow()
 
     private val numberPattern = Regex("^\\d+\$")
 
