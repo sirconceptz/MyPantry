@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.mypantry.data.model.Product
 import com.hermanowicz.mypantry.domain.GetDetailsCategoriesUseCase
+import com.hermanowicz.mypantry.domain.GetGroupProductUseCase
 import com.hermanowicz.mypantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.mypantry.domain.GetOwnCategoriesUseCase
-import com.hermanowicz.mypantry.domain.ObserveProductByIdUseCase
+import com.hermanowicz.mypantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.mypantry.domain.UpdateProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductUiState
@@ -28,7 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
-    private val observeProductByIdUseCase: ObserveProductByIdUseCase,
+    private val observeAllProductsUseCase: ObserveAllProductsUseCase,
+    private val getGroupProductUseCase: GetGroupProductUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
@@ -58,20 +60,22 @@ class EditProductViewModel @Inject constructor(
 
     private fun fetchProductData(productId: Int) {
         viewModelScope.launch {
-            observeProductByIdUseCase(productId).map { product ->
+            observeAllProductsUseCase().map { products ->
+                val groupProduct = getGroupProductUseCase(productId, products)
                 _productDataState.value = EditProductDataState(
-                    name = product.name,
-                    expirationDate = product.expirationDate,
-                    productionDate = product.productionDate,
-                    composition = product.composition,
-                    healingProperties = product.healingProperties,
-                    dosage = product.dosage,
-                    hasSugar = product.hasSugar,
-                    hasSalt = product.hasSalt,
-                    isVege = product.isVege,
-                    isBio = product.isBio,
-                    weight = product.weight.toString(),
-                    volume = product.volume.toString()
+                    name = groupProduct.product.name,
+                    expirationDate = groupProduct.product.expirationDate,
+                    productionDate = groupProduct.product.productionDate,
+                    composition = groupProduct.product.composition,
+                    quantity = groupProduct.quantity.toString(),
+                    healingProperties = groupProduct.product.healingProperties,
+                    dosage = groupProduct.product.dosage,
+                    hasSugar = groupProduct.product.hasSugar,
+                    hasSalt = groupProduct.product.hasSalt,
+                    isVege = groupProduct.product.isVege,
+                    isBio = groupProduct.product.isBio,
+                    weight = groupProduct.product.weight.toString(),
+                    volume = groupProduct.product.volume.toString()
                 )
             }.collect()
         }
