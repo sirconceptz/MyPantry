@@ -6,22 +6,30 @@ import javax.inject.Inject
 
 class UpdateProductsUseCase @Inject constructor(
     private val productRepository: ProductRepository
-) : suspend (List<Product>, Int, Int) -> Unit {
-    override suspend fun invoke(products: List<Product>, oldQuantity: Int, newQuantity: Int) {
-        val mutableProducts = products.toMutableList().asReversed()
+) : suspend (Product, List<Int>, Int, Int) -> Unit {
+    override suspend fun invoke(
+        product: Product,
+        productIdList: List<Int>,
+        oldQuantity: Int,
+        newQuantity: Int
+    ) {
+        val mutableProducts: MutableList<Product> = mutableListOf()
+        for (i in productIdList.indices) {
+            mutableProducts.add(product.copy(id = i))
+        }
+        val idListReversed = productIdList.asReversed()
         val listToDelete: MutableList<Product> = mutableListOf()
         val listToAdd: MutableList<Product> = mutableListOf()
         if (oldQuantity < newQuantity) {
             val diff = newQuantity - oldQuantity
-            for (counter in 1..diff) {
-                listToAdd.add(mutableProducts[counter].copy(id = 0))
-                mutableProducts.removeAt(counter)
+            for (counter in 0 until diff) {
+                listToAdd.add(product.copy(id = 0))
             }
         }
         if (oldQuantity > newQuantity) {
             val diff = oldQuantity - newQuantity
             for (counter in 0 until diff) {
-                listToDelete.add(mutableProducts[counter])
+                listToDelete.add(product.copy(id = idListReversed[counter]))
                 mutableProducts.removeAt(counter)
             }
         }

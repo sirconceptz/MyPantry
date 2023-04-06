@@ -27,8 +27,10 @@ fun EditProductScreen(
     val productDataState by viewModel.productDataState.collectAsState()
 
     LaunchedEffect(key1 = productDataState.onNavigateBack) {
-        if (productDataState.onNavigateBack)
+        if (productDataState.onNavigateBack) {
             onNavigateBack()
+            viewModel.onNavigateBack(false)
+        }
     }
 
     TopBarScaffold(

@@ -15,7 +15,10 @@ class GetGroupProductUseCase @Inject constructor() : (Int, List<Product>) -> Gro
         products.forEach {
             if (product == it.copy(id = product.id))
                 groupProductReturned =
-                    groupProductReturned.copy(quantity = groupProductReturned.quantity + 1)
+                    groupProductReturned.copy(
+                        quantity = groupProductReturned.quantity + 1
+                    )
+            groupProductReturned.idList.add(it.id)
         }
         return groupProductReturned
     }

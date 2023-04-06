@@ -76,7 +76,8 @@ class EditProductViewModel @Inject constructor(
                     isVege = groupProduct.product.isVege,
                     isBio = groupProduct.product.isBio,
                     weight = groupProduct.product.weight.toString(),
-                    volume = groupProduct.product.volume.toString()
+                    volume = groupProduct.product.volume.toString(),
+                    productsIdList = groupProduct.idList
                 )
             }.collect()
         }
@@ -120,18 +121,18 @@ class EditProductViewModel @Inject constructor(
             volume = productDataState.value.volume.toIntOrNull() ?: 0
         )
         viewModelScope.launch(Dispatchers.IO) {
-            val products: MutableList<Product> = mutableListOf()
-            val quantity =
-                if (productDataState.value.newQuantity == "") 1 else productDataState.value.newQuantity.toInt()
-            for (i in 1..quantity) {
-                products.add(product)
-            }
             updateProductsUseCase(
-                products,
-                productDataState.value.oldQuantity.toInt(),
-                productDataState.value.newQuantity.toInt()
+                product,
+                productDataState.value.productsIdList,
+                productDataState.value.oldQuantity.toIntOrNull() ?: 1,
+                productDataState.value.newQuantity.toIntOrNull() ?: 1
             )
+            onNavigateBack(true)
         }
+    }
+
+    fun onNavigateBack(bool: Boolean) {
+        _productDataState.update { it.copy(onNavigateBack = bool) }
     }
 
     fun onNameChange(name: String) {

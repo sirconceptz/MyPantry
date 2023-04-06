@@ -6,18 +6,19 @@ import javax.inject.Inject
 
 class GetGroupProductListUseCase @Inject constructor() : (List<Product>) -> List<GroupProduct> {
     override fun invoke(products: List<Product>): List<GroupProduct> {
-        val groupProductList: MutableList<GroupProduct> = ArrayList()
-        val toAddGroupProductList: MutableList<GroupProduct> = ArrayList()
-        val toRemoveGroupProductList: MutableList<GroupProduct> = ArrayList()
+        val groupProductList: MutableList<GroupProduct> = mutableListOf()
+        val toAddGroupProductList: MutableList<GroupProduct> = mutableListOf()
+        val toRemoveGroupProductList: MutableList<GroupProduct> = mutableListOf()
         for (product in products) {
             var testedGroupProduct: GroupProduct? = getGroupIfOnList(product, groupProductList)
             if (testedGroupProduct != null) {
+                testedGroupProduct.idList.add(product.id)
                 toRemoveGroupProductList.add(testedGroupProduct)
                 testedGroupProduct =
                     testedGroupProduct.copy(quantity = testedGroupProduct.quantity + 1)
                 toAddGroupProductList.add(testedGroupProduct)
             } else {
-                val newGroupProduct = GroupProduct(product, 1)
+                val newGroupProduct = GroupProduct(product, 1, mutableListOf(product.id))
                 toAddGroupProductList.add(newGroupProduct)
             }
             groupProductList.removeAll(toRemoveGroupProductList)

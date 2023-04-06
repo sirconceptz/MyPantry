@@ -34,5 +34,6 @@ data class EditProductDataState(
     val barcode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
-    var onNavigateBack: Boolean = false
+    var onNavigateBack: Boolean = false,
+    val productsIdList: List<Int> = emptyList()
 )
