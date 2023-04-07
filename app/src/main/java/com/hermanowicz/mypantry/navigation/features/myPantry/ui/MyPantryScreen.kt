@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.GroupProductItemCard
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
@@ -30,7 +29,7 @@ fun MyPantryScreen(
     openDrawer: () -> Unit,
     onClickGroupProduct: (Int) -> Unit,
     onClickFilterProduct: () -> Unit,
-    viewModel: MyPantryViewModel = hiltViewModel(),
+    viewModel: MyPantryViewModel,
 
 ) {
     val uiModel = updateUi(viewModel)

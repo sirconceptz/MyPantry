@@ -127,11 +127,11 @@ class EditProductViewModel @Inject constructor(
                 productDataState.value.oldQuantity.toIntOrNull() ?: 1,
                 productDataState.value.newQuantity.toIntOrNull() ?: 1
             )
-            onNavigateBack(true)
         }
+        onNavigateToMyPantry(true)
     }
 
-    fun onNavigateBack(bool: Boolean) {
+    fun onNavigateToMyPantry(bool: Boolean) {
         _productDataState.update { it.copy(onNavigateBack = bool) }
     }
 

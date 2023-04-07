@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -17,6 +18,7 @@ import com.hermanowicz.mypantry.components.common.drawer.AppDrawerView
 import com.hermanowicz.mypantry.navigation.features.editProduct.EditProductRoute
 import com.hermanowicz.mypantry.navigation.features.filterProduct.FilterProductRoute
 import com.hermanowicz.mypantry.navigation.features.myPantry.MyPantryRoute
+import com.hermanowicz.mypantry.navigation.features.myPantry.ui.MyPantryViewModel
 import com.hermanowicz.mypantry.navigation.features.newProduct.NewProductRoute
 import com.hermanowicz.mypantry.navigation.features.ownCategories.OwnCategoriesRoute
 import com.hermanowicz.mypantry.navigation.features.productDetails.ProductDetailsRoute
@@ -72,14 +74,23 @@ fun AppNavHost() {
                 })
             }
         ) {
+            val myPantryViewModel: MyPantryViewModel = hiltViewModel()
             NavHost(
                 navController = navController, startDestination = AppScreens.MyPantry.route
             ) {
                 composable(route = AppScreens.MyPantry.route) {
-                    MyPantryRoute(navController = navController, openDrawer = { openDrawer() })
+                    MyPantryRoute(
+                        navController = navController,
+                        openDrawer = { openDrawer() },
+                        myPantryViewModel = myPantryViewModel
+                    )
                 }
                 composable(route = AppScreens.FilterProduct.route) {
-                    FilterProductRoute(navController = navController, openDrawer = { openDrawer() })
+                    FilterProductRoute(
+                        navController = navController,
+                        openDrawer = { openDrawer() },
+                        myPantryViewModel = myPantryViewModel
+                    )
                 }
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") {
                     ProductDetailsRoute(

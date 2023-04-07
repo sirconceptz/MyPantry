@@ -11,9 +11,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
 import com.hermanowicz.mypantry.components.common.dropdown.DropdownPrimary
+import com.hermanowicz.mypantry.components.common.picker.DatePickerDouble
 import com.hermanowicz.mypantry.components.common.picker.DatePickerPrimary
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
+import com.hermanowicz.mypantry.components.common.textfield.TextFieldDoubleAndLabel
 import com.hermanowicz.mypantry.navigation.features.editProduct.state.EditProductDataState
+import com.hermanowicz.mypantry.navigation.features.filterProduct.state.FilterProductDataState
 import com.hermanowicz.mypantry.navigation.features.newProduct.state.NewProductDataState
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.utils.DatePickerData
@@ -205,8 +208,7 @@ fun EditProductForm(
             textfieldText = productDataState.newQuantity,
             labelText = stringResource(id = R.string.quantity),
             textEvent = onQuantityChange,
-            placeholder = stringResource(id = R.string.quantity),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            placeholder = stringResource(id = R.string.quantity)
         )
         TextFieldAndLabel(
             textfieldText = productDataState.composition,
@@ -245,6 +247,128 @@ fun EditProductForm(
             isBio = productDataState.isBio,
             hasSugar = productDataState.hasSugar,
             hasSalt = productDataState.hasSalt,
+            onIsVegeChange = onIsVegeChange,
+            onIsBioChange = onIsBioChange,
+            onHasSugarChange = onHasSugarChange,
+            onHasSaltChange = onHasSaltChange
+        )
+    }
+}
+
+@Composable
+fun FilterProductForm(
+    filterProductDataState: FilterProductDataState,
+    onNameChange: (String) -> Unit,
+    showMainCategoryDropdown: (Boolean) -> Unit,
+    onMainCategoryChange: (String) -> Unit,
+    showDetailCategoryDropdown: (Boolean) -> Unit,
+    onDetailCategoryChange: (String) -> Unit,
+    onExpirationDateMinChange: (DatePickerData) -> Unit,
+    onExpirationDateMaxChange: (DatePickerData) -> Unit,
+    onProductionDateMinChange: (DatePickerData) -> Unit,
+    onProductionDateMaxChange: (DatePickerData) -> Unit,
+    onWeightMinChange: (String) -> Unit,
+    onWeightMaxChange: (String) -> Unit,
+    onVolumeMinChange: (String) -> Unit,
+    onVolumeMaxChange: (String) -> Unit,
+    onHealingPropertiesChange: (String) -> Unit,
+    onDosageChange: (String) -> Unit,
+    onCompositionChange: (String) -> Unit,
+    onIsVegeChange: (Boolean) -> Unit,
+    onIsBioChange: (Boolean) -> Unit,
+    onHasSugarChange: (Boolean) -> Unit,
+    onHasSaltChange: (Boolean) -> Unit,
+
+    mainCategoryItemList: Map<String, String>,
+    detailCategoryItemList: Map<String, String>
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium)
+    ) {
+        TextFieldAndLabel(
+            textfieldText = filterProductDataState.name,
+            labelText = stringResource(id = R.string.name),
+            textEvent = onNameChange,
+            placeholder = stringResource(id = R.string.name)
+        )
+        DropdownPrimary(
+            textLeft = stringResource(id = R.string.main_category),
+            mapKey = filterProductDataState.mainCategory,
+            itemList = mainCategoryItemList,
+            onClick = { showMainCategoryDropdown(true) },
+            onChange = onMainCategoryChange,
+            visibleDropdown = filterProductDataState.showMainCategoryDropdown,
+            onDismiss = { showMainCategoryDropdown(false) }
+        )
+        DropdownPrimary(
+            textLeft = stringResource(id = R.string.detail_category),
+            mapKey = filterProductDataState.detailCategory,
+            itemList = detailCategoryItemList,
+            onClick = { showDetailCategoryDropdown(true) },
+            onChange = onDetailCategoryChange,
+            visibleDropdown = filterProductDataState.showDetailCategoryDropdown,
+            onDismiss = { showDetailCategoryDropdown(false) }
+        )
+        DatePickerDouble(
+            labelText = stringResource(id = R.string.expiration_date),
+            dateLeftToDisplay = filterProductDataState.expirationDateMin,
+            dateRightToDisplay = filterProductDataState.expirationDateMax,
+            datePickerLeftData = filterProductDataState.expirationDateMinPickerData,
+            datePickerRightData = filterProductDataState.expirationDateMaxPickerData,
+            onChangeLeftDate = onExpirationDateMinChange,
+            onChangeRightDate = onExpirationDateMaxChange,
+        )
+        DatePickerDouble(
+            labelText = stringResource(id = R.string.production_date),
+            dateLeftToDisplay = filterProductDataState.productionDateMin,
+            dateRightToDisplay = filterProductDataState.productionDateMax,
+            datePickerLeftData = filterProductDataState.productionDateMinPickerData,
+            datePickerRightData = filterProductDataState.productionDateMaxPickerData,
+            onChangeLeftDate = onProductionDateMinChange,
+            onChangeRightDate = onProductionDateMaxChange,
+        )
+        TextFieldAndLabel(
+            textfieldText = filterProductDataState.composition,
+            labelText = stringResource(id = R.string.composition),
+            textEvent = onCompositionChange,
+            placeholder = stringResource(id = R.string.composition)
+        )
+        TextFieldAndLabel(
+            textfieldText = filterProductDataState.healingProperties,
+            labelText = stringResource(id = R.string.healing_properties),
+            textEvent = onHealingPropertiesChange,
+            placeholder = stringResource(id = R.string.healing_properties)
+        )
+        TextFieldAndLabel(
+            textfieldText = filterProductDataState.dosage,
+            labelText = stringResource(id = R.string.dosage),
+            textEvent = onDosageChange,
+            placeholder = stringResource(id = R.string.dosage)
+        )
+        TextFieldDoubleAndLabel(
+            textfieldLeftText = filterProductDataState.weightMin,
+            textfieldRightText = filterProductDataState.weightMax,
+            labelText = stringResource(id = R.string.weight),
+            textLeftEvent = onWeightMinChange,
+            textRightEvent = onWeightMaxChange,
+            placeholder = stringResource(id = R.string.weight),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+        )
+        TextFieldDoubleAndLabel(
+            textfieldLeftText = filterProductDataState.volumeMin,
+            textfieldRightText = filterProductDataState.volumeMax,
+            labelText = stringResource(id = R.string.volume),
+            textLeftEvent = onVolumeMinChange,
+            textRightEvent = onVolumeMaxChange,
+            placeholder = stringResource(id = R.string.volume),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+        )
+        ProductDetailsAttributesCard(
+            isVege = filterProductDataState.isVege,
+            isBio = filterProductDataState.isBio,
+            hasSugar = filterProductDataState.hasSugar,
+            hasSalt = filterProductDataState.hasSalt,
             onIsVegeChange = onIsVegeChange,
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,

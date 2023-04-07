@@ -5,14 +5,15 @@ import android.widget.DatePicker
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabelDate
+import com.hermanowicz.mypantry.components.common.textfield.TextFieldDoubleAndLabelDate
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
 import com.hermanowicz.mypantry.utils.PickerType
 
 @Composable
 fun DatePickerPrimary(
-    datePickerData: DatePickerData,
     labelText: String,
+    datePickerData: DatePickerData,
     dateToDisplay: String,
     onChangeDate: (DatePickerData) -> Unit,
     pickerType: PickerType
@@ -33,5 +34,37 @@ fun DatePickerPrimary(
         textfieldText = DateAndTimeConverter.dateToVisibleWithYear(dateToDisplay),
         labelText = labelText,
         onClickTextfield = { datePickerDialog.show() }
+    )
+}
+
+@Composable
+fun DatePickerDouble(
+    labelText: String,
+    datePickerLeftData: DatePickerData,
+    datePickerRightData: DatePickerData,
+    dateLeftToDisplay: String,
+    dateRightToDisplay: String,
+    onChangeLeftDate: (DatePickerData) -> Unit,
+    onChangeRightDate: (DatePickerData) -> Unit,
+) {
+    val datePickerLeftDialog = DatePickerDialog(
+        LocalContext.current,
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            onChangeLeftDate(DatePickerData(mDayOfMonth, mMonth, mYear))
+        }, datePickerLeftData.year, datePickerLeftData.month, datePickerLeftData.day
+    )
+    val datePickerRightDialog = DatePickerDialog(
+        LocalContext.current,
+        { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
+            onChangeRightDate(DatePickerData(mDayOfMonth, mMonth, mYear))
+        }, datePickerRightData.year, datePickerRightData.month, datePickerRightData.day
+    )
+
+    TextFieldDoubleAndLabelDate(
+        labelText = labelText,
+        textfieldLeftText = DateAndTimeConverter.dateToVisibleWithYear(dateLeftToDisplay),
+        textfieldRightText = DateAndTimeConverter.dateToVisibleWithYear(dateRightToDisplay),
+        onClickLeftTextfield = { datePickerLeftDialog.show() },
+        onClickRightTextfield = { datePickerRightDialog.show() }
     )
 }
