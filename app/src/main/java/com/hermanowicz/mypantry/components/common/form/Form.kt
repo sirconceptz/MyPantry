@@ -365,10 +365,10 @@ fun FilterProductForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
         ProductDetailsAttributesCard(
-            isVege = filterProductDataState.isVege,
-            isBio = filterProductDataState.isBio,
-            hasSugar = filterProductDataState.hasSugar,
-            hasSalt = filterProductDataState.hasSalt,
+            isVege = filterProductDataState.isVegeDisplayed,
+            isBio = filterProductDataState.isBioDisplayed,
+            hasSugar = filterProductDataState.hasSugarDisplayed,
+            hasSalt = filterProductDataState.hasSaltDisplayed,
             onIsVegeChange = onIsVegeChange,
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,

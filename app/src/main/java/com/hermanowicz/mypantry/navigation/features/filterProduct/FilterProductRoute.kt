@@ -12,6 +12,8 @@ fun FilterProductRoute(
     myPantryViewModel: MyPantryViewModel
 ) {
     FilterProductScreen(
-        openDrawer = openDrawer, viewModel = myPantryViewModel
+        openDrawer = openDrawer,
+        viewModel = myPantryViewModel,
+        onNavigateBack = { navController.popBackStack() }
     )
 }
