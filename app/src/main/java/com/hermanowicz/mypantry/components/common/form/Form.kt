@@ -9,8 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.components.common.cards.FilterProductDetailsAttributesCard
 import com.hermanowicz.mypantry.components.common.cards.ProductDetailsAttributesCard
-import com.hermanowicz.mypantry.components.common.dropdown.DropdownPrimary
+import com.hermanowicz.mypantry.components.common.dropdown.DropdownCard
 import com.hermanowicz.mypantry.components.common.picker.DatePickerDouble
 import com.hermanowicz.mypantry.components.common.picker.DatePickerPrimary
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
@@ -55,19 +56,19 @@ fun NewProductForm(
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name)
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.main_category),
             mapKey = productDataState.mainCategory,
-            itemList = mainCategoryItemList,
+            itemMap = mainCategoryItemList,
             onClick = { showMainCategoryDropdown(true) },
             onChange = onMainCategoryChange,
             visibleDropdown = productDataState.showMainCategoryDropdown,
             onDismiss = { showMainCategoryDropdown(false) }
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.detail_category),
             mapKey = productDataState.detailCategory,
-            itemList = detailCategoryItemList,
+            itemMap = detailCategoryItemList,
             onClick = { showDetailCategoryDropdown(true) },
             onChange = onDetailCategoryChange,
             visibleDropdown = productDataState.showDetailCategoryDropdown,
@@ -126,6 +127,7 @@ fun NewProductForm(
             placeholder = stringResource(id = R.string.volume),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
+
         ProductDetailsAttributesCard(
             isVege = productDataState.isVege,
             isBio = productDataState.isBio,
@@ -172,19 +174,19 @@ fun EditProductForm(
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name)
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.main_category),
             mapKey = productDataState.mainCategory,
-            itemList = mainCategoryItemList,
+            itemMap = mainCategoryItemList,
             onClick = { showMainCategoryDropdown(true) },
             onChange = onMainCategoryChange,
             visibleDropdown = productDataState.showMainCategoryDropdown,
             onDismiss = { showMainCategoryDropdown(false) }
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.detail_category),
             mapKey = productDataState.detailCategory,
-            itemList = detailCategoryItemList,
+            itemMap = detailCategoryItemList,
             onClick = { showDetailCategoryDropdown(true) },
             onChange = onDetailCategoryChange,
             visibleDropdown = productDataState.showDetailCategoryDropdown,
@@ -250,7 +252,8 @@ fun EditProductForm(
             onIsVegeChange = onIsVegeChange,
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,
-            onHasSaltChange = onHasSaltChange
+            onHasSaltChange = onHasSaltChange,
+
         )
     }
 }
@@ -274,11 +277,14 @@ fun FilterProductForm(
     onHealingPropertiesChange: (String) -> Unit,
     onDosageChange: (String) -> Unit,
     onCompositionChange: (String) -> Unit,
-    onIsVegeChange: (Boolean) -> Unit,
-    onIsBioChange: (Boolean) -> Unit,
-    onHasSugarChange: (Boolean) -> Unit,
-    onHasSaltChange: (Boolean) -> Unit,
-
+    onIsVegeChange: (String) -> Unit,
+    onIsBioChange: (String) -> Unit,
+    onHasSugarChange: (String) -> Unit,
+    onHasSaltChange: (String) -> Unit,
+    showIsVegeDropdown: (Boolean) -> Unit,
+    showIsBioDropdown: (Boolean) -> Unit,
+    showHasSugarDropdown: (Boolean) -> Unit,
+    showHasSaltDropdown: (Boolean) -> Unit,
     mainCategoryItemList: Map<String, String>,
     detailCategoryItemList: Map<String, String>
 ) {
@@ -292,19 +298,19 @@ fun FilterProductForm(
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name)
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.main_category),
             mapKey = filterProductDataState.mainCategory,
-            itemList = mainCategoryItemList,
+            itemMap = mainCategoryItemList,
             onClick = { showMainCategoryDropdown(true) },
             onChange = onMainCategoryChange,
             visibleDropdown = filterProductDataState.showMainCategoryDropdown,
             onDismiss = { showMainCategoryDropdown(false) }
         )
-        DropdownPrimary(
+        DropdownCard(
             textLeft = stringResource(id = R.string.detail_category),
             mapKey = filterProductDataState.detailCategory,
-            itemList = detailCategoryItemList,
+            itemMap = detailCategoryItemList,
             onClick = { showDetailCategoryDropdown(true) },
             onChange = onDetailCategoryChange,
             visibleDropdown = filterProductDataState.showDetailCategoryDropdown,
@@ -364,15 +370,23 @@ fun FilterProductForm(
             placeholder = stringResource(id = R.string.volume),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
-        ProductDetailsAttributesCard(
-            isVege = filterProductDataState.isVegeDisplayed,
-            isBio = filterProductDataState.isBioDisplayed,
-            hasSugar = filterProductDataState.hasSugarDisplayed,
-            hasSalt = filterProductDataState.hasSaltDisplayed,
+        FilterProductDetailsAttributesCard(
+            isVege = filterProductDataState.isVege,
+            isBio = filterProductDataState.isBio,
+            hasSugar = filterProductDataState.hasSugar,
+            hasSalt = filterProductDataState.hasSalt,
             onIsVegeChange = onIsVegeChange,
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,
-            onHasSaltChange = onHasSaltChange
+            onHasSaltChange = onHasSaltChange,
+            showIsVegeDropdown = showIsVegeDropdown,
+            showIsBioDropdown = showIsBioDropdown,
+            showHasSugarDropdown = showHasSugarDropdown,
+            showHasSaltDropdown = showHasSaltDropdown,
+            isVegeDropdownVisible = filterProductDataState.showIsVegeDropdown,
+            isBioDropdownVisible = filterProductDataState.showIsBioDropdown,
+            hasSugarDropdownVisible = filterProductDataState.showHasSugarDropdown,
+            hasSaltDropdownVisible = filterProductDataState.showHasSaltDropdown,
         )
     }
 }

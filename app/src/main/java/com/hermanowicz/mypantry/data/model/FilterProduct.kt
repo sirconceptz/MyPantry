@@ -1,6 +1,6 @@
 package com.hermanowicz.mypantry.data.model
 
-import com.hermanowicz.mypantry.utils.CheckboxValueType
+import com.hermanowicz.mypantry.utils.ProductAttributesValueType
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
 
@@ -20,9 +20,9 @@ data class FilterProduct(
     val volumeMax: Int? = null,
     val weightMin: Int? = null,
     val weightMax: Int? = null,
-    val hasSugar: CheckboxValueType = CheckboxValueType.DISABLED,
-    val hasSalt: CheckboxValueType = CheckboxValueType.DISABLED,
-    val isVege: CheckboxValueType = CheckboxValueType.DISABLED,
-    val isBio: CheckboxValueType = CheckboxValueType.DISABLED,
+    val hasSugar: String = ProductAttributesValueType.ALL.name,
+    val hasSalt: String = ProductAttributesValueType.ALL.name,
+    val isVege: String = ProductAttributesValueType.ALL.name,
+    val isBio: String = ProductAttributesValueType.ALL.name,
     val taste: String = ""
 )

@@ -66,7 +66,11 @@ fun FilterProductScreen(
                     onHasSaltChange = { viewModel.onFilterHasSaltChange(it) },
                     showMainCategoryDropdown = { viewModel.showFilterMainCategoryDropdown(it) },
                     mainCategoryItemList = viewModel.getFilterMainCategories(),
-                    detailCategoryItemList = viewModel.getFilterDetailCategories()
+                    detailCategoryItemList = viewModel.getFilterDetailCategories(),
+                    showIsVegeDropdown = { viewModel.showFilterIsVegeDropdown(it) },
+                    showIsBioDropdown = { viewModel.showFilterIsBioDropdown(it) },
+                    showHasSugarDropdown = { viewModel.showFilterHasSugarDropdown(it) },
+                    showHasSaltDropdown = { viewModel.showFilterHasSaltDropdown(it) },
                 )
             }
             item {

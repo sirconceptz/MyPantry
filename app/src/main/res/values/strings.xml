@@ -30,6 +30,7 @@
     <string name="product_attributes">Product attributes</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="all">All</string>
     <string name="main_category">Main category</string>
     <string name="detail_category">Detail category</string>
     <string name="cancel">Cancel</string>

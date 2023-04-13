@@ -25,11 +25,13 @@ import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonTransparent
 import com.hermanowicz.mypantry.components.common.checkbox.CircleCheckbox
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
+import com.hermanowicz.mypantry.components.common.dropdown.DropdownProductAttributes
 import com.hermanowicz.mypantry.data.model.Category
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
+import com.hermanowicz.mypantry.utils.ProductAttributesValueType
 
 @Composable
 fun GroupProductItemCard(
@@ -232,6 +234,113 @@ fun ProductDetailsAttributesCard(
                     CircleCheckbox(
                         selected = hasSalt,
                         onChecked = { onHasSaltChange(!hasSalt) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FilterProductDetailsAttributesCard(
+    isVege: String,
+    isBio: String,
+    hasSugar: String,
+    hasSalt: String,
+    onIsVegeChange: (String) -> Unit,
+    onIsBioChange: (String) -> Unit,
+    onHasSugarChange: (String) -> Unit,
+    onHasSaltChange: (String) -> Unit,
+    showIsVegeDropdown: (Boolean) -> Unit,
+    showIsBioDropdown: (Boolean) -> Unit,
+    showHasSugarDropdown: (Boolean) -> Unit,
+    showHasSaltDropdown: (Boolean) -> Unit,
+    isVegeDropdownVisible: Boolean,
+    isBioDropdownVisible: Boolean,
+    hasSugarDropdownVisible: Boolean,
+    hasSaltDropdownVisible: Boolean
+) {
+    val map: MutableMap<String, String> = mutableMapOf()
+    enumValues<ProductAttributesValueType>().forEach { category ->
+        map[category.name] = stringResource(category.nameResId)
+    }
+    Column {
+        Text(text = stringResource(id = R.string.product_attributes))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = LocalSpacing.current.tiny),
+            border = BorderStroke(width = LocalSpacing.current.line, color = Color.Black),
+            shape = Shapes.medium
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    vertical = LocalSpacing.current.small,
+                    horizontal = LocalSpacing.current.medium
+                ),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DropdownProductAttributes(
+                        textLeft = stringResource(id = R.string.vege),
+                        mapKey = isVege,
+                        itemMap = map,
+                        onClick = { showIsVegeDropdown(true) },
+                        onChange = onIsVegeChange,
+                        visibleDropdown = isVegeDropdownVisible,
+                        onDismiss = { showIsVegeDropdown(false) }
+                    )
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DropdownProductAttributes(
+                        textLeft = stringResource(id = R.string.bio),
+                        mapKey = isBio,
+                        itemMap = map,
+                        onClick = { showIsBioDropdown(true) },
+                        onChange = onIsBioChange,
+                        visibleDropdown = isBioDropdownVisible,
+                        onDismiss = { showIsBioDropdown(false) }
+                    )
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DropdownProductAttributes(
+                        textLeft = stringResource(id = R.string.sugar),
+                        mapKey = hasSugar,
+                        itemMap = map,
+                        onClick = { showHasSugarDropdown(true) },
+                        onChange = onHasSugarChange,
+                        visibleDropdown = hasSugarDropdownVisible,
+                        onDismiss = { showHasSugarDropdown(false) }
+                    )
+                }
+                DividerCardInside()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    DropdownProductAttributes(
+                        textLeft = stringResource(id = R.string.salt),
+                        mapKey = hasSalt,
+                        itemMap = map,
+                        onClick = { showHasSaltDropdown(true) },
+                        onChange = onHasSaltChange,
+                        visibleDropdown = hasSaltDropdownVisible,
+                        onDismiss = { showHasSaltDropdown(false) }
                     )
                 }
             }

@@ -12,9 +12,9 @@ import com.hermanowicz.mypantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.mypantry.navigation.features.filterProduct.state.FilterProductDataState
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryProductsUiState
-import com.hermanowicz.mypantry.utils.CheckboxValueType
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
+import com.hermanowicz.mypantry.utils.ProductAttributesValueType
 import com.hermanowicz.mypantry.utils.RegexFormats
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
@@ -72,15 +72,26 @@ class MyPantryViewModel @Inject constructor(
         productIsVege: Boolean,
         productHasSugar: Boolean,
         productHasSalt: Boolean,
-        filterProductIsBio: CheckboxValueType,
-        filterProductIsVege: CheckboxValueType,
-        filterProductHasSugar: CheckboxValueType,
-        filterProductHasSalt: CheckboxValueType
+        filterProductIsBio: String,
+        filterProductIsVege: String,
+        filterProductHasSugar: String,
+        filterProductHasSalt: String
     ): Boolean {
-        return ((productIsBio && (filterProductIsBio == CheckboxValueType.YES)) || (!productIsBio && (filterProductIsBio == CheckboxValueType.NO)) || filterProductIsBio == CheckboxValueType.DISABLED) &&
-            ((productIsVege && (filterProductIsVege == CheckboxValueType.YES)) || (!productIsVege && (filterProductIsVege == CheckboxValueType.NO)) || filterProductIsVege == CheckboxValueType.DISABLED) &&
-            ((productHasSugar && (filterProductHasSugar == CheckboxValueType.YES)) || (!productHasSugar && (filterProductHasSugar == CheckboxValueType.NO)) || filterProductHasSugar == CheckboxValueType.DISABLED) &&
-            ((productHasSalt && (filterProductHasSalt == CheckboxValueType.YES)) || (!productHasSalt && (filterProductHasSalt == CheckboxValueType.NO)) || filterProductHasSalt == CheckboxValueType.DISABLED)
+        val isVege = enumValueOf<ProductAttributesValueType>(filterProductIsVege)
+        val isBio = enumValueOf<ProductAttributesValueType>(filterProductIsBio)
+        val hasSugar = enumValueOf<ProductAttributesValueType>(filterProductHasSugar)
+        val hasSalt = enumValueOf<ProductAttributesValueType>(filterProductHasSalt)
+        return checkAttribute(isVege, productIsVege) && checkAttribute(
+            isBio,
+            productIsBio
+        ) && checkAttribute(hasSugar, productHasSugar) && checkAttribute(hasSalt, productHasSalt)
+    }
+
+    private fun checkAttribute(
+        attributeEnum: ProductAttributesValueType,
+        attribute: Boolean,
+    ): Boolean {
+        return attributeEnum == ProductAttributesValueType.ALL || (attributeEnum == ProductAttributesValueType.YES && attribute) || (attributeEnum == ProductAttributesValueType.NO && !attribute)
     }
 
     private fun filteredProductList(
@@ -207,10 +218,10 @@ class MyPantryViewModel @Inject constructor(
                     volumeMax = filterProductDataState.value.volumeMax.toIntOrNull(),
                     weightMin = filterProductDataState.value.weightMin.toIntOrNull(),
                     weightMax = filterProductDataState.value.weightMax.toIntOrNull(),
-                    hasSugar = filterProductDataState.value.hasSugarValue,
-                    hasSalt = filterProductDataState.value.hasSaltValue,
-                    isBio = filterProductDataState.value.isBioValue,
-                    isVege = filterProductDataState.value.isVegeValue,
+                    hasSugar = filterProductDataState.value.hasSugar,
+                    hasSalt = filterProductDataState.value.hasSalt,
+                    isBio = filterProductDataState.value.isBio,
+                    isVege = filterProductDataState.value.isVege,
                     taste = filterProductDataState.value.taste
                 )
             )
@@ -315,60 +326,52 @@ class MyPantryViewModel @Inject constructor(
         }
     }
 
-    fun onFilterIsVegeChange(isVege: Boolean) {
-        val checkboxValue = if (isVege)
-            CheckboxValueType.YES
-        else
-            CheckboxValueType.NO
-
+    fun onFilterIsVegeChange(isVege: String) {
         _filterProductDataState.update {
             it.copy(
-                isVegeDisplayed = isVege,
-                isVegeValue = checkboxValue
+                isVege = isVege, showIsVegeDropdown = false
             )
         }
     }
 
-    fun onFilterIsBioChange(isBio: Boolean) {
-        val checkboxValue = if (isBio)
-            CheckboxValueType.YES
-        else
-            CheckboxValueType.NO
+    fun showFilterIsVegeDropdown(show: Boolean) {
+        _filterProductDataState.update { it.copy(showIsVegeDropdown = show) }
+    }
 
+    fun onFilterIsBioChange(isBio: String) {
         _filterProductDataState.update {
             it.copy(
-                isBioDisplayed = isBio,
-                isBioValue = checkboxValue
+                isBio = isBio, showIsBioDropdown = false
             )
         }
     }
 
-    fun onFilterHasSugarChange(hasSugar: Boolean) {
-        val checkboxValue = if (hasSugar)
-            CheckboxValueType.YES
-        else
-            CheckboxValueType.NO
+    fun showFilterIsBioDropdown(show: Boolean) {
+        _filterProductDataState.update { it.copy(showIsBioDropdown = show) }
+    }
 
+    fun onFilterHasSugarChange(hasSugar: String) {
         _filterProductDataState.update {
             it.copy(
-                hasSugarDisplayed = hasSugar,
-                hasSugarValue = checkboxValue
+                hasSugar = hasSugar, showHasSugarDropdown = false
             )
         }
     }
 
-    fun onFilterHasSaltChange(hasSalt: Boolean) {
-        val checkboxValue = if (hasSalt)
-            CheckboxValueType.YES
-        else
-            CheckboxValueType.NO
+    fun showFilterHasSugarDropdown(show: Boolean) {
+        _filterProductDataState.update { it.copy(showHasSugarDropdown = show) }
+    }
 
+    fun onFilterHasSaltChange(hasSalt: String) {
         _filterProductDataState.update {
             it.copy(
-                hasSaltDisplayed = hasSalt,
-                hasSaltValue = checkboxValue
+                hasSalt = hasSalt, showHasSaltDropdown = false
             )
         }
+    }
+
+    fun showFilterHasSaltDropdown(show: Boolean) {
+        _filterProductDataState.update { it.copy(showHasSaltDropdown = show) }
     }
 
     fun showFilterMainCategoryDropdown(show: Boolean) {

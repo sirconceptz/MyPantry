@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
@@ -20,16 +21,16 @@ import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
 
 @Composable
-fun DropdownPrimary(
+fun DropdownCard(
     textLeft: String,
     mapKey: String,
-    itemList: Map<String, String>,
+    itemMap: Map<String, String>,
     onClick: () -> Unit,
     onChange: (String) -> Unit,
     visibleDropdown: Boolean,
     onDismiss: () -> Unit
 ) {
-    val textRight = itemList.getValue(mapKey)
+    val textRight = itemMap.getValue(mapKey)
 
     Column() {
         Text(text = textLeft)
@@ -50,13 +51,53 @@ fun DropdownPrimary(
                         text = textRight,
                     )
                     DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
-                        itemList.forEach { item ->
+                        itemMap.forEach { item ->
                             DropdownMenuItem(onClick = {
                                 onChange(item.key)
                                 onDismiss()
                             }) {
                                 Text(text = item.value)
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DropdownProductAttributes(
+    textLeft: String,
+    mapKey: String,
+    itemMap: Map<String, String>,
+    onClick: () -> Unit,
+    onChange: (String) -> Unit,
+    visibleDropdown: Boolean,
+    onDismiss: () -> Unit
+) {
+    val textRight = itemMap.getValue(mapKey)
+
+    Column(modifier = Modifier.clickable { onClick() }) {
+        Column(
+            modifier = Modifier.padding(LocalSpacing.current.medium)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = textLeft)
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = textRight,
+                )
+                DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
+                    itemMap.forEach { item ->
+                        DropdownMenuItem(onClick = {
+                            onChange(item.key)
+                            onDismiss()
+                        }) {
+                            Text(text = item.value)
                         }
                     }
                 }
