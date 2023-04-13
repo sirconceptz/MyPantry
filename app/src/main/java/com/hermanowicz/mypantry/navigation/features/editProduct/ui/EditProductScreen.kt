@@ -21,14 +21,14 @@ import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 @Composable
 fun EditProductScreen(
     openDrawer: () -> Unit,
-    onToMyPantry: () -> Unit,
+    onNavigateToMyPantry: () -> Unit,
     viewModel: EditProductViewModel = hiltViewModel()
 ) {
     val productDataState by viewModel.productDataState.collectAsState()
 
     LaunchedEffect(key1 = productDataState.onNavigateBack) {
         if (productDataState.onNavigateBack) {
-            onToMyPantry()
+            onNavigateToMyPantry()
             viewModel.onNavigateToMyPantry(false)
         }
     }

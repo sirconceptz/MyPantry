@@ -80,44 +80,52 @@ fun AppNavHost() {
             ) {
                 composable(route = AppScreens.MyPantry.route) {
                     MyPantryRoute(
-                        navController = navController,
+                        onNavigateToProductDetails = {
+                            navController.navigate("${AppScreens.ProductDetails.route}/$it")
+                        },
+                        onNavigateToFilterProduct = {
+                            navController.navigate(AppScreens.FilterProduct.route)
+                        },
                         openDrawer = { openDrawer() },
                         myPantryViewModel = myPantryViewModel
                     )
                 }
                 composable(route = AppScreens.FilterProduct.route) {
                     FilterProductRoute(
-                        navController = navController,
+                        onNavigateBack = { navController.popBackStack() },
                         openDrawer = { openDrawer() },
                         myPantryViewModel = myPantryViewModel
                     )
                 }
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") {
                     ProductDetailsRoute(
-                        navController = navController,
+                        onNavigateToEditProducts = { navController.navigate("${AppScreens.EditProduct.route}/$it") },
                         openDrawer = { openDrawer() }
                     )
                 }
                 composable(route = "${AppScreens.EditProduct.route}/{id}") {
-                    EditProductRoute(navController = navController, openDrawer = { openDrawer() })
-                }
-                composable(route = AppScreens.NewProduct.route) {
-                    NewProductRoute(navController = navController, openDrawer = { openDrawer() })
-                }
-                composable(route = AppScreens.OwnCategories.route) {
-                    OwnCategoriesRoute(navController = navController, openDrawer = { openDrawer() })
-                }
-                composable(route = AppScreens.ScanProduct.route) {
-                    ScanProductRoute(navController = navController, openDrawer = { openDrawer() })
-                }
-                composable(route = AppScreens.StorageLocations.route) {
-                    StorageLocationsRoute(
-                        navController = navController,
+                    EditProductRoute(
+                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
                         openDrawer = { openDrawer() }
                     )
                 }
+                composable(route = AppScreens.NewProduct.route) {
+                    NewProductRoute(
+                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
+                        openDrawer = { openDrawer() }
+                    )
+                }
+                composable(route = AppScreens.OwnCategories.route) {
+                    OwnCategoriesRoute(openDrawer = { openDrawer() })
+                }
+                composable(route = AppScreens.ScanProduct.route) {
+                    ScanProductRoute(openDrawer = { openDrawer() })
+                }
+                composable(route = AppScreens.StorageLocations.route) {
+                    StorageLocationsRoute(openDrawer = { openDrawer() })
+                }
                 composable(route = AppScreens.Settings.route) {
-                    SettingsRoute(navController = navController, openDrawer = { openDrawer() })
+                    SettingsRoute(openDrawer = { openDrawer() })
                 }
             }
         }

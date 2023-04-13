@@ -35,7 +35,7 @@ fun TopBarScaffold(
             contentColor = Color.White,
             elevation = 10.dp
         )
-    }, content = { it ->
+    }, content = { _ ->
         content()
     })
 }
