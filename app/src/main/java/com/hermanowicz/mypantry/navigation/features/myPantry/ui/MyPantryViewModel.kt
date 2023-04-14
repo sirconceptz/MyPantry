@@ -14,10 +14,10 @@ import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.mypantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import com.hermanowicz.mypantry.utils.DatePickerData
-import com.hermanowicz.mypantry.utils.ProductAttributesValueType
 import com.hermanowicz.mypantry.utils.RegexFormats
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.mypantry.utils.enums.ProductAttributesValueType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

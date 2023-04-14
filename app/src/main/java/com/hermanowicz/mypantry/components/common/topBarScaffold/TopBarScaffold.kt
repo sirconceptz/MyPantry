@@ -1,5 +1,6 @@
 package com.hermanowicz.mypantry.components.common.topBarScaffold
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TopBarScaffold(
     topBarText: String,
@@ -35,7 +37,7 @@ fun TopBarScaffold(
             contentColor = Color.White,
             elevation = 10.dp
         )
-    }, content = { _ ->
+    }, content = {
         content()
     })
 }

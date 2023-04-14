@@ -125,7 +125,11 @@ fun AppNavHost() {
                     StorageLocationsRoute(openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.Settings.route) {
-                    SettingsRoute(openDrawer = { openDrawer() })
+                    SettingsRoute(
+                        onNavigateToUserAccount = { },
+                        onNavigateToAuthorInfo = { },
+                        openDrawer = { openDrawer() }
+                    )
                 }
             }
         }

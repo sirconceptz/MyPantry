@@ -1,37 +1,30 @@
 package com.hermanowicz.mypantry.navigation.features.productDetails.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.R
+import com.hermanowicz.mypantry.components.common.cards.CardWhiteBgWithBorder
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
+import com.hermanowicz.mypantry.components.common.icons.EditIcon
 import com.hermanowicz.mypantry.components.common.loading.LoadingDialog
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.mypantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
-import com.hermanowicz.mypantry.ui.theme.Shapes
 import com.hermanowicz.mypantry.utils.DateAndTimeConverter
 import timber.log.Timber
 
@@ -47,13 +40,7 @@ fun ProductDetailsScreen(
         topBarText = stringResource(id = R.string.product_details),
         openDrawer = openDrawer,
         actions = {
-            IconButton(onClick = { onClickEditProducts(viewModel.productId) }, content = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = null,
-                    tint = White
-                )
-            })
+            EditIcon(onClick = { onClickEditProducts(viewModel.productId) })
         }
     ) {
         LazyColumn(
@@ -70,97 +57,91 @@ fun ProductDetailsScreen(
 
 @Composable
 fun ProductDetailsView(groupProduct: GroupProduct) {
-    Card(
-        modifier = Modifier.padding(top = LocalSpacing.current.medium),
-        border = BorderStroke(width = LocalSpacing.current.line, color = Black),
-        shape = Shapes.medium
+    CardWhiteBgWithBorder(
+        modifier = Modifier.padding(top = LocalSpacing.current.medium)
     ) {
-        Column(
-            modifier = Modifier.background(White)
-        ) {
-            ProductDetailItem(
-                label = stringResource(id = R.string.name),
-                value = groupProduct.product.name
+        ProductDetailItem(
+            label = stringResource(id = R.string.name),
+            value = groupProduct.product.name
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.main_category),
+            value = groupProduct.product.mainCategory
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.detail_category),
+            value = groupProduct.product.detailCategory
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.expiration_date),
+            value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.expirationDate)
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.production_date),
+            value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.productionDate)
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.storage_locations),
+            value = groupProduct.product.storageLocation
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.composition),
+            value = groupProduct.product.composition
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.healing_properties),
+            value = groupProduct.product.healingProperties
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.dosage),
+            value = groupProduct.product.dosage
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.volume),
+            value = if (groupProduct.product.volume == 0) "" else groupProduct.product.volume.toString()
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.weight),
+            value = if (groupProduct.product.weight == 0) "" else groupProduct.product.weight.toString()
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.vege),
+            value = if (groupProduct.product.isVege) stringResource(id = R.string.yes) else stringResource(
+                id = R.string.no
             )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.main_category),
-                value = groupProduct.product.mainCategory
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.bio),
+            value = if (groupProduct.product.isBio) stringResource(id = R.string.yes) else stringResource(
+                id = R.string.no
             )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.detail_category),
-                value = groupProduct.product.detailCategory
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.sugar),
+            value = if (groupProduct.product.hasSugar) stringResource(id = R.string.yes) else stringResource(
+                id = R.string.no
             )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.expiration_date),
-                value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.expirationDate)
+        )
+        DividerCardInside()
+        ProductDetailItem(
+            label = stringResource(id = R.string.salt),
+            value = if (groupProduct.product.hasSalt) stringResource(id = R.string.yes) else stringResource(
+                id = R.string.no
             )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.production_date),
-                value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.productionDate)
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.storage_locations),
-                value = groupProduct.product.storageLocation
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.composition),
-                value = groupProduct.product.composition
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.healing_properties),
-                value = groupProduct.product.healingProperties
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.dosage),
-                value = groupProduct.product.dosage
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.volume),
-                value = if (groupProduct.product.volume == 0) "" else groupProduct.product.volume.toString()
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.weight),
-                value = if (groupProduct.product.weight == 0) "" else groupProduct.product.weight.toString()
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.vege),
-                value = if (groupProduct.product.isVege) stringResource(id = R.string.yes) else stringResource(
-                    id = R.string.no
-                )
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.bio),
-                value = if (groupProduct.product.isBio) stringResource(id = R.string.yes) else stringResource(
-                    id = R.string.no
-                )
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.sugar),
-                value = if (groupProduct.product.hasSugar) stringResource(id = R.string.yes) else stringResource(
-                    id = R.string.no
-                )
-            )
-            DividerCardInside()
-            ProductDetailItem(
-                label = stringResource(id = R.string.salt),
-                value = if (groupProduct.product.hasSalt) stringResource(id = R.string.yes) else stringResource(
-                    id = R.string.no
-                )
-            )
-        }
+        )
     }
 }
 

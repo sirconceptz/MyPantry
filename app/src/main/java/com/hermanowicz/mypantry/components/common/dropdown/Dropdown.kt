@@ -16,7 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
 
@@ -99,6 +102,40 @@ fun DropdownProductAttributes(
                         }) {
                             Text(text = item.value)
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DropdownSettings(
+    label: String,
+    mapKey: String,
+    itemMap: Map<String, String>,
+    onClick: () -> Unit,
+    onChange: (String) -> Unit,
+    visibleDropdown: Boolean,
+    onDismiss: () -> Unit
+) {
+    val value = itemMap.getValue(mapKey)
+
+    Row(modifier = Modifier.clickable { onClick() }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(LocalSpacing.current.medium)
+        ) {
+            Text(text = label, style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold))
+            Text(text = value, style = TextStyle(fontSize = 14.sp))
+            DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
+                itemMap.forEach { item ->
+                    DropdownMenuItem(onClick = {
+                        onChange(item.key)
+                        onDismiss()
+                    }) {
+                        Text(text = item.value)
                     }
                 }
             }

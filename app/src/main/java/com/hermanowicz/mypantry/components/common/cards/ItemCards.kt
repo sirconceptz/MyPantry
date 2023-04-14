@@ -31,7 +31,7 @@ import com.hermanowicz.mypantry.data.model.GroupProduct
 import com.hermanowicz.mypantry.data.model.StorageLocation
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.Shapes
-import com.hermanowicz.mypantry.utils.ProductAttributesValueType
+import com.hermanowicz.mypantry.utils.enums.ProductAttributesValueType
 
 @Composable
 fun GroupProductItemCard(
@@ -260,10 +260,7 @@ fun FilterProductDetailsAttributesCard(
     hasSugarDropdownVisible: Boolean,
     hasSaltDropdownVisible: Boolean
 ) {
-    val map: MutableMap<String, String> = mutableMapOf()
-    enumValues<ProductAttributesValueType>().forEach { category ->
-        map[category.name] = stringResource(category.nameResId)
-    }
+    val map: Map<String, String> = ProductAttributesValueType.toMap()
     Column {
         Text(text = stringResource(id = R.string.product_attributes))
         Card(

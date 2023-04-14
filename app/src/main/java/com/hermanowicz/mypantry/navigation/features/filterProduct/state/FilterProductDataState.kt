@@ -3,9 +3,9 @@ package com.hermanowicz.mypantry.navigation.features.filterProduct.state
 import com.hermanowicz.mypantry.data.model.Category
 import com.hermanowicz.mypantry.data.model.FilterProduct
 import com.hermanowicz.mypantry.utils.DatePickerData
-import com.hermanowicz.mypantry.utils.ProductAttributesValueType
 import com.hermanowicz.mypantry.utils.category.MainCategoriesTypes
 import com.hermanowicz.mypantry.utils.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.mypantry.utils.enums.ProductAttributesValueType
 
 data class FilterProductDataState(
     val name: String = "",
