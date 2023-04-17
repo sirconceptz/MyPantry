@@ -20,13 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.BuildConfig
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.cards.CardWhiteBgWithBorder
-import com.hermanowicz.mypantry.components.common.dialog.DialogAuthorInfo
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
 import com.hermanowicz.mypantry.components.common.dropdown.DropdownSettings
 import com.hermanowicz.mypantry.components.common.slider.SliderSettings
@@ -39,9 +37,9 @@ import com.hermanowicz.mypantry.components.common.text.TextSettingsButtonWithVal
 import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.MyPantryTheme
-import com.hermanowicz.mypantry.utils.enums.CameraValueType
+import com.hermanowicz.mypantry.utils.enums.CameraMode
 import com.hermanowicz.mypantry.utils.enums.DatabaseMode
-import com.hermanowicz.mypantry.utils.enums.QRCodeSizeValueType
+import com.hermanowicz.mypantry.utils.enums.SizePrintedQRCodes
 
 
 @Composable
@@ -54,32 +52,14 @@ fun SettingsScreen(
     val context = LocalContext.current
 
     TopBarScaffold(
-        topBarText = stringResource(id = R.string.settings),
-        openDrawer = openDrawer
+        topBarText = stringResource(id = R.string.settings), openDrawer = openDrawer
     ) {
-        if (state.showAuthorDialog) {
-            DialogAuthorInfo(
-                onClickFacebook = {
-                    openInBrowser(
-                        context,
-                        context.getString(R.string.author_facebook)
-                    )
-                },
-                onClickLinkedIn = {
-                    openInBrowser(
-                        context,
-                        context.getString(R.string.author_linkedin)
-                    )
-                },
-                onClickAppWebsite = {
-                    openInBrowser(
-                        context,
-                        context.getString(R.string.author_app_website)
-                    )
-                },
-                onDismissRequest = { viewModel.showAuthorDialog(false) }
-            )
-        }
+        ShowSettingsDialogs(
+            state = state,
+            context = context,
+            onAuthorDialogDismiss = { viewModel.showAuthorDialog(false) },
+            onConfirmClearDatabase = { viewModel.onConfirmClearDatabase() }
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -100,54 +80,43 @@ fun SettingsScreen(
             }
             item {
                 ButtonPrimary(
-                    text = stringResource(id = R.string.user_account),
-                    onClick = onClickUserAccount
+                    text = stringResource(id = R.string.user_account), onClick = onClickUserAccount
                 )
             }
             item {
                 SpacerMedium()
                 TextLabel(text = stringResource(id = R.string.main_settings))
                 CardWhiteBgWithBorder {
-                    DropdownSettings(
-                        label = stringResource(id = R.string.database_mode),
+                    DropdownSettings(label = stringResource(id = R.string.database_mode),
                         mapKey = state.databaseMode,
                         itemMap = DatabaseMode.toMap(),
                         onClick = { viewModel.showDatabaseMode(true) },
                         onChange = { viewModel.onChangeDatabaseMode(it) },
                         visibleDropdown = state.showDatabaseModeDropdown,
-                        onDismiss = { viewModel.showDatabaseMode(false) }
-                    )
+                        onDismiss = { viewModel.showDatabaseMode(false) })
                     DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.export_local_database_to_cloud),
-                        onClick = { /*TODO*/ }
-                    )
+                    TextSettingsButton(label = stringResource(id = R.string.export_local_database_to_cloud),
+                        onClick = { /*TODO*/ })
                     DividerCardInside()
-                    DropdownSettings(
-                        label = stringResource(id = R.string.camera_to_scan_codes),
+                    DropdownSettings(label = stringResource(id = R.string.camera_to_scan_codes),
                         mapKey = state.cameraToScanCodes,
-                        itemMap = CameraValueType.toMap(),
+                        itemMap = CameraMode.toMap(),
                         onClick = { viewModel.showCameraMode(true) },
                         onChange = { viewModel.onChangeCameraMode(it) },
                         visibleDropdown = state.showCameraModeDropdown,
-                        onDismiss = { viewModel.showCameraMode(false) }
-                    )
+                        onDismiss = { viewModel.showCameraMode(false) })
                     DividerCardInside()
-                    SwitchPrimary(
-                        label = stringResource(id = R.string.scanner_sound),
+                    SwitchPrimary(label = stringResource(id = R.string.scanner_sound),
                         state = state.scannerSound,
-                        onStateChange = { viewModel.onChangeScannerSoundMode(!state.scannerSound) }
-                    )
+                        onStateChange = { viewModel.onChangeScannerSoundMode(!state.scannerSound) })
                     DividerCardInside()
-                    DropdownSettings(
-                        label = stringResource(id = R.string.qr_code_size),
+                    DropdownSettings(label = stringResource(id = R.string.qr_code_size),
                         mapKey = state.sizeQrCodes,
-                        itemMap = QRCodeSizeValueType.toMap(),
+                        itemMap = SizePrintedQRCodes.toMap(),
                         onClick = { viewModel.showQrCodeSizeMode(true) },
                         onChange = { viewModel.onChangeQrCodeSizeMode(it) },
                         visibleDropdown = state.showSizeQrCodesDropdown,
-                        onDismiss = { viewModel.showQrCodeSizeMode(false) }
-                    )
+                        onDismiss = { viewModel.showQrCodeSizeMode(false) })
                 }
             }
             item {
@@ -186,60 +155,16 @@ fun SettingsScreen(
             }
             item {
                 SpacerMedium()
-                TextLabel(text = stringResource(id = R.string.backup_settings))
+                TextLabel(text = stringResource(id = R.string.advanced))
                 CardWhiteBgWithBorder {
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.import_product_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.export_product_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.clean_product_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.import_category_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.export_category_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.clean_category_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.import_storage_locations_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.export_storage_locations_database),
-                        onClick = { /*TODO*/ }
-                    )
-                    DividerCardInside()
-                    TextSettingsButton(
-                        label = stringResource(id = R.string.clean_storage_locations_database),
-                        onClick = { /*TODO*/ }
-                    )
+                    TextSettingsButton(label = stringResource(id = R.string.clear_database),
+                        onClick = { viewModel.showClearDatabaseDialog(true) })
                 }
             }
             item {
                 SpacerLarge()
-                ButtonPrimary(
-                    text = stringResource(id = R.string.contact_with_author),
-                    onClick = { viewModel.showAuthorDialog(true) }
-                )
+                ButtonPrimary(text = stringResource(id = R.string.contact_with_author),
+                    onClick = { viewModel.showAuthorDialog(true) })
                 SpacerMedium()
                 AppVersion()
             }
@@ -247,18 +172,15 @@ fun SettingsScreen(
     }
 }
 
-
 fun openInBrowser(context: Context, url: String) {
-    val browserIntent =
-        Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     context.startActivity(browserIntent)
 }
 
 @Composable
 fun AppVersion() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
         Text(
             text = stringResource(id = R.string.app_version) + ": ",

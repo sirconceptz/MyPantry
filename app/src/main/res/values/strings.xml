@@ -81,7 +81,7 @@
     <string name="user_account">User account</string>
     <string name="main_settings">Main settings</string>
     <string name="notification_settings">Notification settings</string>
-    <string name="backup_settings">Backup settings</string>
+    <string name="advanced">Advanced</string>
     <string name="app_version">App version</string>
     <string name="contact_with_author">Contact with author</string>
     <string name="database_mode">Database mode</string>
@@ -101,19 +101,18 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="email_address_for_notifications">Email address for notifications</string>
-    <string name="import_product_database">Import product database</string>
-    <string name="export_product_database">Export product database</string>
-    <string name="clean_product_database">Clean product database</string>
-    <string name="import_category_database">Import category database</string>
-    <string name="export_category_database">Export category database</string>
-    <string name="clean_category_database">Clean category database</string>
-    <string name="import_storage_locations_database">Import storage location database</string>
-    <string name="export_storage_locations_database">Export storage location database</string>
-    <string name="clean_storage_locations_database">Clean storage location database</string>
+    <string name="import_database">Import database</string>
+    <string name="export_database">Export database</string>
+    <string name="clear_database">Clean database</string>
     <string name="close">Close</string>
     <string name="author">Author</string>
     <string name="app_website_url">https://www.mypantry.pl/kontakt/</string>
     <string name="author_facebook" translatable="false">https://www.facebook.com/sirconceptz/</string>
     <string name="author_linkedin" translatable="false">https://www.linkedin.com/in/mateusz-hermanowicz-579064182/</string>
     <string name="author_app_website" translatable="false">https://www.mypantry.pl/kontakt/</string>
+    <string name="confirm" translatable="false">Confirm</string>
+    <string name="statement_import_database_warning">Do you want to import databases from an external file? This will result in the loss of the products currently added to the application.</string>
+    <string name="statement_export_database_warning">Do you want to export databases from to an external file?</string>
+    <string name="statement_clear_database_warning">Do you want to clear database? All entries will be removed and the operation is irreversible.</string>
+    <string name="settings_choose_file_to_restore">Choose database file to restore</string>
 </resources>

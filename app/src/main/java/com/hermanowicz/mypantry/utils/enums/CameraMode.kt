@@ -4,15 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.mypantry.R
 
-enum class QRCodeSizeValueType(val nameResId: Int) {
-    BIG(R.string.big),
-    SMALL(R.string.small);
+enum class CameraMode(val nameResId: Int) {
+    REAR(R.string.rear_camera),
+    FRONT(R.string.front_camera);
 
     companion object {
         @Composable
         fun toMap(): Map<String, String> {
             val map: MutableMap<String, String> = mutableMapOf()
-            enumValues<QRCodeSizeValueType>().forEach { category ->
+            enumValues<CameraMode>().forEach { category ->
                 map[category.name] = stringResource(category.nameResId)
             }
             return map

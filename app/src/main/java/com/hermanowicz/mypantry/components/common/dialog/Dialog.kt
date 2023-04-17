@@ -1,15 +1,11 @@
 package com.hermanowicz.mypantry.components.common.dialog
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -21,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat.startActivity
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.textfield.TextFieldAndLabel
@@ -136,6 +131,47 @@ fun DialogAuthorInfo(
                     text = stringResource(id = R.string.app_website_url),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DialogBackup(
+    label: String,
+    statement: String,
+    onPositiveRequest: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(LocalSpacing.current.small)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = LocalSpacing.current.medium,
+                        horizontal = LocalSpacing.current.small
+                    ),
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+            ) {
+                Text(text = label, fontWeight = FontWeight.Bold)
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = statement,
+                    textAlign = TextAlign.Justify
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.confirm), onClick = onPositiveRequest
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.close), onClick = onDismissRequest

@@ -127,7 +127,6 @@ fun AppNavHost() {
                 composable(route = AppScreens.Settings.route) {
                     SettingsRoute(
                         onNavigateToUserAccount = { },
-                        onNavigateToAuthorInfo = { },
                         openDrawer = { openDrawer() }
                     )
                 }
