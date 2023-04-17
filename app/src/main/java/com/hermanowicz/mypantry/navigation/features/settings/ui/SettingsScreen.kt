@@ -1,5 +1,8 @@
 package com.hermanowicz.mypantry.navigation.features.settings.ui
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,18 +10,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.mypantry.BuildConfig
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.button.ButtonPrimary
 import com.hermanowicz.mypantry.components.common.cards.CardWhiteBgWithBorder
+import com.hermanowicz.mypantry.components.common.dialog.DialogAuthorInfo
 import com.hermanowicz.mypantry.components.common.divider.DividerCardInside
 import com.hermanowicz.mypantry.components.common.dropdown.DropdownSettings
 import com.hermanowicz.mypantry.components.common.slider.SliderSettings
@@ -32,20 +40,47 @@ import com.hermanowicz.mypantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.mypantry.ui.theme.LocalSpacing
 import com.hermanowicz.mypantry.ui.theme.MyPantryTheme
 import com.hermanowicz.mypantry.utils.enums.CameraValueType
-import com.hermanowicz.mypantry.utils.enums.DatabaseValueType
+import com.hermanowicz.mypantry.utils.enums.DatabaseMode
 import com.hermanowicz.mypantry.utils.enums.QRCodeSizeValueType
+
 
 @Composable
 fun SettingsScreen(
     openDrawer: () -> Unit,
     onClickUserAccount: () -> Unit,
-    onClickContactWithAuthor: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    val state by viewModel.settingsState.collectAsState()
+    val context = LocalContext.current
+
     TopBarScaffold(
         topBarText = stringResource(id = R.string.settings),
         openDrawer = openDrawer
     ) {
+        if (state.showAuthorDialog) {
+            DialogAuthorInfo(
+                onClickFacebook = {
+                    openInBrowser(
+                        context,
+                        context.getString(R.string.author_facebook)
+                    )
+                },
+                onClickLinkedIn = {
+                    openInBrowser(
+                        context,
+                        context.getString(R.string.author_linkedin)
+                    )
+                },
+                onClickAppWebsite = {
+                    openInBrowser(
+                        context,
+                        context.getString(R.string.author_app_website)
+                    )
+                },
+                onDismissRequest = { viewModel.showAuthorDialog(false) }
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,7 +92,7 @@ fun SettingsScreen(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "mateusz.hermanowicz@icloud.com",
+                        text = state.userEmailOrUnlogged,
                         style = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold),
                         textAlign = TextAlign.Center
                     )
@@ -75,12 +110,12 @@ fun SettingsScreen(
                 CardWhiteBgWithBorder {
                     DropdownSettings(
                         label = stringResource(id = R.string.database_mode),
-                        mapKey = "LOCAL",
-                        itemMap = DatabaseValueType.toMap(),
-                        onClick = { /*TODO*/ },
-                        onChange = { /*TODO*/ },
-                        visibleDropdown = false,
-                        onDismiss = { /*TODO*/ }
+                        mapKey = state.databaseMode,
+                        itemMap = DatabaseMode.toMap(),
+                        onClick = { viewModel.showDatabaseMode(true) },
+                        onChange = { viewModel.onChangeDatabaseMode(it) },
+                        visibleDropdown = state.showDatabaseModeDropdown,
+                        onDismiss = { viewModel.showDatabaseMode(false) }
                     )
                     DividerCardInside()
                     TextSettingsButton(
@@ -90,28 +125,28 @@ fun SettingsScreen(
                     DividerCardInside()
                     DropdownSettings(
                         label = stringResource(id = R.string.camera_to_scan_codes),
-                        mapKey = "REAR",
+                        mapKey = state.cameraToScanCodes,
                         itemMap = CameraValueType.toMap(),
-                        onClick = { /*TODO*/ },
-                        onChange = { /*TODO*/ },
-                        visibleDropdown = false,
-                        onDismiss = { /*TODO*/ }
+                        onClick = { viewModel.showCameraMode(true) },
+                        onChange = { viewModel.onChangeCameraMode(it) },
+                        visibleDropdown = state.showCameraModeDropdown,
+                        onDismiss = { viewModel.showCameraMode(false) }
                     )
                     DividerCardInside()
                     SwitchPrimary(
                         label = stringResource(id = R.string.scanner_sound),
-                        state = false,
-                        onStateChange = { /*TODO*/ }
+                        state = state.scannerSound,
+                        onStateChange = { viewModel.onChangeScannerSoundMode(!state.scannerSound) }
                     )
                     DividerCardInside()
                     DropdownSettings(
                         label = stringResource(id = R.string.qr_code_size),
-                        mapKey = "BIG",
+                        mapKey = state.sizeQrCodes,
                         itemMap = QRCodeSizeValueType.toMap(),
-                        onClick = { /*TODO*/ },
-                        onChange = { /*TODO*/ },
-                        visibleDropdown = false,
-                        onDismiss = { /*TODO*/ }
+                        onClick = { viewModel.showQrCodeSizeMode(true) },
+                        onChange = { viewModel.onChangeQrCodeSizeMode(it) },
+                        visibleDropdown = state.showSizeQrCodesDropdown,
+                        onDismiss = { viewModel.showQrCodeSizeMode(false) }
                     )
                 }
             }
@@ -121,30 +156,30 @@ fun SettingsScreen(
                 CardWhiteBgWithBorder {
                     SliderSettings(
                         label = stringResource(id = R.string.days_to_notify_before_expiration),
-                        value = 3f,
-                        valueRange = 0f..14f,
-                        onValueChange = {},
-                        steps = 15
+                        value = state.daysToNotifyBeforeExpiration,
+                        valueRange = 1f..14f,
+                        onValueChange = { viewModel.onChangeDaysToNotifyBeforeExpiration(it) },
+                        steps = 12
                     )
                     DividerCardInside()
                     TextSettingsButtonWithValue(
                         label = stringResource(id = R.string.email_address_for_notifications),
-                        value = "None",
+                        value = state.emailAddressForNotifications,
                         onClick = { /*TODO*/ },
                         enabled = true
                     )
                     DividerCardInside()
                     SwitchPrimary(
                         label = stringResource(id = R.string.push_notifications),
-                        state = true,
-                        onStateChange = { /*TODO*/ },
+                        state = state.pushNotifications,
+                        onStateChange = { viewModel.onChangePushNotifications(!state.pushNotifications) },
                         enabled = true
                     )
                     DividerCardInside()
                     SwitchPrimary(
                         label = stringResource(id = R.string.email_notifications),
-                        state = false,
-                        onStateChange = { /*TODO*/ },
+                        state = state.emailNotifications,
+                        onStateChange = { viewModel.onChangeEmailNotifications(!state.emailNotifications) },
                         enabled = false
                     )
                 }
@@ -203,13 +238,20 @@ fun SettingsScreen(
                 SpacerLarge()
                 ButtonPrimary(
                     text = stringResource(id = R.string.contact_with_author),
-                    onClick = onClickContactWithAuthor
+                    onClick = { viewModel.showAuthorDialog(true) }
                 )
                 SpacerMedium()
                 AppVersion()
             }
         }
     }
+}
+
+
+fun openInBrowser(context: Context, url: String) {
+    val browserIntent =
+        Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    context.startActivity(browserIntent)
 }
 
 @Composable
@@ -234,6 +276,6 @@ fun AppVersion() {
 @Composable
 private fun Preview() {
     MyPantryTheme {
-        SettingsScreen({}, {}, {})
+        SettingsScreen({}, {})
     }
 }

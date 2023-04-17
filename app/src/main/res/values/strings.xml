@@ -110,4 +110,10 @@
     <string name="import_storage_locations_database">Import storage location database</string>
     <string name="export_storage_locations_database">Export storage location database</string>
     <string name="clean_storage_locations_database">Clean storage location database</string>
+    <string name="close">Close</string>
+    <string name="author">Author</string>
+    <string name="app_website_url">https://www.mypantry.pl/kontakt/</string>
+    <string name="author_facebook" translatable="false">https://www.facebook.com/sirconceptz/</string>
+    <string name="author_linkedin" translatable="false">https://www.linkedin.com/in/mateusz-hermanowicz-579064182/</string>
+    <string name="author_app_website" translatable="false">https://www.mypantry.pl/kontakt/</string>
 </resources>

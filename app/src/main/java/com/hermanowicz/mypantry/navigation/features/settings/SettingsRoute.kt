@@ -11,7 +11,6 @@ fun SettingsRoute(
 ) {
     SettingsScreen(
         onClickUserAccount = onNavigateToUserAccount,
-        onClickContactWithAuthor = onNavigateToAuthorInfo,
         openDrawer = openDrawer
     )
 }

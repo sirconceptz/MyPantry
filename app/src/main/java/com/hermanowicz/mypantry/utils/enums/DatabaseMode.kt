@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.mypantry.R
 
-enum class DatabaseValueType(val nameResId: Int) {
+enum class DatabaseMode(val nameResId: Int) {
     LOCAL(R.string.local),
     ONLINE(R.string.online);
 
@@ -12,7 +12,7 @@ enum class DatabaseValueType(val nameResId: Int) {
         @Composable
         fun toMap(): Map<String, String> {
             val map: MutableMap<String, String> = mutableMapOf()
-            enumValues<DatabaseValueType>().forEach { category ->
+            enumValues<DatabaseMode>().forEach { category ->
                 map[category.name] = stringResource(category.nameResId)
             }
             return map
