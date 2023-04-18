@@ -1,0 +1,13 @@
+package com.hermanowicz.pantry.domain
+
+import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.di.repository.ProductRepository
+import javax.inject.Inject
+
+class DeleteProductsUseCase @Inject constructor(
+    private val productRepository: ProductRepository
+) : suspend (List<Product>) -> Unit {
+    override suspend fun invoke(products: List<Product>) {
+        productRepository.delete(products)
+    }
+}

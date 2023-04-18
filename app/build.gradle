@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace 'com.hermanowicz.mypantry'
+    namespace 'com.hermanowicz.pantry'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.hermanowicz.mypantry"
+        applicationId "com.hermanowicz.pantry"
         minSdk 26
         targetSdk 33
         versionCode 70
@@ -88,6 +88,7 @@ dependencies {
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:31.4.0')
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
@@ -121,3 +122,5 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }
+
+apply plugin: 'com.google.gms.google-services'
