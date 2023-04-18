@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 interface StorageLocationRemoteDataSource {
     suspend fun observeAll(): Flow<List<StorageLocationEntity>>
     fun observeById(id: Int): Flow<StorageLocationEntity>
-    suspend fun insert(products: List<StorageLocationEntity>)
-    suspend fun update(products: List<StorageLocationEntity>)
-    suspend fun delete(products: List<StorageLocationEntity>)
+    suspend fun insert(storageLocations: List<StorageLocationEntity>)
+    suspend fun update(storageLocations: List<StorageLocationEntity>)
+    suspend fun delete(storageLocations: List<StorageLocationEntity>)
     suspend fun deleteAll()
 }
 

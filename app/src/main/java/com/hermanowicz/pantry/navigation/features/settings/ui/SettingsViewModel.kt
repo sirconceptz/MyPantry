@@ -193,7 +193,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun showImportDatabaseToCloudDialog(bool: Boolean) {
+    fun showExportDatabaseToCloudDialog(bool: Boolean) {
         _settingsState.update {
             it.copy(
                 showExportDatabaseToCloudDialog = bool
@@ -225,6 +225,6 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             exportDatabaseToCloudUseCase()
         }
-        showImportDatabaseToCloudDialog(false)
+        showExportDatabaseToCloudDialog(false)
     }
 }

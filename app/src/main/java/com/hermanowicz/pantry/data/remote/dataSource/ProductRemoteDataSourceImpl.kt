@@ -1,12 +1,9 @@
 package com.hermanowicz.pantry.data.remote.dataSource
 
-import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.hermanowicz.pantry.data.local.model.ProductEntity
 import com.hermanowicz.pantry.di.remote.dataSource.ProductRemoteDataSource
-import com.hermanowicz.pantry.utils.InternetMonitor
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
@@ -14,21 +11,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProductRemoteDataSourceImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val internetMonitor: InternetMonitor
-) : ProductRemoteDataSource {
+class ProductRemoteDataSourceImpl @Inject constructor() : ProductRemoteDataSource {
 
-    private val database = FirebaseDatabase.getInstance()
+    private val databaseReference = FirebaseDatabase.getInstance().reference.child("products")
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     override suspend fun observeAll(): Flow<List<ProductEntity>> {
         if (userId.isNotEmpty()) {
             return try {
                 val products = mutableListOf<ProductEntity>()
-                val children = database
-                    .reference
-                    .child("products")
+                val children = databaseReference
                     .child(userId).get().await().children
                 children.forEach {
                     val product = it.getValue(ProductEntity::class.java)!!
@@ -47,22 +39,32 @@ class ProductRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun insert(products: List<ProductEntity>) {
-        TODO("Not yet implemented")
+        if (userId.isNotEmpty()) {
+            products.forEach { product ->
+                databaseReference.child(userId).child(product.id.toString()).setValue(product)
+            }
+        }
     }
 
     override suspend fun update(products: List<ProductEntity>) {
-        TODO("Not yet implemented")
+        if (userId.isNotEmpty()) {
+            products.forEach { product ->
+                databaseReference.child(userId).child(product.id.toString()).setValue(product)
+            }
+        }
     }
 
     override suspend fun delete(products: List<ProductEntity>) {
-        TODO("Not yet implemented")
+        if (userId.isNotEmpty()) {
+            products.forEach { product ->
+                databaseReference.child(userId).child(product.id.toString()).removeValue()
+            }
+        }
     }
 
     override suspend fun deleteAll() {
-        database
-            .reference
-            .child("products")
-            .child(userId)
-            .removeValue()
+        if (userId.isNotEmpty()) {
+            databaseReference.child(userId).removeValue()
+        }
     }
 }
