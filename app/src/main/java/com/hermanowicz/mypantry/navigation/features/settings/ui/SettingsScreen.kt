@@ -58,7 +58,9 @@ fun SettingsScreen(
             state = state,
             context = context,
             onAuthorDialogDismiss = { viewModel.showAuthorDialog(false) },
-            onConfirmClearDatabase = { viewModel.onConfirmClearDatabase() }
+            onConfirmClearDatabase = { viewModel.onConfirmClearDatabase() },
+            onChangeEmailForNotifications = { viewModel.onChangeEmailAddressForNotifications(it) },
+            onChangeEmailDialogDismiss = { viewModel.showEmailAddressDialog(false) }
         )
 
         LazyColumn(
@@ -134,7 +136,7 @@ fun SettingsScreen(
                     TextSettingsButtonWithValue(
                         label = stringResource(id = R.string.email_address_for_notifications),
                         value = state.emailAddressForNotifications,
-                        onClick = { /*TODO*/ },
+                        onClick = { viewModel.showEmailAddressDialog(true) },
                         enabled = true
                     )
                     DividerCardInside()
@@ -149,7 +151,7 @@ fun SettingsScreen(
                         label = stringResource(id = R.string.email_notifications),
                         state = state.emailNotifications,
                         onStateChange = { viewModel.onChangeEmailNotifications(!state.emailNotifications) },
-                        enabled = false
+                        enabled = state.emailNotificationsCheckboxEnabled
                     )
                 }
             }

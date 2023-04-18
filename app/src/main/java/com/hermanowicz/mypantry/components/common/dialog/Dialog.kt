@@ -9,11 +9,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -128,7 +134,7 @@ fun DialogAuthorInfo(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onClickAppWebsite() },
-                    text = stringResource(id = R.string.app_website_url),
+                    text = stringResource(id = R.string.author_app_website),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center
                 )
@@ -141,9 +147,7 @@ fun DialogAuthorInfo(
 }
 
 @Composable
-fun DialogBackup(
-    label: String,
-    statement: String,
+fun DialogClearDatabase(
     onPositiveRequest: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -164,14 +168,66 @@ fun DialogBackup(
                     ),
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
-                Text(text = label, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.clear_database),
+                    fontWeight = FontWeight.Bold
+                )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = statement,
+                    text = stringResource(id = R.string.statement_clear_database_warning),
                     textAlign = TextAlign.Justify
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.confirm), onClick = onPositiveRequest
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun DialogChangeEmail(
+    emailAddress: String,
+    onPositiveRequest: (String) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    var text by remember { mutableStateOf(TextFieldValue(emailAddress)) }
+
+    Dialog(
+        onDismissRequest = onDismissRequest
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(LocalSpacing.current.small)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = LocalSpacing.current.medium,
+                        horizontal = LocalSpacing.current.small
+                    ),
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.email_address_for_notifications),
+                    fontWeight = FontWeight.Bold
+                )
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = text,
+                    onValueChange = { newText ->
+                        text = newText
+                    }
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.confirm),
+                    onClick = { onPositiveRequest(text.text) }
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.close), onClick = onDismissRequest

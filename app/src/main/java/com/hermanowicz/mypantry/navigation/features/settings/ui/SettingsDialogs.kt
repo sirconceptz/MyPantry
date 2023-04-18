@@ -5,7 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.mypantry.R
 import com.hermanowicz.mypantry.components.common.dialog.DialogAuthorInfo
-import com.hermanowicz.mypantry.components.common.dialog.DialogBackup
+import com.hermanowicz.mypantry.components.common.dialog.DialogChangeEmail
+import com.hermanowicz.mypantry.components.common.dialog.DialogClearDatabase
 import com.hermanowicz.mypantry.navigation.features.settings.state.SettingsState
 
 @Composable
@@ -13,7 +14,9 @@ fun ShowSettingsDialogs(
     state: SettingsState,
     context: Context,
     onAuthorDialogDismiss: () -> Unit,
-    onConfirmClearDatabase: () -> Unit
+    onConfirmClearDatabase: () -> Unit,
+    onChangeEmailForNotifications: (String) -> Unit,
+    onChangeEmailDialogDismiss: () -> Unit
 ) {
     if (state.showAuthorDialog) {
         DialogAuthorInfo(
@@ -40,12 +43,17 @@ fun ShowSettingsDialogs(
     }
 
     if (state.showClearDatabaseDialog) {
-        DialogBackup(
-            label = stringResource(id = R.string.clear_database), statement = stringResource(
-                id = R.string.statement_clear_database_warning
-            ), onPositiveRequest = onConfirmClearDatabase
-        ) {
+        DialogClearDatabase(
+            onPositiveRequest = onConfirmClearDatabase,
+            onDismissRequest = onAuthorDialogDismiss
+        )
+    }
 
-        }
+    if (state.showChangeNotificationsEmailDialog) {
+        DialogChangeEmail(
+            emailAddress = state.emailAddressForNotifications,
+            onPositiveRequest = onChangeEmailForNotifications,
+            onDismissRequest = onChangeEmailDialogDismiss
+        )
     }
 }

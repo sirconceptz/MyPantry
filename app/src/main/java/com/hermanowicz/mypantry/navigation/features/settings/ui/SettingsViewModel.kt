@@ -6,7 +6,9 @@ import com.hermanowicz.mypantry.data.settings.AppSettings
 import com.hermanowicz.mypantry.domain.ClearDatabaseToFileUseCase
 import com.hermanowicz.mypantry.domain.FetchAppSettingsUseCase
 import com.hermanowicz.mypantry.domain.UpdateAppSettingsUseCase
+import com.hermanowicz.mypantry.domain.ValidateEmailUseCase
 import com.hermanowicz.mypantry.navigation.features.settings.state.SettingsState
+import com.hermanowicz.mypantry.utils.enums.EmailValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,12 +24,14 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val fetchAppSettingsUseCase: FetchAppSettingsUseCase,
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
-    private val clearDatabaseToFileUseCase: ClearDatabaseToFileUseCase
+    private val clearDatabaseToFileUseCase: ClearDatabaseToFileUseCase,
+    private val validateEmailUseCase: ValidateEmailUseCase
 ) : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
     var settingsState: StateFlow<SettingsState> = _settingsState.asStateFlow()
 
     init {
+
         viewModelScope.launch {
             fetchAppSettingsUseCase().map { appSettings ->
                 _settingsState.update {
@@ -40,10 +44,17 @@ class SettingsViewModel @Inject constructor(
                         emailNotifications = appSettings.emailNotifications,
                         emailAddressForNotifications = appSettings.emailForNotifications,
                         pushNotifications = appSettings.pushNotifications,
+                        emailNotificationsCheckboxEnabled = isEmailNotificationsCheckboxEnabled(
+                            appSettings.emailForNotifications
+                        )
                     )
                 }
             }.collect()
         }
+    }
+
+    private fun isEmailNotificationsCheckboxEnabled(emailAddress: String): Boolean {
+        return validateEmailUseCase(emailAddress) == EmailValidation.VALID
     }
 
     fun onChangeDatabaseMode(databaseMode: String) {
@@ -143,7 +154,8 @@ class SettingsViewModel @Inject constructor(
     fun onChangeEmailNotifications(bool: Boolean) {
         _settingsState.update {
             it.copy(
-                emailNotifications = bool
+                emailNotifications = bool,
+                showChangeNotificationsEmailDialog = false
             )
         }
         updateAppSettings()
@@ -170,5 +182,33 @@ class SettingsViewModel @Inject constructor(
             clearDatabaseToFileUseCase()
         }
         showClearDatabaseDialog(false)
+    }
+
+    fun showEmailAddressDialog(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                showChangeNotificationsEmailDialog = bool
+            )
+        }
+    }
+
+    fun onChangeEmailAddressForNotifications(emailAddress: String) {
+        _settingsState.update {
+            when (validateEmailUseCase(emailAddress)) {
+                EmailValidation.VALID -> it.copy(
+                    emailAddressForNotifications = emailAddress,
+                    emailNotificationsCheckboxEnabled = true,
+                    showChangeNotificationsEmailDialog = false
+                )
+
+                else -> it.copy(
+                    emailAddressForNotifications = "",
+                    emailNotificationsCheckboxEnabled = false,
+                    emailNotifications = false,
+                    showChangeNotificationsEmailDialog = false
+                )
+            }
+        }
+        updateAppSettings()
     }
 }
