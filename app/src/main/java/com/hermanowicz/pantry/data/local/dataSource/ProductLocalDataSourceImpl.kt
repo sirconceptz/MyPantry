@@ -15,6 +15,10 @@ class ProductLocalDataSourceImpl @Inject constructor(
         return productDao.observeAll()
     }
 
+    override fun getAll(): List<ProductEntity> {
+        return productDao.getAll()
+    }
+
     override fun observeById(id: Int): Flow<ProductEntity> {
         return productDao.observeById(id)
     }

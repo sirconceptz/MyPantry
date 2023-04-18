@@ -11,10 +11,14 @@ import kotlinx.coroutines.flow.Flow
 interface ProductRepository {
     fun observeById(id: Int): Flow<Product>
     suspend fun observeAll(): Flow<List<Product>>
+    fun getAllLocal(): List<Product>
     suspend fun insert(products: List<Product>)
+    suspend fun insertRemote(products: List<Product>)
     suspend fun update(products: List<Product>)
     suspend fun delete(products: List<Product>)
-    suspend fun deleteAll()
+    suspend fun deleteAllCurrentDatabase()
+    suspend fun deleteAllRemote()
+    suspend fun deleteAllLocal()
 }
 
 @Module

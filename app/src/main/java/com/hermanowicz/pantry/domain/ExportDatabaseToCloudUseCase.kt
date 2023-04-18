@@ -5,12 +5,26 @@ import com.hermanowicz.pantry.di.repository.ProductRepository
 import com.hermanowicz.pantry.di.repository.StorageLocationRepository
 import javax.inject.Inject
 
-class ClearDatabaseToFileUseCase @Inject constructor(
+class ExportDatabaseToCloudUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val storageLocationRepository: StorageLocationRepository
 ) : suspend () -> Unit {
     override suspend fun invoke() {
+        val products = productRepository.getAllLocal()
+        val categories = categoryRepository.getAllLocal()
+        val storageLocations = storageLocationRepository.getAllLocal()
+
+        cleanDatabases()
+        productRepository.insertRemote(products)
+        categoryRepository.insertRemote(categories)
+        storageLocationRepository.insertRemote(storageLocations)
+    }
+
+    private suspend fun cleanDatabases() {
+        productRepository.deleteAllRemote()
+        categoryRepository.deleteAllRemote()
+        storageLocationRepository.deleteAllRemote()
         productRepository.deleteAllCurrentDatabase()
         categoryRepository.deleteAllCurrentDatabase()
         storageLocationRepository.deleteAllCurrentDatabase()

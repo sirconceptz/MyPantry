@@ -15,6 +15,10 @@ class StorageLocationLocalDataSourceImpl @Inject constructor(
         return storageLocationDao.observeAll()
     }
 
+    override fun getAll(): List<StorageLocationEntity> {
+        return storageLocationDao.getAll()
+    }
+
     override fun observeById(id: Int): Flow<StorageLocationEntity> {
         return storageLocationDao.observeById(id)
     }

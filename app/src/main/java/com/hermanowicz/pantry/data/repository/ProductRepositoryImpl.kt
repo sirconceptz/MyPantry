@@ -38,8 +38,16 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAllLocal(): List<Product> {
+        return localDataSource.getAll().map { it.toDomainModel() }
+    }
+
     override suspend fun insert(products: List<Product>) {
         localDataSource.insert(products.map { product -> product.toEntityModel() })
+    }
+
+    override suspend fun insertRemote(products: List<Product>) {
+        remoteDataSource.insert(products.map { product -> product.toEntityModel() })
     }
 
     override suspend fun update(products: List<Product>) {
@@ -50,7 +58,15 @@ class ProductRepositoryImpl @Inject constructor(
         localDataSource.delete(products.map { product -> product.toEntityModel() })
     }
 
-    override suspend fun deleteAll() {
+    override suspend fun deleteAllCurrentDatabase() {
+        localDataSource.deleteAll()
+    }
+
+    override suspend fun deleteAllRemote() {
+        remoteDataSource.deleteAll()
+    }
+
+    override suspend fun deleteAllLocal() {
         localDataSource.deleteAll()
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.settings.AppSettings
 import com.hermanowicz.pantry.domain.ClearDatabaseToFileUseCase
 import com.hermanowicz.pantry.domain.FetchAppSettingsUseCase
+import com.hermanowicz.pantry.domain.ExportDatabaseToCloudUseCase
 import com.hermanowicz.pantry.domain.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.ValidateEmailUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
@@ -25,13 +26,13 @@ class SettingsViewModel @Inject constructor(
     private val fetchAppSettingsUseCase: FetchAppSettingsUseCase,
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
     private val clearDatabaseToFileUseCase: ClearDatabaseToFileUseCase,
-    private val validateEmailUseCase: ValidateEmailUseCase
+    private val validateEmailUseCase: ValidateEmailUseCase,
+    private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase
 ) : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
     var settingsState: StateFlow<SettingsState> = _settingsState.asStateFlow()
 
     init {
-
         viewModelScope.launch {
             fetchAppSettingsUseCase().map { appSettings ->
                 _settingsState.update {
@@ -192,6 +193,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun showImportDatabaseToCloudDialog(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                showExportDatabaseToCloudDialog = bool
+            )
+        }
+    }
+
     fun onChangeEmailAddressForNotifications(emailAddress: String) {
         _settingsState.update {
             when (validateEmailUseCase(emailAddress)) {
@@ -210,5 +219,12 @@ class SettingsViewModel @Inject constructor(
             }
         }
         updateAppSettings()
+    }
+
+    fun onConfirmExportDatabaseToCloud() {
+        viewModelScope.launch(Dispatchers.IO) {
+            exportDatabaseToCloudUseCase()
+        }
+        showImportDatabaseToCloudDialog(false)
     }
 }

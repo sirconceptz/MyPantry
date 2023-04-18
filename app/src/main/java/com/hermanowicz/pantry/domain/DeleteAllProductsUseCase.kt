@@ -7,6 +7,6 @@ class DeleteAllProductsUseCase @Inject constructor(
     private val productRepository: ProductRepository
 ) : suspend () -> Unit {
     override suspend fun invoke() {
-        productRepository.deleteAll()
+        productRepository.deleteAllCurrentDatabase()
     }
 }

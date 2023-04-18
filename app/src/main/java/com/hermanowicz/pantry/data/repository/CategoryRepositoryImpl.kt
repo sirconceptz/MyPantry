@@ -4,8 +4,9 @@ import android.content.Context
 import com.hermanowicz.pantry.data.mapper.toDomainModel
 import com.hermanowicz.pantry.data.mapper.toEntityModel
 import com.hermanowicz.pantry.data.model.Category
-import com.hermanowicz.pantry.di.local.dataSource.CategoriesLocalDataSource
-import com.hermanowicz.pantry.di.repository.CategoriesRepository
+import com.hermanowicz.pantry.di.local.dataSource.CategoryLocalDataSource
+import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
+import com.hermanowicz.pantry.di.repository.CategoryRepository
 import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -15,10 +16,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CategoriesRepositoryImpl @Inject constructor(
-    private val localDataSource: CategoriesLocalDataSource,
+class CategoryRepositoryImpl @Inject constructor(
+    private val localDataSource: CategoryLocalDataSource,
+    private val remoteDataSource: CategoryRemoteDataSource,
     @ApplicationContext private val context: Context
-) : CategoriesRepository {
+) : CategoryRepository {
     override fun observeById(id: Int): Flow<Category> {
         return localDataSource.observeById(id).filterNotNull().map { storageLocationEntity ->
             storageLocationEntity.toDomainModel()
@@ -29,6 +31,10 @@ class CategoriesRepositoryImpl @Inject constructor(
         return localDataSource.observeAll().map { categoriesEntities ->
             categoriesEntities.map { categoryEntity -> categoryEntity.toDomainModel() }
         }
+    }
+
+    override fun getAllLocal(): List<Category> {
+        return localDataSource.getAll().map { it.toDomainModel() }
     }
 
     override fun getMainCategories(): Map<String, String> {
@@ -47,6 +53,10 @@ class CategoriesRepositoryImpl @Inject constructor(
         localDataSource.insert(category.toEntityModel())
     }
 
+    override suspend fun insertRemote(categories: List<Category>) {
+        remoteDataSource.insert(categories.map { it.toEntityModel() })
+    }
+
     override suspend fun update(category: Category) {
         localDataSource.update(category.toEntityModel())
     }
@@ -55,7 +65,15 @@ class CategoriesRepositoryImpl @Inject constructor(
         localDataSource.delete(category.toEntityModel())
     }
 
-    override suspend fun deleteAll() {
+    override suspend fun deleteAllCurrentDatabase() {
+        localDataSource.deleteAll()
+    }
+
+    override suspend fun deleteAllRemote() {
+        remoteDataSource.deleteAll()
+    }
+
+    override suspend fun deleteAllLocal() {
         localDataSource.deleteAll()
     }
 }

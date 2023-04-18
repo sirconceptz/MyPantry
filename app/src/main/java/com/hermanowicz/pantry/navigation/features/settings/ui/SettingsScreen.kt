@@ -59,6 +59,8 @@ fun SettingsScreen(
             context = context,
             onAuthorDialogDismiss = { viewModel.showAuthorDialog(false) },
             onConfirmClearDatabase = { viewModel.onConfirmClearDatabase() },
+            onExportDatabaseToCloudDialogDismiss = { viewModel.onConfirmExportDatabaseToCloud() },
+            onConfirmExportDatabaseToCloud = { viewModel.showImportDatabaseToCloudDialog(false) },
             onChangeEmailForNotifications = { viewModel.onChangeEmailAddressForNotifications(it) },
             onChangeEmailDialogDismiss = { viewModel.showEmailAddressDialog(false) }
         )
@@ -98,7 +100,7 @@ fun SettingsScreen(
                         onDismiss = { viewModel.showDatabaseMode(false) })
                     DividerCardInside()
                     TextSettingsButton(label = stringResource(id = R.string.export_local_database_to_cloud),
-                        onClick = { /*TODO*/ })
+                        onClick = { viewModel.showImportDatabaseToCloudDialog(true) })
                     DividerCardInside()
                     DropdownSettings(label = stringResource(id = R.string.camera_to_scan_codes),
                         mapKey = state.cameraToScanCodes,

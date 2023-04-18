@@ -16,6 +16,9 @@ interface ProductDao {
     @Query("SELECT * FROM products ORDER BY expirationDate ASC")
     fun observeAll(): Flow<List<ProductEntity>>
 
+    @Query("SELECT * FROM products ORDER BY expirationDate ASC")
+    fun getAll(): List<ProductEntity>
+
     @Insert
     fun insert(products: List<ProductEntity>)
 

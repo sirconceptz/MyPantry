@@ -10,7 +10,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.hermanowicz.pantry.data.local.db.CategoriesDao
+import com.hermanowicz.pantry.data.local.db.CategoryDao
 import com.hermanowicz.pantry.data.local.db.LOCAL_DB_NAME
 import com.hermanowicz.pantry.data.local.db.LocalDb
 import com.hermanowicz.pantry.data.local.db.ProductDao
@@ -54,7 +54,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideCategoriesDao(localDb: LocalDb): CategoriesDao {
+    fun provideCategoriesDao(localDb: LocalDb): CategoryDao {
         return localDb.categoriesDao()
     }
 

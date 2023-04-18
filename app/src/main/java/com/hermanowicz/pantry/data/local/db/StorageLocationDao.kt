@@ -16,6 +16,9 @@ interface StorageLocationDao {
     @Query("SELECT * FROM storage_locations")
     fun observeAll(): Flow<List<StorageLocationEntity>>
 
+    @Query("SELECT * FROM storage_locations")
+    fun getAll(): List<StorageLocationEntity>
+
     @Insert
     fun insert(storageLocation: StorageLocationEntity)
 

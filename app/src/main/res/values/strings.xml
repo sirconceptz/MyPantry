@@ -109,6 +109,7 @@
     <string name="author_app_website" translatable="false">https://www.mypantry.pl/kontakt/</string>
     <string name="confirm" translatable="false">Confirm</string>
     <string name="statement_clear_database_warning">Do you want to clear database? All entries will be removed and the operation is irreversible.</string>
+    <string name="statement_import_local_db_to_cloud_warning">Import the product database from the device to the cloud (to an internet account). CURRENTLY SAVED DATA IN THE CLOUD WILL BE DELETED AND REPLACED BY PHONE PRODUCTS.</string>
     <string name="settings_choose_file_to_restore">Choose database file to restore</string>
     <string name="email">Email</string>
 </resources>

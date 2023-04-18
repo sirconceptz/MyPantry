@@ -147,7 +147,9 @@ fun DialogAuthorInfo(
 }
 
 @Composable
-fun DialogClearDatabase(
+fun DialogWarning(
+    label: String,
+    warning: String,
     onPositiveRequest: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -169,12 +171,12 @@ fun DialogClearDatabase(
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
                 Text(
-                    text = stringResource(id = R.string.clear_database),
+                    text = label,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.statement_clear_database_warning),
+                    text = warning,
                     textAlign = TextAlign.Justify
                 )
                 ButtonPrimary(

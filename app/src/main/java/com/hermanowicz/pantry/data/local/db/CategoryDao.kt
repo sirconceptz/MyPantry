@@ -5,28 +5,28 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.hermanowicz.pantry.data.local.model.CategoriesEntity
+import com.hermanowicz.pantry.data.local.model.CategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CategoriesDao {
+interface CategoryDao {
     @Query("SELECT * FROM categories WHERE id = (:id)")
-    fun observeById(id: Int): Flow<CategoriesEntity>
+    fun observeById(id: Int): Flow<CategoryEntity>
 
     @Query("SELECT * FROM categories")
-    fun observeAll(): Flow<List<CategoriesEntity>>
+    fun observeAll(): Flow<List<CategoryEntity>>
 
     @Query("SELECT * FROM categories")
-    fun getAll(): List<CategoriesEntity>
+    fun getAll(): List<CategoryEntity>
 
     @Insert
-    fun insert(vararg categories: CategoriesEntity)
+    fun insert(vararg categories: CategoryEntity)
 
     @Delete
-    fun delete(vararg categories: CategoriesEntity)
+    fun delete(vararg categories: CategoryEntity)
 
     @Update
-    fun update(vararg categories: CategoriesEntity)
+    fun update(vararg categories: CategoryEntity)
 
     @Query("DELETE FROM categories")
     fun deleteAll()

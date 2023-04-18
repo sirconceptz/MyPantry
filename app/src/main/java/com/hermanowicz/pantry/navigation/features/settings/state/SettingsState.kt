@@ -22,5 +22,6 @@ data class SettingsState(
     val showEmailNotificationsDropdown: Boolean = false,
     val showAuthorDialog: Boolean = false,
     val showClearDatabaseDialog: Boolean = false,
-    val showChangeNotificationsEmailDialog: Boolean = false
+    val showChangeNotificationsEmailDialog: Boolean = false,
+    val showExportDatabaseToCloudDialog: Boolean = false
 )

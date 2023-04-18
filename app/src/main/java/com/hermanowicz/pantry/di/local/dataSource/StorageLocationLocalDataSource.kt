@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StorageLocationLocalDataSource {
     fun observeAll(): Flow<List<StorageLocationEntity>>
+    fun getAll(): List<StorageLocationEntity>
     fun observeById(id: Int): Flow<StorageLocationEntity>
     suspend fun insert(storageLocation: StorageLocationEntity)
     suspend fun update(storageLocation: StorageLocationEntity)

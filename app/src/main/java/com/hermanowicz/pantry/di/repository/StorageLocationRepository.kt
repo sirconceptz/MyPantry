@@ -11,10 +11,14 @@ import kotlinx.coroutines.flow.Flow
 interface StorageLocationRepository {
     fun observeById(id: Int): Flow<StorageLocation>
     fun observeAll(): Flow<List<StorageLocation>>
+    fun getAllLocal(): List<StorageLocation>
     suspend fun insert(storageLocation: StorageLocation)
+    suspend fun insertRemote(storageLocations: List<StorageLocation>)
     suspend fun update(storageLocation: StorageLocation)
     suspend fun delete(storageLocation: StorageLocation)
-    suspend fun deleteAll()
+    suspend fun deleteAllCurrentDatabase()
+    suspend fun deleteAllRemote()
+    suspend fun deleteAllLocal()
 }
 
 @Module
