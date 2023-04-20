@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
+import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
@@ -23,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,10 +34,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPantryViewModel @Inject constructor(
-    val getGroupProductListUseCase: GetGroupProductListUseCase,
-    val observeAllProductsUseCase: ObserveAllProductsUseCase,
-    val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase
+    private val getGroupProductListUseCase: GetGroupProductListUseCase,
+    private val observeAllProductsUseCase: ObserveAllProductsUseCase,
+    private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
+    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<MyPantryProductsUiState>(MyPantryProductsUiState.Empty)
     val uiState: StateFlow<MyPantryProductsUiState> = _uiState
@@ -44,22 +48,27 @@ class MyPantryViewModel @Inject constructor(
         _filterProductDataState.asStateFlow()
 
     init {
-        fetchProducts()
+        observeProducts()
     }
 
-    private fun fetchProducts() {
+    fun observeProducts() {
         _uiState.value = MyPantryProductsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeAllProductsUseCase().map { products ->
-                    filteredProductList(products, filterProductDataState.value.filterProduct)
-                }.collect { products ->
-                    _uiState.value = MyPantryProductsUiState.Loaded(
-                        MyPantryModel(
-                            groupsProduct = getGroupProductListUseCase(products),
-                            loadingVisible = false
+                fetchDatabaseModeUseCase().collect { databaseMode ->
+                    observeAllProductsUseCase(databaseMode).map { products ->
+                        filteredProductList(
+                            products,
+                            filterProductDataState.value.filterProduct
                         )
-                    )
+                    }.collect {
+                        _uiState.value = MyPantryProductsUiState.Loaded(
+                            MyPantryModel(
+                                groupsProduct = getGroupProductListUseCase(it),
+                                loadingVisible = false
+                            )
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 _uiState.value = MyPantryProductsUiState.Error(e.toString())
@@ -114,25 +123,25 @@ class MyPantryViewModel @Inject constructor(
                 product.volume in volumeMin..volumeMax &&
                 product.weight in weightMin..weightMax &&
                 isProductAttributesValid(
-                        product.isBio,
-                        product.isVege,
-                        product.hasSugar,
-                        product.hasSalt,
-                        filterProduct.isBio,
-                        filterProduct.isVege,
-                        filterProduct.hasSugar,
-                        filterProduct.hasSalt
-                    ) &&
+                    product.isBio,
+                    product.isVege,
+                    product.hasSugar,
+                    product.hasSalt,
+                    filterProduct.isBio,
+                    filterProduct.isVege,
+                    filterProduct.hasSugar,
+                    filterProduct.hasSalt
+                ) &&
                 product.taste.contains(filterProduct.taste) &&
                 isExpirationDateInRange(
-                        product.expirationDate,
-                        filterProduct.expirationDateMin,
-                        filterProduct.expirationDateMax
-                    ) && isProductionDateInRange(
-                        product.productionDate,
-                        filterProduct.productionDateMin,
-                        filterProduct.productionDateMax
-                    )
+                    product.expirationDate,
+                    filterProduct.expirationDateMin,
+                    filterProduct.expirationDateMax
+                ) && isProductionDateInRange(
+                    product.productionDate,
+                    filterProduct.productionDateMin,
+                    filterProduct.productionDateMax
+                )
             )
                 mutableProducts.add(product)
         }
@@ -144,9 +153,9 @@ class MyPantryViewModel @Inject constructor(
         filterProductMainCategory: String
     ): Boolean {
         return filterProductMainCategory == MainCategoriesTypes.CHOOSE.name ||
-            filterProductMainCategory.isEmpty() ||
-            productMainCategory == filterProductMainCategory ||
-            productMainCategory.isEmpty()
+                filterProductMainCategory.isEmpty() ||
+                productMainCategory == filterProductMainCategory ||
+                productMainCategory.isEmpty()
     }
 
     private fun isDetailCategoryValid(
@@ -154,9 +163,9 @@ class MyPantryViewModel @Inject constructor(
         filterProductDetailCategory: String
     ): Boolean {
         return filterProductDetailCategory == ChooseCategoryTypes.CHOOSE.name ||
-            filterProductDetailCategory.isEmpty() ||
-            productDetailCategory == filterProductDetailCategory ||
-            productDetailCategory.isEmpty()
+                filterProductDetailCategory.isEmpty() ||
+                productDetailCategory == filterProductDetailCategory ||
+                productDetailCategory.isEmpty()
     }
 
     private fun isExpirationDateInRange(
@@ -226,7 +235,7 @@ class MyPantryViewModel @Inject constructor(
                 )
             )
         }
-        fetchProducts()
+        observeProducts()
         onNavigateBack(true)
     }
 

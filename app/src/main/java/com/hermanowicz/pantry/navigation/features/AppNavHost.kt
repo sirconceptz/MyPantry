@@ -21,10 +21,12 @@ import com.hermanowicz.pantry.navigation.features.myPantry.MyPantryRoute
 import com.hermanowicz.pantry.navigation.features.myPantry.ui.MyPantryViewModel
 import com.hermanowicz.pantry.navigation.features.newProduct.NewProductRoute
 import com.hermanowicz.pantry.navigation.features.ownCategories.OwnCategoriesRoute
+import com.hermanowicz.pantry.navigation.features.ownCategories.ui.OwnCategoriesViewModel
 import com.hermanowicz.pantry.navigation.features.productDetails.ProductDetailsRoute
 import com.hermanowicz.pantry.navigation.features.scanProduct.ScanProductRoute
 import com.hermanowicz.pantry.navigation.features.settings.SettingsRoute
 import com.hermanowicz.pantry.navigation.features.storageLocations.StorageLocationsRoute
+import com.hermanowicz.pantry.navigation.features.storageLocations.ui.StorageLocationsViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -75,6 +77,8 @@ fun AppNavHost() {
             }
         ) {
             val myPantryViewModel: MyPantryViewModel = hiltViewModel()
+            val ownCategoriesViewModel: OwnCategoriesViewModel = hiltViewModel()
+            val storageLocationsViewModel: StorageLocationsViewModel = hiltViewModel()
             NavHost(
                 navController = navController, startDestination = AppScreens.MyPantry.route
             ) {
@@ -94,7 +98,7 @@ fun AppNavHost() {
                     FilterProductRoute(
                         onNavigateBack = { navController.popBackStack() },
                         openDrawer = { openDrawer() },
-                        myPantryViewModel = myPantryViewModel
+                        viewModel = myPantryViewModel
                     )
                 }
                 composable(route = "${AppScreens.ProductDetails.route}/{id}") {
@@ -116,21 +120,45 @@ fun AppNavHost() {
                     )
                 }
                 composable(route = AppScreens.OwnCategories.route) {
-                    OwnCategoriesRoute(openDrawer = { openDrawer() })
+                    OwnCategoriesRoute(
+                        openDrawer = { openDrawer() },
+                        viewModel = ownCategoriesViewModel
+                    )
                 }
                 composable(route = AppScreens.ScanProduct.route) {
                     ScanProductRoute(openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.StorageLocations.route) {
-                    StorageLocationsRoute(openDrawer = { openDrawer() })
+                    StorageLocationsRoute(
+                        openDrawer = { openDrawer() },
+                        viewModel = storageLocationsViewModel
+                    )
                 }
                 composable(route = AppScreens.Settings.route) {
                     SettingsRoute(
-                        onNavigateToUserAccount = { },
+                        observeNewDatabase = {
+                            reObserveDatabases(
+                                myPantryViewModel,
+                                ownCategoriesViewModel,
+                                storageLocationsViewModel
+                            )
+                        },
                         openDrawer = { openDrawer() }
                     )
                 }
             }
         }
     }
+
+
+}
+
+private fun reObserveDatabases(
+    myPantryViewModel: MyPantryViewModel,
+    ownCategoriesViewModel: OwnCategoriesViewModel,
+    storageLocationsViewModel: StorageLocationsViewModel
+) {
+    myPantryViewModel.observeProducts()
+    ownCategoriesViewModel.observeCategories()
+    storageLocationsViewModel.observeStorageLocations()
 }

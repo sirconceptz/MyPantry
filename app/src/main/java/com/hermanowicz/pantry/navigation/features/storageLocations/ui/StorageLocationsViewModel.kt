@@ -34,10 +34,10 @@ class StorageLocationsViewModel @Inject constructor(
         _storageLocationsState.asStateFlow()
 
     init {
-        fetchStorageLocations()
+        observeStorageLocations()
     }
 
-    fun fetchStorageLocations() {
+    fun observeStorageLocations() {
         _uiState.value = StorageLocationsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {

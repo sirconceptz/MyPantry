@@ -18,7 +18,9 @@ fun ShowSettingsDialogs(
     onExportDatabaseToCloudDialogDismiss: () -> Unit,
     onConfirmExportDatabaseToCloud: () -> Unit,
     onChangeEmailForNotifications: (String) -> Unit,
-    onChangeEmailDialogDismiss: () -> Unit
+    onChangeEmailDialogDismiss: () -> Unit,
+    onConfirmDeleteAccount: () -> Unit,
+    onConfirmDialogDismiss: () -> Unit
 ) {
     if (state.showAuthorDialog) {
         DialogAuthorInfo(
@@ -67,6 +69,15 @@ fun ShowSettingsDialogs(
             emailAddress = state.emailAddressForNotifications,
             onPositiveRequest = onChangeEmailForNotifications,
             onDismissRequest = onChangeEmailDialogDismiss
+        )
+    }
+
+    if (state.showDeleteAccountDialog) {
+        DialogWarning(
+            label = stringResource(id = R.string.delete_account),
+            warning = stringResource(id = R.string.statement_delete_account_warning),
+            onPositiveRequest = onConfirmDeleteAccount,
+            onDismissRequest = onConfirmDialogDismiss
         )
     }
 }

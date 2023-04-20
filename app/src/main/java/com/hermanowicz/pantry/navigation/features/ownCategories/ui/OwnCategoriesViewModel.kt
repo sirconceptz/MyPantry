@@ -34,10 +34,10 @@ class OwnCategoriesViewModel @Inject constructor(
         _categoriesState.asStateFlow()
 
     init {
-        fetchCategories()
+        observeCategories()
     }
 
-    fun fetchCategories() {
+    fun observeCategories() {
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {

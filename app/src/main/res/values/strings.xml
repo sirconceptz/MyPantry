@@ -101,7 +101,7 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="email_address_for_notifications">Email address for notifications</string>
-    <string name="clear_database">Clean database</string>
+    <string name="clear_database">Clear database</string>
     <string name="close">Close</string>
     <string name="author">Author</string>
     <string name="author_facebook" translatable="false">https://www.facebook.com/sirconceptz/</string>
@@ -112,4 +112,9 @@
     <string name="statement_import_local_db_to_cloud_warning">Import the product database from the device to the cloud (to an internet account). CURRENTLY SAVED DATA IN THE CLOUD WILL BE DELETED AND REPLACED BY PHONE PRODUCTS.</string>
     <string name="settings_choose_file_to_restore">Choose database file to restore</string>
     <string name="email">Email</string>
+    <string name="unlogged">Unlogged</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="delete_account">Delete account</string>
+    <string name="statement_delete_account_warning">Are you sure you want to delete you account? This operation is irreversible. All your products, categories, storage locations and all info about you will be deleted.</string>
 </resources>

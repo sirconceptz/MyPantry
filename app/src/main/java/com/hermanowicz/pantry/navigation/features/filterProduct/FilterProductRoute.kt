@@ -8,11 +8,11 @@ import com.hermanowicz.pantry.navigation.features.myPantry.ui.MyPantryViewModel
 fun FilterProductRoute(
     onNavigateBack: () -> Unit,
     openDrawer: () -> Unit,
-    myPantryViewModel: MyPantryViewModel
+    viewModel: MyPantryViewModel
 ) {
     FilterProductScreen(
         openDrawer = openDrawer,
-        viewModel = myPantryViewModel,
+        viewModel = viewModel,
         onNavigateBack = onNavigateBack
     )
 }

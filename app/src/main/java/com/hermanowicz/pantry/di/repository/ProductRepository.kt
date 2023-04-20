@@ -2,6 +2,7 @@ package com.hermanowicz.pantry.di.repository
 
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.data.repository.ProductRepositoryImpl
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
     fun observeById(id: Int): Flow<Product>
-    suspend fun observeAll(): Flow<List<Product>>
+    fun observeAll(databaseMode: DatabaseMode): Flow<List<Product>>
     fun getAllLocal(): List<Product>
     suspend fun insert(products: List<Product>)
     suspend fun insertRemote(products: List<Product>)

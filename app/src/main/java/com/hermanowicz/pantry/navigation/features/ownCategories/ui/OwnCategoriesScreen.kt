@@ -27,10 +27,11 @@ import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import timber.log.Timber
 
 @Composable
-fun OwnCategoriesScreen(openDrawer: () -> Unit) {
-    val viewModel: OwnCategoriesViewModel = hiltViewModel()
+fun OwnCategoriesScreen(
+    openDrawer: () -> Unit,
+    viewModel: OwnCategoriesViewModel
+) {
     val categoriesState by viewModel.categoriesState.collectAsState()
-
     val categoriesModel = updateCategoriesModel(viewModel)
 
     if (categoriesModel.categories.isEmpty() && categoriesState.isEditMode)

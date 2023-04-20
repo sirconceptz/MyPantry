@@ -59,28 +59,28 @@ class EditProductViewModel @Inject constructor(
     }
 
     private fun fetchProductData(productId: Int) {
-        viewModelScope.launch {
-            observeAllProductsUseCase().map { products ->
-                val groupProduct = getGroupProductUseCase(productId, products)
-                _productDataState.value = EditProductDataState(
-                    name = groupProduct.product.name,
-                    expirationDate = groupProduct.product.expirationDate,
-                    productionDate = groupProduct.product.productionDate,
-                    composition = groupProduct.product.composition,
-                    oldQuantity = groupProduct.quantity.toString(),
-                    newQuantity = groupProduct.quantity.toString(),
-                    healingProperties = groupProduct.product.healingProperties,
-                    dosage = groupProduct.product.dosage,
-                    hasSugar = groupProduct.product.hasSugar,
-                    hasSalt = groupProduct.product.hasSalt,
-                    isVege = groupProduct.product.isVege,
-                    isBio = groupProduct.product.isBio,
-                    weight = groupProduct.product.weight.toString(),
-                    volume = groupProduct.product.volume.toString(),
-                    productsIdList = groupProduct.idList
-                )
-            }.collect()
-        }
+//        viewModelScope.launch {
+//            observeAllProductsUseCase().map { products ->
+//                val groupProduct = getGroupProductUseCase(productId, products)
+//                _productDataState.value = EditProductDataState(
+//                    name = groupProduct.product.name,
+//                    expirationDate = groupProduct.product.expirationDate,
+//                    productionDate = groupProduct.product.productionDate,
+//                    composition = groupProduct.product.composition,
+//                    oldQuantity = groupProduct.quantity.toString(),
+//                    newQuantity = groupProduct.quantity.toString(),
+//                    healingProperties = groupProduct.product.healingProperties,
+//                    dosage = groupProduct.product.dosage,
+//                    hasSugar = groupProduct.product.hasSugar,
+//                    hasSalt = groupProduct.product.hasSalt,
+//                    isVege = groupProduct.product.isVege,
+//                    isBio = groupProduct.product.isBio,
+//                    weight = groupProduct.product.weight.toString(),
+//                    volume = groupProduct.product.volume.toString(),
+//                    productsIdList = groupProduct.idList
+//                )
+//            }.collect()
+//        }
     }
 
     fun onSaveClick() {

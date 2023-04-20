@@ -66,11 +66,12 @@ class SettingsRepositoryImpl @Inject constructor(
         }
     }
 
-    override val databaseMode: Flow<DatabaseMode> = run {
-        context.dataStore.data.map { preferences ->
-            enumValueOf(preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name)
-        }
-    }
+    override val databaseMode: Flow<String>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
+            }
+
 
     companion object {
         val DATABASE_MODE_KEY = stringPreferencesKey("database_mode")

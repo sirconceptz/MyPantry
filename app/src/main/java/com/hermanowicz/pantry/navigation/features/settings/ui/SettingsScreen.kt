@@ -1,8 +1,10 @@
 package com.hermanowicz.pantry.navigation.features.settings.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +14,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -21,6 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.firebase.auth.FirebaseAuth
 import com.hermanowicz.pantry.BuildConfig
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
@@ -35,21 +44,26 @@ import com.hermanowicz.pantry.components.common.text.TextLabel
 import com.hermanowicz.pantry.components.common.text.TextSettingsButton
 import com.hermanowicz.pantry.components.common.text.TextSettingsButtonWithValue
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
+import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.ui.theme.MyPantryTheme
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.SizePrintedQRCodes
 
-
 @Composable
 fun SettingsScreen(
     openDrawer: () -> Unit,
-    onClickUserAccount: () -> Unit,
+    observeNewDatabase: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.settingsState.collectAsState()
     val context = LocalContext.current
+
+    if (state.reObserveDatabase) {
+        observeNewDatabase()
+        viewModel.reObserveDatabase(false)
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.settings), openDrawer = openDrawer
@@ -62,8 +76,14 @@ fun SettingsScreen(
             onExportDatabaseToCloudDialogDismiss = { viewModel.showExportDatabaseToCloudDialog(false) },
             onConfirmExportDatabaseToCloud = { viewModel.onConfirmExportDatabaseToCloud() },
             onChangeEmailForNotifications = { viewModel.onChangeEmailAddressForNotifications(it) },
-            onChangeEmailDialogDismiss = { viewModel.showEmailAddressDialog(false) }
+            onChangeEmailDialogDismiss = { viewModel.showEmailAddressDialog(false) },
+            onConfirmDeleteAccount = { viewModel.onConfirmDeleteAccount() },
+            onConfirmDialogDismiss = { viewModel.showDeleteAccountDialog(false) }
         )
+        SignInForm(
+            state = state,
+            hideSignInForm = { viewModel.showSignInOrSignOut(false) },
+            showUserEmail = { viewModel.showUserEmail() })
 
         LazyColumn(
             modifier = Modifier
@@ -84,8 +104,17 @@ fun SettingsScreen(
             }
             item {
                 ButtonPrimary(
-                    text = stringResource(id = R.string.user_account), onClick = onClickUserAccount
+                    text = if (!state.isUserLogged) stringResource(id = R.string.sign_in) else stringResource(
+                        id = R.string.sign_out
+                    ),
+                    onClick = { viewModel.showSignInOrSignOut(true) }
                 )
+                if (state.isUserLogged) {
+                    ButtonPrimary(
+                        text = stringResource(id = R.string.delete_account),
+                        onClick = { viewModel.showDeleteAccountDialog(true) }
+                    )
+                }
             }
             item {
                 SpacerMedium()
@@ -182,7 +211,7 @@ fun openInBrowser(context: Context, url: String) {
 }
 
 @Composable
-fun AppVersion() {
+private fun AppVersion() {
     Row(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
@@ -195,6 +224,39 @@ fun AppVersion() {
             text = BuildConfig.VERSION_NAME,
             style = TextStyle(fontSize = 15.sp),
         )
+    }
+}
+
+@Composable
+fun SignInForm(state: SettingsState, hideSignInForm: () -> Unit, showUserEmail: () -> Unit) {
+    val result = remember { mutableStateOf<FirebaseAuthUIAuthenticationResult?>(null) }
+    val launcher = rememberLauncherForActivityResult(FirebaseAuthUIActivityResultContract()) {
+        result.value = it
+    }
+
+    val providers = listOf(
+        EmailBuilder().build()
+    )
+
+    result.let {
+        val response = it.value?.resultCode
+        if (response == RESULT_OK)
+            showUserEmail()
+    }
+
+    if (state.showSignInForm) {
+        if (!state.isUserLogged) {
+            val signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build()
+            launcher.launch(signInIntent)
+            hideSignInForm()
+        } else {
+            FirebaseAuth.getInstance().signOut()
+            showUserEmail()
+            hideSignInForm()
+        }
     }
 }
 

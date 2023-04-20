@@ -3,15 +3,19 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.settings.AppSettings
+import com.hermanowicz.pantry.domain.CheckIsUserLoggedUseCase
 import com.hermanowicz.pantry.domain.ClearDatabaseToFileUseCase
+import com.hermanowicz.pantry.domain.DeleteUserAccountUseCase
 import com.hermanowicz.pantry.domain.FetchAppSettingsUseCase
 import com.hermanowicz.pantry.domain.ExportDatabaseToCloudUseCase
+import com.hermanowicz.pantry.domain.FetchUserEmailOrUnloggedUseCase
 import com.hermanowicz.pantry.domain.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.ValidateEmailUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 import com.hermanowicz.pantry.utils.enums.EmailValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +31,10 @@ class SettingsViewModel @Inject constructor(
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
     private val clearDatabaseToFileUseCase: ClearDatabaseToFileUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
-    private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase
+    private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase,
+    private val fetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase,
+    private val deleteUserAccountUseCase: DeleteUserAccountUseCase,
+    private val checkIsUserLoggedUseCase: CheckIsUserLoggedUseCase
 ) : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
     var settingsState: StateFlow<SettingsState> = _settingsState.asStateFlow()
@@ -42,12 +49,14 @@ class SettingsViewModel @Inject constructor(
                         cameraToScanCodes = appSettings.cameraMode,
                         sizeQrCodes = appSettings.sizePrintedQRCodes,
                         daysToNotifyBeforeExpiration = appSettings.daysToNotifyBeforeExpiration,
+                        userEmailOrUnlogged = fetchUserEmailOrUnloggedUseCase(),
                         emailNotifications = appSettings.emailNotifications,
                         emailAddressForNotifications = appSettings.emailForNotifications,
                         pushNotifications = appSettings.pushNotifications,
                         emailNotificationsCheckboxEnabled = isEmailNotificationsCheckboxEnabled(
                             appSettings.emailForNotifications
-                        )
+                        ),
+                        isUserLogged = checkIsUserLoggedUseCase()
                     )
                 }
             }.collect()
@@ -66,6 +75,7 @@ class SettingsViewModel @Inject constructor(
             )
         }
         updateAppSettings()
+        reObserveDatabase(true)
     }
 
     private fun updateAppSettings() {
@@ -201,6 +211,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun showSignInOrSignOut(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                showSignInForm = bool
+            )
+        }
+    }
+
     fun onChangeEmailAddressForNotifications(emailAddress: String) {
         _settingsState.update {
             when (validateEmailUseCase(emailAddress)) {
@@ -226,5 +244,37 @@ class SettingsViewModel @Inject constructor(
             exportDatabaseToCloudUseCase()
         }
         showExportDatabaseToCloudDialog(false)
+    }
+
+    fun reObserveDatabase(bool: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(1000)
+            _settingsState.update {
+                it.copy(
+                    reObserveDatabase = bool
+                )
+            }
+        }
+    }
+
+    fun showUserEmail() {
+        _settingsState.update {
+            it.copy(
+                userEmailOrUnlogged = fetchUserEmailOrUnloggedUseCase(),
+                isUserLogged = checkIsUserLoggedUseCase()
+            )
+        }
+    }
+
+    fun showDeleteAccountDialog(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                showDeleteAccountDialog = bool
+            )
+        }
+    }
+
+    fun onConfirmDeleteAccount() {
+        deleteUserAccountUseCase()
     }
 }

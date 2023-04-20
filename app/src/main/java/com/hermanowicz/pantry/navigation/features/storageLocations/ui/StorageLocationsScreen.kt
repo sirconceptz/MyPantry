@@ -29,8 +29,8 @@ import timber.log.Timber
 @Composable
 fun StorageLocationsScreen(
     openDrawer: () -> Unit,
+    viewModel: StorageLocationsViewModel
 ) {
-    val viewModel: StorageLocationsViewModel = hiltViewModel()
     val storageLocationState by viewModel.storageLocationState.collectAsState()
     val storageLocationModel = updateStorageLocationsModel(viewModel)
 

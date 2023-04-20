@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,15 +29,18 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun observeAll(): Flow<List<Product>> {
-        val databaseMode = settingsRepository.databaseMode.first()
-        return if (databaseMode == DatabaseMode.LOCAL) {
-            localDataSource.observeAll().map { productEntities ->
+    override fun observeAll(databaseMode: DatabaseMode): Flow<List<Product>> {
+        lateinit var flow: Flow<List<Product>>
+        if (databaseMode == DatabaseMode.LOCAL) {
+            flow = localDataSource.observeAll().map { productEntities ->
                 productEntities.map { productEntity -> productEntity.toDomainModel() }
             }
-        } else remoteDataSource.observeAll().map { productEntities ->
-            productEntities.map { productEntity -> productEntity.toDomainModel() }
+        } else remoteDataSource.observeAll {
+            flow = it.map { productEntities ->
+                productEntities.map { productEntity -> productEntity.toDomainModel() }
+            }
         }
+        return flow
     }
 
     override fun getAllLocal(): List<Product> {

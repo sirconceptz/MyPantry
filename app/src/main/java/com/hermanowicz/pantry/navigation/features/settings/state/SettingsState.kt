@@ -5,7 +5,7 @@ import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.SizePrintedQRCodes
 
 data class SettingsState(
-    val userEmailOrUnlogged: String = "Unlogged",
+    val userEmailOrUnlogged: String = "",
     val databaseMode: String = DatabaseMode.LOCAL.name,
     val showDatabaseModeDropdown: Boolean = false,
     val cameraToScanCodes: String = CameraMode.REAR.name,
@@ -23,5 +23,9 @@ data class SettingsState(
     val showAuthorDialog: Boolean = false,
     val showClearDatabaseDialog: Boolean = false,
     val showChangeNotificationsEmailDialog: Boolean = false,
-    val showExportDatabaseToCloudDialog: Boolean = false
+    val showExportDatabaseToCloudDialog: Boolean = false,
+    val showSignInForm: Boolean = false,
+    val reObserveDatabase: Boolean = false,
+    val isUserLogged: Boolean = false,
+    val showDeleteAccountDialog: Boolean = false
 )

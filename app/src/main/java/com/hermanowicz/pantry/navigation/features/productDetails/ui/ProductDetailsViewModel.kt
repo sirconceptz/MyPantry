@@ -32,19 +32,19 @@ class ProductDetailsViewModel @Inject constructor(
 
     private fun fetchProducts(productId: Int) {
         _uiState.value = ProductDetailsUiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                observeAllProductsUseCase().collect { products ->
-                    _uiState.value = ProductDetailsUiState.Loaded(
-                        ProductDetailsModel(
-                            groupProduct = getGroupProductUseCase(productId, products),
-                            loadingVisible = false
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.value = ProductDetailsUiState.Error(e.toString())
-            }
-        }
+//        viewModelScope.launch(Dispatchers.IO) {
+//            try {
+//                observeAllProductsUseCase().collect { products ->
+//                    _uiState.value = ProductDetailsUiState.Loaded(
+//                        ProductDetailsModel(
+//                            groupProduct = getGroupProductUseCase(productId, products),
+//                            loadingVisible = false
+//                        )
+//                    )
+//                }
+//            } catch (e: Exception) {
+//                _uiState.value = ProductDetailsUiState.Error(e.toString())
+//            }
+//        }
     }
 }

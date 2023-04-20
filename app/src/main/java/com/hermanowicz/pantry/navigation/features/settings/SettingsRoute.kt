@@ -5,11 +5,11 @@ import com.hermanowicz.pantry.navigation.features.settings.ui.SettingsScreen
 
 @Composable
 fun SettingsRoute(
-    onNavigateToUserAccount: () -> Unit,
+    observeNewDatabase: () -> Unit,
     openDrawer: () -> Unit
 ) {
     SettingsScreen(
-        onClickUserAccount = onNavigateToUserAccount,
+        observeNewDatabase = observeNewDatabase,
         openDrawer = openDrawer
     )
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
     val appSettings: Flow<AppSettings>
-    val databaseMode: Flow<DatabaseMode>
+    val databaseMode: Flow<String>
     suspend fun updateAppSettings(appSettings: AppSettings)
 }
 
