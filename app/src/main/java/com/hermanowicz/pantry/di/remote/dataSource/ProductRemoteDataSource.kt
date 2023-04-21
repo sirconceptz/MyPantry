@@ -1,6 +1,7 @@
 package com.hermanowicz.pantry.di.remote.dataSource
 
 import com.hermanowicz.pantry.data.local.model.ProductEntity
+import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.data.remote.dataSource.ProductRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -9,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRemoteDataSource {
-    fun observeAll(callback: (products: Flow<List<ProductEntity>>) -> Unit)
+    fun observeAll(): Flow<List<ProductEntity>>
     fun observeById(id: Int, callback: (product: Flow<ProductEntity>) -> Unit)
     suspend fun insert(products: List<ProductEntity>)
     suspend fun update(products: List<ProductEntity>)

@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.data.remote.dataSource
 
+import androidx.sqlite.db.SupportSQLiteCompat.Api16Impl.cancel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -7,7 +8,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.hermanowicz.pantry.data.local.model.ProductEntity
 import com.hermanowicz.pantry.di.remote.dataSource.ProductRemoteDataSource
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,22 +21,26 @@ class ProductRemoteDataSourceImpl @Inject constructor() : ProductRemoteDataSourc
     private val databaseReference = FirebaseDatabase.getInstance().reference.child("products")
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-    override fun observeAll(callback: (products: Flow<List<ProductEntity>>) -> Unit) {
-        if (userId.isNotEmpty()) {
-            databaseReference.child(userId).addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(snapshotError: DatabaseError) {
-                    TODO("not implemented")
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val products: MutableList<ProductEntity> = mutableListOf()
-                    val children = snapshot.children
-                    children.forEach { product ->
-                        product.getValue(ProductEntity::class.java)?.let { products.add(it) }
+    override fun observeAll(): Flow<List<ProductEntity>> {
+        return callbackFlow {
+            if (userId.isNotEmpty()) {
+                val ref = databaseReference.child(userId)
+                val listener = ref.addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(snapshotError: DatabaseError) {
                     }
-                    callback(flowOf(products))
-                }
-            })
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val products: MutableList<ProductEntity> = mutableListOf()
+                        val children = snapshot.children
+                        children.forEach { product ->
+                            product.getValue(ProductEntity::class.java)?.let { products.add(it) }
+                        }
+                        trySend(products)
+                    }
+                })
+                awaitClose { ref.removeEventListener(listener) }
+            } else
+                trySend(emptyList())
         }
     }
 
