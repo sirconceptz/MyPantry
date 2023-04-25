@@ -9,11 +9,11 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface CategoryRemoteDataSource {
-    suspend fun observeAll(): Flow<List<CategoryEntity>>
-    fun observeById(id: Int): Flow<CategoryEntity>
-    suspend fun insert(categories: List<CategoryEntity>)
-    suspend fun update(categories: List<CategoryEntity>)
-    suspend fun delete(categories: List<CategoryEntity>)
+    fun observeAll(): Flow<List<CategoryEntity>>
+    fun observeById(id: Int): Flow<CategoryEntity?>
+    suspend fun insert(category: CategoryEntity)
+    suspend fun update(category: CategoryEntity)
+    suspend fun delete(category: CategoryEntity)
     suspend fun deleteAll()
 }
 

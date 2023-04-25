@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.domain.DeleteCategoryUseCase
+import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
@@ -15,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +28,8 @@ class OwnCategoriesViewModel @Inject constructor(
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
     private val saveCategoryUseCase: SaveCategoryUseCase,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
-    private val deleteCategoryUseCase: DeleteCategoryUseCase
+    private val deleteCategoryUseCase: DeleteCategoryUseCase,
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Empty)
     val uiState: StateFlow<CategoriesUiState> = _uiState
@@ -41,13 +46,15 @@ class OwnCategoriesViewModel @Inject constructor(
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeAllOwnCategoriesUseCase().collect { categoryList ->
-                    _uiState.value = CategoriesUiState.Loaded(
-                        CategoriesModel(
-                            categories = categoryList,
-                            loadingVisible = false
+                fetchDatabaseModeUseCase().collect { databaseMode ->
+                    observeAllOwnCategoriesUseCase(databaseMode).collect {
+                        _uiState.value = CategoriesUiState.Loaded(
+                            CategoriesModel(
+                                categories = it,
+                                loadingVisible = false
+                            )
                         )
-                    )
+                    }
                 }
             } catch (e: Exception) {
                 _uiState.value = CategoriesUiState.Error(e.toString())

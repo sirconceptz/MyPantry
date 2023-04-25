@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.domain.DeleteStorageLocationUseCase
+import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.SaveStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.UpdateStorageLocationUseCase
@@ -24,7 +25,8 @@ class StorageLocationsViewModel @Inject constructor(
     private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
     private val saveStorageLocationsUseCase: SaveStorageLocationsUseCase,
     private val deleteStorageLocationUseCase: DeleteStorageLocationUseCase,
-    private val updateStorageLocationUseCase: UpdateStorageLocationUseCase
+    private val updateStorageLocationUseCase: UpdateStorageLocationUseCase,
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<StorageLocationsUiState>(StorageLocationsUiState.Empty)
     val uiState: StateFlow<StorageLocationsUiState> = _uiState
@@ -41,13 +43,15 @@ class StorageLocationsViewModel @Inject constructor(
         _uiState.value = StorageLocationsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeAllStorageLocationsUseCase().collect { storageLocationList ->
-                    _uiState.value = StorageLocationsUiState.Loaded(
-                        StorageLocationsModel(
-                            storageLocations = storageLocationList,
-                            loadingVisible = false
+                fetchDatabaseModeUseCase().collect { databaseMode ->
+                    observeAllStorageLocationsUseCase(databaseMode).collect {
+                        _uiState.value = StorageLocationsUiState.Loaded(
+                            StorageLocationsModel(
+                                storageLocations = it,
+                                loadingVisible = false
+                            )
                         )
-                    )
+                    }
                 }
             } catch (e: Exception) {
                 _uiState.value = StorageLocationsUiState.Error(e.toString())

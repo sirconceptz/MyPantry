@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
-    fun observeById(id: Int): Flow<Product>
+    fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Product>
     fun observeAll(databaseMode: DatabaseMode): Flow<List<Product>>
     fun getAllLocal(): List<Product>
     suspend fun insert(products: List<Product>)

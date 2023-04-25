@@ -17,8 +17,12 @@ class ExportDatabaseToCloudUseCase @Inject constructor(
 
         cleanDatabases()
         productRepository.insertRemote(products)
-        categoryRepository.insertRemote(categories)
-        storageLocationRepository.insertRemote(storageLocations)
+        categories.forEach {
+            categoryRepository.insertRemote(it)
+        }
+        storageLocations.forEach {
+            storageLocationRepository.insertRemote(it)
+        }
     }
 
     private suspend fun cleanDatabases() {
