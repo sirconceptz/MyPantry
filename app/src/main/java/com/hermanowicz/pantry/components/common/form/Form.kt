@@ -15,6 +15,7 @@ import com.hermanowicz.pantry.components.common.dropdown.DropdownCard
 import com.hermanowicz.pantry.components.common.picker.DatePickerDouble
 import com.hermanowicz.pantry.components.common.picker.DatePickerPrimary
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
+import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabelError
 import com.hermanowicz.pantry.components.common.textfield.TextFieldDoubleAndLabel
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
@@ -50,11 +51,13 @@ fun NewProductForm(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium)
     ) {
-        TextFieldAndLabel(
+        TextFieldAndLabelError(
             textfieldText = productDataState.name,
             labelText = stringResource(id = R.string.name),
             textEvent = onNameChange,
-            placeholder = stringResource(id = R.string.name)
+            placeholder = stringResource(id = R.string.name),
+            showError = productDataState.showErrorWrongName,
+            errorText = stringResource(id = R.string.error_wrong_product_name)
         )
         DropdownCard(
             textLeft = stringResource(id = R.string.main_category),
@@ -254,7 +257,7 @@ fun EditProductForm(
             onHasSugarChange = onHasSugarChange,
             onHasSaltChange = onHasSaltChange,
 
-        )
+            )
     }
 }
 

@@ -3,7 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id "org.jlleitschuh.gradle.ktlint"
+    id 'org.jlleitschuh.gradle.ktlint'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -125,5 +126,3 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }
-
-apply plugin: 'com.google.gms.google-services'

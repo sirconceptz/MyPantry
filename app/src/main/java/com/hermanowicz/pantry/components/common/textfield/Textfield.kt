@@ -77,6 +77,60 @@ fun TextFieldAndLabel(
 }
 
 @Composable
+fun TextFieldAndLabelError(
+    textfieldText: String,
+    labelText: String,
+    textEvent: (String) -> Unit,
+    placeholder: String,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = true,
+    maxLines: Int = 1,
+    showError: Boolean,
+    errorText: String
+) {
+    Column() {
+        Text(text = labelText)
+        TextField(
+            value = textfieldText,
+            onValueChange = {
+                textEvent(it)
+            },
+            modifier = Modifier
+                .background(
+                    color = Color.White,
+                    shape = Shapes.medium,
+                )
+                .fillMaxWidth()
+                .border(
+                    width = 1.dp,
+                    color = Color.Black,
+                    shape = Shapes.medium,
+                ),
+            placeholder = { Text(text = placeholder) },
+            shape = Shapes.medium,
+            maxLines = maxLines,
+            singleLine = singleLine,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            textStyle = TextStyle(
+                fontSize = 15.sp
+            ),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            visualTransformation = visualTransformation
+        )
+        if(showError)
+            Text(text = errorText, color = Color.Red)
+    }
+}
+
+@Composable
 fun TextFieldAndLabelDate(
     labelText: String,
     textfieldText: String,

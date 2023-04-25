@@ -248,7 +248,7 @@ class SettingsViewModel @Inject constructor(
 
     fun reObserveDatabase(bool: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(1000)
+            delay(2000)
             _settingsState.update {
                 it.copy(
                     reObserveDatabase = bool

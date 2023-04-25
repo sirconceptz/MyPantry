@@ -13,6 +13,7 @@ interface ProductRepository {
     fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Product>
     fun observeAll(databaseMode: DatabaseMode): Flow<List<Product>>
     fun getAllLocal(): List<Product>
+    suspend fun getLastId(databaseMode: DatabaseMode): Int
     suspend fun insert(products: List<Product>)
     suspend fun insertRemote(products: List<Product>)
     suspend fun update(products: List<Product>)

@@ -49,12 +49,23 @@ class ProductRepositoryImpl @Inject constructor(
         return localDataSource.getAll().map { it.toDomainModel() }
     }
 
+    override suspend fun getLastId(databaseMode: DatabaseMode): Int {
+        return observeAll(databaseMode).map { products ->
+            products.maxOf { it.id }
+        }.first()
+    }
+
     override suspend fun insert(products: List<Product>) {
         val databaseMode = fetchDatabaseModeUseCase().first()
+        var id = getLastId(DatabaseMode.ONLINE)
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.insert(products.map { product -> product.toEntityModel() })
-        else
-            remoteDataSource.insert(products.map { product -> product.toEntityModel() })
+        else {
+            remoteDataSource.insert(products.map { product ->
+                id++
+                product.copy(id = id).toEntityModel()
+            })
+        }
     }
 
     override suspend fun insertRemote(products: List<Product>) {
