@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
@@ -12,6 +13,8 @@ import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
+import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
+import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
@@ -35,7 +38,8 @@ class EditProductViewModel @Inject constructor(
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -59,28 +63,30 @@ class EditProductViewModel @Inject constructor(
     }
 
     private fun fetchProductData(productId: Int) {
-//        viewModelScope.launch {
-//            observeAllProductsUseCase().map { products ->
-//                val groupProduct = getGroupProductUseCase(productId, products)
-//                _productDataState.value = EditProductDataState(
-//                    name = groupProduct.product.name,
-//                    expirationDate = groupProduct.product.expirationDate,
-//                    productionDate = groupProduct.product.productionDate,
-//                    composition = groupProduct.product.composition,
-//                    oldQuantity = groupProduct.quantity.toString(),
-//                    newQuantity = groupProduct.quantity.toString(),
-//                    healingProperties = groupProduct.product.healingProperties,
-//                    dosage = groupProduct.product.dosage,
-//                    hasSugar = groupProduct.product.hasSugar,
-//                    hasSalt = groupProduct.product.hasSalt,
-//                    isVege = groupProduct.product.isVege,
-//                    isBio = groupProduct.product.isBio,
-//                    weight = groupProduct.product.weight.toString(),
-//                    volume = groupProduct.product.volume.toString(),
-//                    productsIdList = groupProduct.idList
-//                )
-//            }.collect()
-//        }
+        viewModelScope.launch {
+            fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeAllProductsUseCase(databaseMode).collect { products ->
+                    val groupProduct = getGroupProductUseCase(productId, products)
+                    _productDataState.value = EditProductDataState(
+                        name = groupProduct.product.name,
+                        expirationDate = groupProduct.product.expirationDate,
+                        productionDate = groupProduct.product.productionDate,
+                        composition = groupProduct.product.composition,
+                        oldQuantity = groupProduct.quantity.toString(),
+                        newQuantity = groupProduct.quantity.toString(),
+                        healingProperties = groupProduct.product.healingProperties,
+                        dosage = groupProduct.product.dosage,
+                        hasSugar = groupProduct.product.hasSugar,
+                        hasSalt = groupProduct.product.hasSalt,
+                        isVege = groupProduct.product.isVege,
+                        isBio = groupProduct.product.isBio,
+                        weight = groupProduct.product.weight.toString(),
+                        volume = groupProduct.product.volume.toString(),
+                        productsIdList = groupProduct.idList
+                    )
+                }
+            }
+        }
     }
 
     fun onSaveClick() {

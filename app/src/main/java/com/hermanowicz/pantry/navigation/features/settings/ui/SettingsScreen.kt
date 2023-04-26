@@ -49,7 +49,7 @@ import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.ui.theme.MyPantryTheme
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
-import com.hermanowicz.pantry.utils.enums.SizePrintedQRCodes
+import com.hermanowicz.pantry.utils.enums.QrCodeSize
 
 @Composable
 fun SettingsScreen(
@@ -145,7 +145,7 @@ fun SettingsScreen(
                     DividerCardInside()
                     DropdownSettings(label = stringResource(id = R.string.qr_code_size),
                         mapKey = state.sizeQrCodes,
-                        itemMap = SizePrintedQRCodes.toMap(),
+                        itemMap = QrCodeSize.toMap(),
                         onClick = { viewModel.showQrCodeSizeMode(true) },
                         onChange = { viewModel.onChangeQrCodeSizeMode(it) },
                         visibleDropdown = state.showSizeQrCodesDropdown,

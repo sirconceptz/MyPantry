@@ -23,8 +23,8 @@ class ProductLocalDataSourceImpl @Inject constructor(
         return productDao.observeById(id)
     }
 
-    override suspend fun insert(products: List<ProductEntity>) {
-        productDao.insert(products)
+    override suspend fun insert(products: List<ProductEntity>): List<Long> {
+        return productDao.insert(products)
     }
 
     override suspend fun update(products: List<ProductEntity>) {

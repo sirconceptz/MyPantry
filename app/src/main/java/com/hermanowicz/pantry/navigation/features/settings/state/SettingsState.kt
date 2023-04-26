@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.navigation.features.settings.state
 
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
-import com.hermanowicz.pantry.utils.enums.SizePrintedQRCodes
+import com.hermanowicz.pantry.utils.enums.QrCodeSize
 
 data class SettingsState(
     val userEmailOrUnlogged: String = "",
@@ -11,7 +11,7 @@ data class SettingsState(
     val cameraToScanCodes: String = CameraMode.REAR.name,
     val showCameraModeDropdown: Boolean = false,
     val scannerSound: Boolean = true,
-    val sizeQrCodes: String = SizePrintedQRCodes.BIG.name,
+    val sizeQrCodes: String = QrCodeSize.BIG.name,
     val daysToNotifyBeforeExpiration: Float = 3f,
     val emailAddressForNotifications: String = "",
     val showSizeQrCodesDropdown: Boolean = false,

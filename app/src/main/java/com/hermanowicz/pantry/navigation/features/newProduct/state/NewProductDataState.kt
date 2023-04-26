@@ -33,5 +33,8 @@ data class NewProductDataState(
     val barcode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
-    var onNavigateToMyPantry: Boolean = false
+    var showNavigateToPrintQRCodesDialog: Boolean = false,
+    var onNavigateToMyPantry: Boolean = false,
+    var onNavigateToPrintQRCodes: Boolean = false,
+    var productIdList: List<Long> = emptyList()
 )

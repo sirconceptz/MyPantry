@@ -118,4 +118,8 @@
     <string name="delete_account">Delete account</string>
     <string name="statement_delete_account_warning">Are you sure you want to delete you account? This operation is irreversible. All your products, categories, storage locations and all info about you will be deleted.</string>
     <string name="error_wrong_product_name">Wrong name length.</string>
+    <string name="print_qr_codes">Print QR codes</string>
+    <string name="statement_would_you_like_to_print_qr_codes">Would you like to print qr codes for new added products?</string>
+    <string name="qr_codes_quantity">QR codes quantity</string>
+    <string name="share_pdf_document">Share PDF document</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
+import com.hermanowicz.pantry.components.common.dialog.DialogWarning
 import com.hermanowicz.pantry.components.common.form.NewProductForm
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
@@ -22,20 +23,36 @@ import com.hermanowicz.pantry.ui.theme.LocalSpacing
 fun NewProductScreen(
     openDrawer: () -> Unit,
     viewModel: NewProductViewModel = hiltViewModel(),
-    onNavigateToMyPantry: () -> Unit
+    onNavigateToMyPantry: () -> Unit,
+    onNavigateToPrintQRCodes: (List<Long>) -> Unit
 ) {
-    val productDataState by viewModel.productDataState.collectAsState()
+    val state by viewModel.productDataState.collectAsState()
 
-    LaunchedEffect(key1 = productDataState.onNavigateToMyPantry) {
-        if (productDataState.onNavigateToMyPantry) {
+    LaunchedEffect(key1 = state.onNavigateToMyPantry) {
+        if (state.onNavigateToMyPantry) {
             onNavigateToMyPantry()
             viewModel.onNavigateToMyPantry(false)
         }
     }
 
+    LaunchedEffect(key1 = state.onNavigateToPrintQRCodes) {
+        if (state.onNavigateToPrintQRCodes) {
+            onNavigateToPrintQRCodes(state.productIdList)
+            viewModel.onNavigateToPrintQRCodes(false)
+        }
+    }
+
+    if (state.showNavigateToPrintQRCodesDialog) {
+        DialogWarning(label = stringResource(id = R.string.print_qr_codes),
+            warning = stringResource(
+                id = R.string.statement_would_you_like_to_print_qr_codes
+            ),
+            onPositiveRequest = { viewModel.onNavigateToPrintQRCodes(true) },
+            onDismissRequest = { viewModel.showNavigateToPrintQRCodesDialog(false) })
+    }
+
     TopBarScaffold(
-        topBarText = stringResource(id = R.string.new_product),
-        openDrawer = openDrawer
+        topBarText = stringResource(id = R.string.new_product), openDrawer = openDrawer
     ) {
         LazyColumn(
             modifier = Modifier
@@ -43,12 +60,11 @@ fun NewProductScreen(
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
             item {
-                NewProductForm(
-                    productDataState,
+                NewProductForm(state,
                     onNameChange = { viewModel.onNameChange(it) },
-                    showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(!productDataState.showMainCategoryDropdown) },
+                    showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(!state.showMainCategoryDropdown) },
                     onMainCategoryChange = { viewModel.onMainCategoryChange(it) },
-                    showDetailCategoryDropdown = { viewModel.showDetailCategoryDropdown(!productDataState.showDetailCategoryDropdown) },
+                    showDetailCategoryDropdown = { viewModel.showDetailCategoryDropdown(!state.showDetailCategoryDropdown) },
                     onDetailCategoryChange = { viewModel.onDetailCategoryChange(it) },
                     onExpirationDateChange = { viewModel.onExpirationDateChange(it) },
                     onProductionDateChange = { viewModel.onProductionDateChange(it) },
@@ -68,10 +84,8 @@ fun NewProductScreen(
             }
             item {
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
-                ButtonPrimary(
-                    text = stringResource(id = R.string.save_products),
-                    onClick = { viewModel.onSaveClick() }
-                )
+                ButtonPrimary(text = stringResource(id = R.string.save_products),
+                    onClick = { viewModel.onSaveClick() })
             }
         }
     }

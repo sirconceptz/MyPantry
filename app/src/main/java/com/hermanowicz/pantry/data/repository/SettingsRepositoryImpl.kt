@@ -12,7 +12,7 @@ import com.hermanowicz.pantry.data.settings.AppSettings
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
-import com.hermanowicz.pantry.utils.enums.SizePrintedQRCodes
+import com.hermanowicz.pantry.utils.enums.QrCodeSize
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,8 +31,8 @@ class SettingsRepositoryImpl @Inject constructor(
                 val databaseMode = preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
                 val cameraMode = preferences[CAMERA_MODE_KEY] ?: CameraMode.REAR.name
                 val scannerSoundMode = preferences[SCANNER_SOUND_MODE_KEY] ?: true
-                val sizePrintedQRCodes =
-                    preferences[SIZE_PRINTED_QR_CODES_KEY] ?: SizePrintedQRCodes.BIG.name
+                val qrCodeSize =
+                    preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
                 val daysToNotifyBeforeExpiration =
                     preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] ?: 3
                 val emailForNotifications = preferences[EMAIL_FOR_NOTIFICATIONS_KEY] ?: ""
@@ -45,7 +45,7 @@ class SettingsRepositoryImpl @Inject constructor(
                     scannerSound = scannerSoundMode,
                     daysToNotifyBeforeExpiration = daysToNotifyBeforeExpiration.toFloat(),
                     emailForNotifications = emailForNotifications,
-                    sizePrintedQRCodes = sizePrintedQRCodes,
+                    qrCodeSize = qrCodeSize,
                     pushNotifications = pushNotifications,
                     emailNotifications = emailNotifications
                 )
@@ -57,7 +57,7 @@ class SettingsRepositoryImpl @Inject constructor(
             preferences[DATABASE_MODE_KEY] = appSettings.databaseMode
             preferences[CAMERA_MODE_KEY] = appSettings.cameraMode
             preferences[SCANNER_SOUND_MODE_KEY] = appSettings.scannerSound
-            preferences[SIZE_PRINTED_QR_CODES_KEY] = appSettings.sizePrintedQRCodes
+            preferences[SIZE_PRINTED_QR_CODES_KEY] = appSettings.qrCodeSize
             preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] =
                 appSettings.daysToNotifyBeforeExpiration.toInt()
             preferences[EMAIL_FOR_NOTIFICATIONS_KEY] = appSettings.emailForNotifications
@@ -72,6 +72,11 @@ class SettingsRepositoryImpl @Inject constructor(
                 preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
             }
 
+    override val qrCodeSize: Flow<String>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
+            }
 
     companion object {
         val DATABASE_MODE_KEY = stringPreferencesKey("database_mode")

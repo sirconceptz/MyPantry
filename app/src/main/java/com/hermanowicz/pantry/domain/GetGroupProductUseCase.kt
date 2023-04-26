@@ -13,12 +13,13 @@ class GetGroupProductUseCase @Inject constructor() : (Int, List<Product>) -> Gro
         }
         var groupProductReturned = GroupProduct(product, 0)
         products.forEach {
-            if (product == it.copy(id = product.id))
+            if (product == it.copy(id = product.id, hashCode = product.hashCode)) {
                 groupProductReturned =
                     groupProductReturned.copy(
                         quantity = groupProductReturned.quantity + 1
                     )
-            groupProductReturned.idList.add(it.id)
+                groupProductReturned.idList.add(it.id)
+            }
         }
         return groupProductReturned
     }

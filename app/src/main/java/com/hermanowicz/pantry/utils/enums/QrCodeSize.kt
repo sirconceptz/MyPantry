@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.pantry.R
 
-enum class SizePrintedQRCodes(val nameResId: Int) {
+enum class QrCodeSize(val nameResId: Int) {
     BIG(R.string.big),
     SMALL(R.string.small);
 
@@ -12,7 +12,7 @@ enum class SizePrintedQRCodes(val nameResId: Int) {
         @Composable
         fun toMap(): Map<String, String> {
             val map: MutableMap<String, String> = mutableMapOf()
-            enumValues<SizePrintedQRCodes>().forEach { category ->
+            enumValues<QrCodeSize>().forEach { category ->
                 map[category.name] = stringResource(category.nameResId)
             }
             return map

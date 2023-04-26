@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsRepository {
     val appSettings: Flow<AppSettings>
     val databaseMode: Flow<String>
+    val qrCodeSize: Flow<String>
     suspend fun updateAppSettings(appSettings: AppSettings)
 }
 

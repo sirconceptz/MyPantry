@@ -20,7 +20,7 @@ interface ProductDao {
     fun getAll(): List<ProductEntity>
 
     @Insert
-    fun insert(products: List<ProductEntity>)
+    fun insert(products: List<ProductEntity>): List<Long>
 
     @Delete
     fun delete(products: List<ProductEntity>)

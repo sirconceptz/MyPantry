@@ -71,12 +71,15 @@ class ProductRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insert(products: List<ProductEntity>) {
+    override suspend fun insert(products: List<ProductEntity>): List<Long> {
+        val productIdList = mutableListOf<Long>()
         if (userId.isNotEmpty()) {
             products.forEach { product ->
                 databaseReference.child(userId).child(product.id.toString()).setValue(product)
+                productIdList.add(product.id.toLong())
             }
         }
+        return productIdList
     }
 
     override suspend fun update(products: List<ProductEntity>) {

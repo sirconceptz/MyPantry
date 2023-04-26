@@ -6,6 +6,7 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.GetProductIdListUseCase
 import com.hermanowicz.pantry.domain.SaveProductsUseCase
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
@@ -51,9 +52,31 @@ class NewProductViewModel @Inject constructor(
         if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
             _productDataState.update { it.copy(showErrorWrongName = true) }
         else {
-            saveProducts()
-            cleanErrors()
-            onNavigateToMyPantry(true)
+            viewModelScope.launch(Dispatchers.IO) {
+                val productIdList = saveProducts()
+                _productDataState.update {
+                    it.copy(
+                        productIdList = productIdList,
+                        showNavigateToPrintQRCodesDialog = true
+                    )
+                }
+                cleanErrors()
+                showNavigateToPrintQRCodesDialog(true)
+            }
+            //onNavigateToMyPantry(true)
+        }
+    }
+
+    fun showNavigateToPrintQRCodesDialog(bool: Boolean) {
+        _productDataState.update { it.copy(showNavigateToPrintQRCodesDialog = bool) }
+    }
+
+    fun onNavigateToPrintQRCodes(bool: Boolean) {
+        _productDataState.update {
+            it.copy(
+                onNavigateToPrintQRCodes = bool,
+                showNavigateToPrintQRCodesDialog = false
+            )
         }
     }
 
@@ -61,7 +84,7 @@ class NewProductViewModel @Inject constructor(
         _productDataState.update { it.copy(showErrorWrongName = false) }
     }
 
-    private fun saveProducts() {
+    private suspend fun saveProducts(): List<Long> {
         var mainCategory = ""
         var detailCategory = ""
         if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
@@ -84,15 +107,13 @@ class NewProductViewModel @Inject constructor(
             weight = productDataState.value.weight.toIntOrNull() ?: 0,
             volume = productDataState.value.volume.toIntOrNull() ?: 0
         )
-        viewModelScope.launch(Dispatchers.IO) {
-            val products: MutableList<Product> = mutableListOf()
-            val quantity =
-                if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
-            for (i in 1..quantity) {
-                products.add(product)
-            }
-            saveProductsUseCase(products)
+        val products: MutableList<Product> = mutableListOf()
+        val quantity =
+            if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
+        for (i in 1..quantity) {
+            products.add(product)
         }
+        return saveProductsUseCase(products)
     }
 
     fun getMainCategories(): Map<String, String> {

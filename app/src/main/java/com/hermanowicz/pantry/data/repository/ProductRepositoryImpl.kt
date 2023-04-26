@@ -11,6 +11,7 @@ import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -50,18 +51,22 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLastId(databaseMode: DatabaseMode): Int {
-        return observeAll(databaseMode).map { products ->
-            products.maxOf { it.id }
-        }.first()
+        return try {
+            observeAll(databaseMode).map { products ->
+                products.maxOf { it.id }
+            }.first()
+        } catch (exception: NoSuchElementException) {
+            -1
+        }
     }
 
-    override suspend fun insert(products: List<Product>) {
+    override suspend fun insert(products: List<Product>): List<Long> {
         val databaseMode = fetchDatabaseModeUseCase().first()
         var id = getLastId(DatabaseMode.ONLINE)
         if (databaseMode == DatabaseMode.LOCAL)
-            localDataSource.insert(products.map { product -> product.toEntityModel() })
+            return localDataSource.insert(products.map { product -> product.toEntityModel() })
         else {
-            remoteDataSource.insert(products.map { product ->
+            return remoteDataSource.insert(products.map { product ->
                 id++
                 product.copy(id = id).toEntityModel()
             })

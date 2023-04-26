@@ -22,6 +22,7 @@ import com.hermanowicz.pantry.navigation.features.myPantry.ui.MyPantryViewModel
 import com.hermanowicz.pantry.navigation.features.newProduct.NewProductRoute
 import com.hermanowicz.pantry.navigation.features.ownCategories.OwnCategoriesRoute
 import com.hermanowicz.pantry.navigation.features.ownCategories.ui.OwnCategoriesViewModel
+import com.hermanowicz.pantry.navigation.features.printQRCodes.PrintQRCodesRoute
 import com.hermanowicz.pantry.navigation.features.productDetails.ProductDetailsRoute
 import com.hermanowicz.pantry.navigation.features.scanProduct.ScanProductRoute
 import com.hermanowicz.pantry.navigation.features.settings.SettingsRoute
@@ -116,8 +117,22 @@ fun AppNavHost() {
                 composable(route = AppScreens.NewProduct.route) {
                     NewProductRoute(
                         onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
-                        openDrawer = { openDrawer() }
+                        openDrawer = { openDrawer() },
+                        onNavigationPrintQRCodes = {
+                            navController.navigate(
+                                "${AppScreens.PrintQRCodes.route}/${
+                                    it.joinToString(
+                                        ";"
+                                    )
+                                }"
+                            )
+                        }
                     )
+                }
+                composable(route = "${AppScreens.PrintQRCodes.route}/{productIdList}") {
+                    PrintQRCodesRoute(
+                        openDrawer = { openDrawer() },
+                        onNavigateBack = { navController.popBackStack() })
                 }
                 composable(route = AppScreens.OwnCategories.route) {
                     OwnCategoriesRoute(
