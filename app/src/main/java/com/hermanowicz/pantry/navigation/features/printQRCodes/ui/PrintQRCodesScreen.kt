@@ -1,5 +1,10 @@
 package com.hermanowicz.pantry.navigation.features.printQRCodes.ui
 
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,40 +22,123 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
 import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
 import com.hermanowicz.pantry.components.common.divider.DividerCardInside
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
+import com.hermanowicz.pantry.utils.PdfFile
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PrintQRCodesScreen(
     openDrawer: () -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: PrintQRCodesViewModel = hiltViewModel()
+    viewModel: PrintQRCodesViewModel = hiltViewModel(),
+    writePermissions: List<String>
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val writePermissionState = rememberMultiplePermissionsState(writePermissions)
 
     LaunchedEffect(key1 = uiState.onNavigateBack) {
-        onNavigateBack()
-        viewModel.onNavigateBack(false)
+        //onNavigateBack()
+        //viewModel.onNavigateBack(false)
+    }
+
+    val launcherPrintQrCodes =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
+            var isGranted = true
+            for (permission in requestedPermissions) {
+                if (!permission.value)
+                    isGranted = false
+            }
+            if (isGranted) {
+                viewModel.onPrintCodesPermissionGranted()
+            } else {
+                viewModel.onGoToPermissionSettings(true)
+            }
+        }
+
+    val launcherSharePdfDocument =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
+            var isGranted = true
+            for (permission in requestedPermissions) {
+                if (!permission.value)
+                    isGranted = false
+            }
+            if (isGranted) {
+                viewModel.onSharePdfDocumentPermissionGranted()
+            } else {
+                viewModel.onGoToPermissionSettings(true)
+            }
+        }
+
+    if (uiState.goToPermissionSettings) {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", LocalContext.current.packageName, null)
+        )
+        LocalContext.current.startActivity(intent)
+        viewModel.onGoToPermissionSettings(false)
+    }
+
+    if (uiState.navigateToPrintQrCodes) {
+        if (uiState.pdfFileName != null) {
+            val context = LocalContext.current
+            val pdfUri = FileProvider.getUriForFile(
+                context,
+                "com.hermanowicz.pantry.provider",
+                PdfFile.getPdfFile(uiState.pdfFileName!!)
+            )
+            val pdfDocumentIntent = Intent(Intent.ACTION_VIEW)
+            pdfDocumentIntent.setDataAndType(pdfUri, "application/pdf")
+            pdfDocumentIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            pdfDocumentIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(pdfDocumentIntent)
+        }
+        viewModel.clearPdfState()
+    }
+
+    if (uiState.navigateToSharePdfDocument) {
+        if (uiState.pdfFileName != null) {
+            val context = LocalContext.current
+            val pdfUri = FileProvider.getUriForFile(
+                context,
+                "com.hermanowicz.pantry.provider",
+                PdfFile.getPdfFile(uiState.pdfFileName!!)
+            )
+            val emailIntent = Intent(Intent.ACTION_SEND)
+            emailIntent.type = "plain/text"
+            if (pdfUri != null) {
+                emailIntent.putExtra(Intent.EXTRA_STREAM, pdfUri)
+            }
+            context.startActivity(Intent.createChooser(emailIntent, ""))
+        }
+        viewModel.clearPdfState()
     }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.print_qr_codes),
         openDrawer = openDrawer,
         actions = {
-            IconButton(onClick = { viewModel.onClickPrint() }, content = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_print),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            })
+            IconButton(
+                onClick = { launcherPrintQrCodes.launch(writePermissions.toTypedArray()) },
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_print),
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                })
         })
     {
         LazyColumn(
@@ -80,11 +168,11 @@ fun PrintQRCodesScreen(
                 }
                 Spacer(modifier = Modifier.height(LocalSpacing.current.small))
                 ButtonPrimary(text = stringResource(id = R.string.print_qr_codes)) {
-                    viewModel.onClickPrint()
+                    launcherPrintQrCodes.launch(writePermissions.toTypedArray())
                 }
                 Spacer(modifier = Modifier.height(LocalSpacing.current.small))
                 ButtonPrimary(text = stringResource(id = R.string.share_pdf_document)) {
-                    viewModel.onClickSharePdfDocument()
+                    launcherSharePdfDocument.launch(writePermissions.toTypedArray())
                 }
             }
         }

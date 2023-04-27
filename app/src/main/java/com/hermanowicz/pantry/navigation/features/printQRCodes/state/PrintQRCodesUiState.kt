@@ -8,5 +8,9 @@ data class PrintQRCodesUiState(
     var productList: List<Product> = emptyList(),
     var sizeOfQrCodeNameResId: Int = QrCodeSize.BIG.nameResId,
     var qrCodesQuantity: Int = 0,
-    var onNavigateBack: Boolean = false
+    var onNavigateBack: Boolean = false,
+    var goToPermissionSettings: Boolean = false,
+    var pdfFileName: String? = null,
+    var navigateToPrintQrCodes: Boolean = false,
+    var navigateToSharePdfDocument: Boolean = false
 )

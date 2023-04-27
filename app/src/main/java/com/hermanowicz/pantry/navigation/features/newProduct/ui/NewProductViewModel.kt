@@ -56,14 +56,12 @@ class NewProductViewModel @Inject constructor(
                 val productIdList = saveProducts()
                 _productDataState.update {
                     it.copy(
-                        productIdList = productIdList,
-                        showNavigateToPrintQRCodesDialog = true
+                        productIdList = productIdList
                     )
                 }
                 cleanErrors()
-                showNavigateToPrintQRCodesDialog(true)
             }
-            //onNavigateToMyPantry(true)
+            showNavigateToPrintQRCodesDialog(true)
         }
     }
 
@@ -91,7 +89,7 @@ class NewProductViewModel @Inject constructor(
             mainCategory = productDataState.value.mainCategory
         if (productDataState.value.detailCategory != MainCategoriesTypes.CHOOSE.name)
             detailCategory = productDataState.value.detailCategory
-        val product = Product(
+        var product = Product(
             name = productDataState.value.name,
             mainCategory = mainCategory,
             detailCategory = detailCategory,
@@ -107,9 +105,11 @@ class NewProductViewModel @Inject constructor(
             weight = productDataState.value.weight.toIntOrNull() ?: 0,
             volume = productDataState.value.volume.toIntOrNull() ?: 0
         )
+        product = product.copy(hashCode = product.hashCode().toString())
         val products: MutableList<Product> = mutableListOf()
         val quantity =
-            if (productDataState.value.quantity == "") 1 else productDataState.value.quantity.toInt()
+            if (productDataState.value.quantity.isEmpty()) 1
+            else productDataState.value.quantity.toIntOrNull() ?: 1
         for (i in 1..quantity) {
             products.add(product)
         }

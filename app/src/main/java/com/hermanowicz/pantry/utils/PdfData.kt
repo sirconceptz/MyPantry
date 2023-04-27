@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.utils
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -43,12 +42,9 @@ class PdfData {
     }
 
     fun createPdfDocumentBigQrCodes(
-        qrCodesArray: ArrayList<Bitmap?>,
-        namesOfProductsArray: ArrayList<String?>,
-        expirationDatesArray: ArrayList<String>,
-        productionDatesArray: ArrayList<String>
+        productLabelList: List<ProductLabel>
     ): PdfDocument {
-        for (counter in qrCodesArray.indices) {
+        productLabelList.forEach {
             if (codesOnPageCounter == 20) {
                 createNewPage()
             }
@@ -57,25 +53,25 @@ class PdfData {
                 widthCounter = 0
             }
             canvas.drawBitmap(
-                qrCodesArray[counter]!!,
+                it.bitmap!!,
                 (25 + widthCounter * 141).toFloat(),
                 (64 + topCounter * 142).toFloat(),
                 null
             )
             canvas.drawText(
-                namesOfProductsArray[counter]!!,
+                it.productName!!,
                 (widthCounter * 141 + 40).toFloat(),
                 (64 + topCounter * 142 + 112).toFloat(),
                 textPaint
             )
             canvas.drawText(
-                "EXP: " + expirationDatesArray[counter],
+                "EXP: " + it.expirationDate,
                 (widthCounter * 141 + 40).toFloat(),
                 (64 + topCounter * 142 + 122).toFloat(),
                 textPaint
             )
             canvas.drawText(
-                "PRO: " + productionDatesArray[counter],
+                "PRO: " + it.productionDate,
                 (widthCounter * 141 + 40).toFloat(),
                 (64 + topCounter * 142 + 132).toFloat(),
                 textPaint
@@ -88,11 +84,9 @@ class PdfData {
     }
 
     fun createPdfDocumentSmallQrCodes(
-        qrCodesArray: ArrayList<Bitmap?>,
-        namesOfProductsArray: ArrayList<String?>,
-        expirationDatesArray: ArrayList<String>
+        productLabelList: List<ProductLabel>
     ): PdfDocument {
-        for (counter in qrCodesArray.indices) {
+        productLabelList.forEach {
             if (codesOnPageCounter == 49) {
                 createNewPage()
             }
@@ -101,19 +95,19 @@ class PdfData {
                 widthCounter = 0
             }
             canvas.drawBitmap(
-                qrCodesArray[counter]!!,
+                it.bitmap!!,
                 (widthCounter * 80).toFloat(),
                 (topCounter * 120).toFloat(),
                 null
             )
             canvas.drawText(
-                namesOfProductsArray[counter]!!,
+                it.productName!!,
                 (widthCounter * 80 + 20).toFloat(),
                 (topCounter * 120 + 90).toFloat(),
                 textPaint
             )
             canvas.drawText(
-                "EXP: " + expirationDatesArray[counter],
+                "EXP: " + it.expirationDate,
                 (widthCounter * 80 + 20).toFloat(),
                 (topCounter * 120 + 100).toFloat(),
                 textPaint

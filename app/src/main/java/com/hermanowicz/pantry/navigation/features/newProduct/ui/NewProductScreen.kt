@@ -60,7 +60,8 @@ fun NewProductScreen(
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
             item {
-                NewProductForm(state,
+                NewProductForm(
+                    state,
                     onNameChange = { viewModel.onNameChange(it) },
                     showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(!state.showMainCategoryDropdown) },
                     onMainCategoryChange = { viewModel.onMainCategoryChange(it) },

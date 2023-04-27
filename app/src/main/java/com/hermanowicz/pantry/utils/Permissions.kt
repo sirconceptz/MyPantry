@@ -15,7 +15,6 @@ object Permissions {
 
     val writePermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         listOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_MEDIA_LOCATION
         )
     } else {

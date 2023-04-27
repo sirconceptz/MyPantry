@@ -3,6 +3,7 @@ package com.hermanowicz.pantry.navigation.features.printQRCodes.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.domain.CreatePdfDocumentUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.GetProductListByIdsProductsUseCase
@@ -23,6 +24,7 @@ class PrintQRCodesViewModel @Inject constructor(
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val getProductListByIdsProductsUseCase: GetProductListByIdsProductsUseCase,
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase,
+    private val createPdfDocumentUseCase: CreatePdfDocumentUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,7 +32,7 @@ class PrintQRCodesViewModel @Inject constructor(
     var uiState: StateFlow<PrintQRCodesUiState> = _uiState.asStateFlow()
 
     init {
-        val savedProductIdList = savedStateHandle["productIdList"] ?: ""
+        val savedProductIdList = savedStateHandle["productIdList"] ?: "0"
         val productIdArray = savedProductIdList.split(";")
         val productIdList = productIdArray.map { it.toInt() }
         fetchProducts(productIdList)
@@ -57,29 +59,61 @@ class PrintQRCodesViewModel @Inject constructor(
                     }
                 }.collect()
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        productList = emptyList(),
-                        qrCodesQuantity = 0,
-                        onNavigateBack = true
-                    )
-                }
+//                _uiState.update {
+//                    it.copy(
+//                        productList = emptyList(),
+//                        qrCodesQuantity = 0,
+//                        onNavigateBack = true
+//                    )
+//                }
             }
         }
     }
 
-    fun onClickPrint() {
-
-    }
-
-
-    fun onClickSharePdfDocument() {
-
-    }
 
     fun onNavigateBack(bool: Boolean) {
         _uiState.update {
             it.copy(onNavigateBack = bool)
+        }
+    }
+
+    fun onPrintCodesPermissionGranted() {
+        viewModelScope.launch {
+            val fileName = createPdfDocumentUseCase(uiState.value.productList)
+            _uiState.update {
+                it.copy(
+                    pdfFileName = fileName,
+                    navigateToPrintQrCodes = true
+                )
+            }
+        }
+    }
+
+    fun onSharePdfDocumentPermissionGranted() {
+        viewModelScope.launch {
+            val fileName = createPdfDocumentUseCase(uiState.value.productList)
+            _uiState.update {
+                it.copy(
+                    pdfFileName = fileName,
+                    navigateToSharePdfDocument = true
+                )
+            }
+        }
+    }
+
+    fun clearPdfState() {
+        _uiState.update {
+            it.copy(
+                pdfFileName = null,
+                navigateToSharePdfDocument = false,
+                navigateToPrintQrCodes = false
+            )
+        }
+    }
+
+    fun onGoToPermissionSettings(bool: Boolean) {
+        _uiState.update {
+            it.copy(goToPermissionSettings = bool)
         }
     }
 
