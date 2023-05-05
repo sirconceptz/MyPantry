@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.navigation.features.editProduct.state
 
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.utils.DatePickerData
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 
 data class EditProductDataState(
@@ -12,7 +12,7 @@ data class EditProductDataState(
     var expirationDatePickerData: DatePickerData = DatePickerData(),
     var productionDatePickerData: DatePickerData = DatePickerData(),
     var ownCategories: List<Category> = emptyList(),
-    var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
+    var mainCategory: String = MainCategories.CHOOSE.name,
     val detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
     val newQuantity: String = "",
     val oldQuantity: String = "0",

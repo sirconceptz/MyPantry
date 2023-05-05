@@ -122,4 +122,15 @@
     <string name="statement_would_you_like_to_print_qr_codes">Would you like to print qr codes for new added products?</string>
     <string name="qr_codes_quantity">QR codes quantity</string>
     <string name="share_pdf_document">Share PDF document</string>
+    <string name="notification_title">[My Pantry] Products expiration date is approaching</string>
+    <string name="notification_statement">%PRODUCT_NAME% is overdue. You have less than %DAYS% days to make it before this date.</string>
+    <string name="put_barcode_manually">Put barcode manually</string>
+    <string name="put_barcode_manually_statement">If you want to add new product to the database you can put the barcode manually if product was added previously by the app and barcode was scanned.</string>
+    <string name="scan_barcode">Scan barcode</string>
+    <string name="scan_barcode_statement">If you want to add new product to the database you can scan the barcode if product was added previously by the app and barcode was scanned.</string>
+    <string name="scan_qr_code">Scan QR code</string>
+    <string name="scan_qr_code_statement">If you want to find more details about the product you can scan the qr code created previously by the app.</string>
+    <string name="scan_qr_code_to_find_details">Scan qr code to find details</string>
+    <string name="scan_barcode_to_add_new_product">Scan barcode to add new product</string>
+    <string name="put_barcode_manually_to_add_new_product">Put barcode manually to add new product</string>
 </resources>

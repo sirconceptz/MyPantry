@@ -23,7 +23,7 @@ object DateAndTimeConverter {
         var convertedDate = ""
         if (dateArray.size == 3) {
             val calendar = Calendar.getInstance()
-            calendar.set(dateArray[0].toInt(), dateArray[1].toInt(), dateArray[2].toInt())
+            calendar.set(dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt())
             val date = Date(calendar.timeInMillis)
             val format = SimpleDateFormat("dd MMM yyyy")
             convertedDate = format.format(date)

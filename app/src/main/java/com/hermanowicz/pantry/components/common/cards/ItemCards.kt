@@ -36,7 +36,7 @@ import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 @Composable
 fun GroupProductItemCard(
     groupProduct: GroupProduct,
-    onClickGroupProduct: (Int) -> Unit
+    onClickGroupProduct: (Pair<Int, String>) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -48,7 +48,12 @@ fun GroupProductItemCard(
             modifier = Modifier
                 .padding(LocalSpacing.current.small)
                 .clickable {
-                    onClickGroupProduct(groupProduct.product.id)
+                    onClickGroupProduct(
+                        Pair(
+                            groupProduct.product.id,
+                            groupProduct.product.hashCode
+                        )
+                    )
                 }
         ) {
             Text(text = groupProduct.product.name, fontSize = 20.sp)

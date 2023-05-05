@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.utils.category
 
 import com.hermanowicz.pantry.R
 
-enum class MainCategoriesTypes(val nameResId: Int) {
+enum class MainCategories(val nameResId: Int) {
     CHOOSE(R.string.choose),
     OWN_CATEGORIES(R.string.own_categories),
     STORE_PRODUCTS(R.string.store_products),

@@ -3,7 +3,7 @@ package com.hermanowicz.pantry.domain
 import android.annotation.SuppressLint
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 import java.text.SimpleDateFormat
@@ -56,7 +56,7 @@ class GetFilteredProductListUseCase @Inject constructor() :
     private fun isMainCategoryValid(
         productMainCategory: String, filterProductMainCategory: String
     ): Boolean {
-        return filterProductMainCategory == MainCategoriesTypes.CHOOSE.name || filterProductMainCategory.isEmpty() || productMainCategory == filterProductMainCategory || productMainCategory.isEmpty()
+        return filterProductMainCategory == MainCategories.CHOOSE.name || filterProductMainCategory.isEmpty() || productMainCategory == filterProductMainCategory || productMainCategory.isEmpty()
     }
 
     private fun isDetailCategoryValid(

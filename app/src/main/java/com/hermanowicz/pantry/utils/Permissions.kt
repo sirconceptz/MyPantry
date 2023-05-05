@@ -4,6 +4,8 @@ import android.Manifest
 import android.os.Build
 
 object Permissions {
+    val cameraPermissions = listOf(Manifest.permission.CAMERA)
+
     val notificationPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             listOf(

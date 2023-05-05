@@ -8,7 +8,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ScannerRepository {
-    fun startScanning(): Flow<String?>
+    fun startQRCodeScanning(): Flow<Pair<Int, String>>
+    fun startBarcodeScanning(): Flow<String>
 }
 
 @Module

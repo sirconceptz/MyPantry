@@ -35,6 +35,7 @@ import com.hermanowicz.pantry.components.common.button.ButtonPrimary
 import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
 import com.hermanowicz.pantry.components.common.divider.DividerCardInside
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
+import com.hermanowicz.pantry.domain.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.PdfFile
 
@@ -47,7 +48,6 @@ fun PrintQRCodesScreen(
     writePermissions: List<String>
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val writePermissionState = rememberMultiplePermissionsState(writePermissions)
 
     LaunchedEffect(key1 = uiState.onNavigateBack) {
         //onNavigateBack()
@@ -83,11 +83,7 @@ fun PrintQRCodesScreen(
         }
 
     if (uiState.goToPermissionSettings) {
-        val intent = Intent(
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.fromParts("package", LocalContext.current.packageName, null)
-        )
-        LocalContext.current.startActivity(intent)
+        GoToPermissionSettingsUseCase.invoke(LocalContext.current)
         viewModel.onGoToPermissionSettings(false)
     }
 

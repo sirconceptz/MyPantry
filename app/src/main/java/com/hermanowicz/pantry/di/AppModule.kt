@@ -58,28 +58,11 @@ class AppModule {
         return localDb.categoriesDao()
     }
 
-    @ViewModelScoped
-    @Provides
-    fun provideBarCodeOptions(): GmsBarcodeScannerOptions {
-        return GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .build()
-    }
-
     @Singleton
     @Provides
     fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             produceFile = { context.preferencesDataStoreFile(DATA_STORE_FILE) }
         )
-    }
-
-    @ViewModelScoped
-    @Provides
-    fun provideBarCodeScanner(
-        context: Context,
-        options: GmsBarcodeScannerOptions
-    ): GmsBarcodeScanner {
-        return GmsBarcodeScanning.getClient(context, options)
     }
 }

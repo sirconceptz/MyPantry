@@ -192,12 +192,13 @@ fun DialogWarning(
 
 
 @Composable
-fun DialogChangeEmail(
-    emailAddress: String,
+fun DialogTextfield(
+    label: String,
+    value: String,
     onPositiveRequest: (String) -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    var text by remember { mutableStateOf(TextFieldValue(emailAddress)) }
+    var text by remember { mutableStateOf(TextFieldValue(value)) }
 
     Dialog(
         onDismissRequest = onDismissRequest
@@ -217,7 +218,7 @@ fun DialogChangeEmail(
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
                 Text(
-                    text = stringResource(id = R.string.email_address_for_notifications),
+                    text = label,
                     fontWeight = FontWeight.Bold
                 )
                 TextField(

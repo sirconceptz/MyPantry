@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.navigation.features.myPantry.ui.MyPantryViewModel
 
 @Composable
 fun MyPantryRoute(
-    onNavigateToProductDetails: (Int) -> Unit,
+    onNavigateToProductDetails: (Pair<Int, String>) -> Unit,
     onNavigateToFilterProduct: () -> Unit,
     openDrawer: () -> Unit,
     myPantryViewModel: MyPantryViewModel

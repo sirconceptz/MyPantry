@@ -8,17 +8,15 @@ import com.hermanowicz.pantry.di.local.dataSource.CategoryLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
 import com.hermanowicz.pantry.di.repository.CategoryRepository
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
-import timber.log.Timber
 
 @Singleton
 class CategoryRepositoryImpl @Inject constructor(
@@ -57,7 +55,7 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override fun getMainCategories(): Map<String, String> {
         val map: MutableMap<String, String> = mutableMapOf()
-        enumValues<MainCategoriesTypes>().forEach { category ->
+        enumValues<MainCategories>().forEach { category ->
             map[category.name] = context.getString(category.nameResId)
         }
         return map

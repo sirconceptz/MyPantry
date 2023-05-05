@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.dialog.DialogAuthorInfo
-import com.hermanowicz.pantry.components.common.dialog.DialogChangeEmail
+import com.hermanowicz.pantry.components.common.dialog.DialogTextfield
 import com.hermanowicz.pantry.components.common.dialog.DialogWarning
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 
@@ -65,8 +65,9 @@ fun ShowSettingsDialogs(
     }
 
     if (state.showChangeNotificationsEmailDialog) {
-        DialogChangeEmail(
-            emailAddress = state.emailAddressForNotifications,
+        DialogTextfield(
+            label = stringResource(id = R.string.email_address_for_notifications),
+            value = state.emailAddressForNotifications,
             onPositiveRequest = onChangeEmailForNotifications,
             onDismissRequest = onChangeEmailDialogDismiss
         )

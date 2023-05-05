@@ -13,6 +13,10 @@ interface SettingsRepository {
     val appSettings: Flow<AppSettings>
     val databaseMode: Flow<String>
     val qrCodeSize: Flow<String>
+    val daysBeforeNotification: Flow<Int>
+    val isPushNotificationsEnabled: Flow<Boolean>
+    val isEmailNotificationsEnabled: Flow<Boolean>
+    val emailAddressForNotifications: Flow<String>
     suspend fun updateAppSettings(appSettings: AppSettings)
 }
 

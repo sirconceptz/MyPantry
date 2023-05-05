@@ -3,7 +3,7 @@ package com.hermanowicz.pantry.navigation.features.filterProduct.state
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.utils.DatePickerData
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 
@@ -14,7 +14,7 @@ data class FilterProductDataState(
     var productionDateMinPickerData: DatePickerData = DatePickerData(),
     var productionDateMaxPickerData: DatePickerData = DatePickerData(),
     var ownCategories: List<Category> = emptyList(),
-    var mainCategory: String = MainCategoriesTypes.CHOOSE.name,
+    var mainCategory: String = MainCategories.CHOOSE.name,
     var detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
     val storageLocation: String = "",
     val expirationDateMin: String = "",

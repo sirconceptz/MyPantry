@@ -13,19 +13,15 @@ import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
-import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
-import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -105,9 +101,9 @@ class EditProductViewModel @Inject constructor(
     private fun updateProducts() {
         var mainCategory = ""
         var detailCategory = ""
-        if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
+        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name)
             mainCategory = productDataState.value.mainCategory
-        if (productDataState.value.detailCategory != MainCategoriesTypes.CHOOSE.name)
+        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name)
             detailCategory = productDataState.value.detailCategory
         val product = Product(
             id = productId,

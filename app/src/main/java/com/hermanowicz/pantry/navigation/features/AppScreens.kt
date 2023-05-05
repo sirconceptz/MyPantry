@@ -7,7 +7,7 @@ sealed class AppScreens(
     object NewProduct : AppScreens("new_product")
     object PrintQRCodes : AppScreens("print_qr_codes")
     object FilterProduct : AppScreens("filter_product")
-    object ProductDetails : AppScreens("filter_product")
+    object ProductDetails : AppScreens("product_details")
     object OwnCategories : AppScreens("own_categories")
     object ScanProduct : AppScreens("scan_product")
     object Settings : AppScreens("settings")

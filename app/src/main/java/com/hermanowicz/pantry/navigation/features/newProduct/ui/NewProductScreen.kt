@@ -48,7 +48,10 @@ fun NewProductScreen(
                 id = R.string.statement_would_you_like_to_print_qr_codes
             ),
             onPositiveRequest = { viewModel.onNavigateToPrintQRCodes(true) },
-            onDismissRequest = { viewModel.showNavigateToPrintQRCodesDialog(false) })
+            onDismissRequest = {
+                viewModel.onNavigateToMyPantry(true)
+                viewModel.showNavigateToPrintQRCodesDialog(false)
+            })
     }
 
     TopBarScaffold(

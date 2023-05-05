@@ -27,11 +27,11 @@ import timber.log.Timber
 @Composable
 fun MyPantryScreen(
     openDrawer: () -> Unit,
-    onClickGroupProduct: (Int) -> Unit,
+    onClickGroupProduct: (Pair<Int, String>) -> Unit,
     onClickFilterProduct: () -> Unit,
     viewModel: MyPantryViewModel,
 
-) {
+    ) {
     val uiModel = updateUi(viewModel)
 
     TopBarScaffold(
@@ -68,15 +68,18 @@ private fun updateUi(
             Timber.d("My Pantry UI State - Empty")
             return MyPantryModel()
         }
+
         is MyPantryProductsUiState.Loading -> {
             Timber.d("My Pantry UI State - Loading")
             LoadingDialog()
             return MyPantryModel()
         }
+
         is MyPantryProductsUiState.Loaded -> {
             Timber.d("My Pantry UI State - Success")
             return state.data
         }
+
         is MyPantryProductsUiState.Error -> {
             Timber.d("My Pantry UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()
@@ -86,7 +89,10 @@ private fun updateUi(
 }
 
 @Composable
-fun ShowProducts(groupsProduct: List<GroupProduct>, onClickGroupProduct: (Int) -> Unit) {
+fun ShowProducts(
+    groupsProduct: List<GroupProduct>,
+    onClickGroupProduct: (Pair<Int, String>) -> Unit
+) {
     groupsProduct.forEach { groupProduct ->
         GroupProductItemCard(groupProduct = groupProduct) { onClickGroupProduct(it) }
     }

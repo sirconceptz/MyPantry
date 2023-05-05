@@ -6,13 +6,12 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
-import com.hermanowicz.pantry.domain.GetProductIdListUseCase
 import com.hermanowicz.pantry.domain.SaveProductsUseCase
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -85,9 +84,9 @@ class NewProductViewModel @Inject constructor(
     private suspend fun saveProducts(): List<Long> {
         var mainCategory = ""
         var detailCategory = ""
-        if (productDataState.value.mainCategory != MainCategoriesTypes.CHOOSE.name)
+        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name)
             mainCategory = productDataState.value.mainCategory
-        if (productDataState.value.detailCategory != MainCategoriesTypes.CHOOSE.name)
+        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name)
             detailCategory = productDataState.value.detailCategory
         var product = Product(
             name = productDataState.value.name,

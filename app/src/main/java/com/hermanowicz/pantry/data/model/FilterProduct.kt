@@ -1,12 +1,12 @@
 package com.hermanowicz.pantry.data.model
 
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 
 data class FilterProduct(
     val name: String = "",
-    val mainCategory: String = MainCategoriesTypes.CHOOSE.name,
+    val mainCategory: String = MainCategories.CHOOSE.name,
     val detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
     val storageLocation: String = "",
     val expirationDateMin: String = "",

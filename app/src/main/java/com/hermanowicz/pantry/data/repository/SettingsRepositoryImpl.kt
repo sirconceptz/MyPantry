@@ -35,7 +35,7 @@ class SettingsRepositoryImpl @Inject constructor(
                     preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
                 val daysToNotifyBeforeExpiration =
                     preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] ?: 3
-                val emailForNotifications = preferences[EMAIL_FOR_NOTIFICATIONS_KEY] ?: ""
+                val emailForNotifications = preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] ?: ""
                 val pushNotifications = preferences[PUSH_NOTIFICATIONS_KEY] ?: true
                 val emailNotifications = preferences[EMAIL_NOTIFICATIONS_KEY] ?: false
 
@@ -60,7 +60,7 @@ class SettingsRepositoryImpl @Inject constructor(
             preferences[SIZE_PRINTED_QR_CODES_KEY] = appSettings.qrCodeSize
             preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] =
                 appSettings.daysToNotifyBeforeExpiration.toInt()
-            preferences[EMAIL_FOR_NOTIFICATIONS_KEY] = appSettings.emailForNotifications
+            preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] = appSettings.emailForNotifications
             preferences[EMAIL_NOTIFICATIONS_KEY] = appSettings.emailNotifications
             preferences[PUSH_NOTIFICATIONS_KEY] = appSettings.pushNotifications
         }
@@ -78,10 +78,34 @@ class SettingsRepositoryImpl @Inject constructor(
                 preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
             }
 
+    override val daysBeforeNotification: Flow<Int>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] ?: 3
+            }
+
+    override val isPushNotificationsEnabled: Flow<Boolean>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[PUSH_NOTIFICATIONS_KEY] ?: true
+            }
+
+    override val isEmailNotificationsEnabled: Flow<Boolean>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[EMAIL_NOTIFICATIONS_KEY] ?: false
+            }
+
+    override val emailAddressForNotifications: Flow<String>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] ?: ""
+            }
+
     companion object {
         val DATABASE_MODE_KEY = stringPreferencesKey("database_mode")
         val CAMERA_MODE_KEY = stringPreferencesKey("camera_mode")
-        val EMAIL_FOR_NOTIFICATIONS_KEY = stringPreferencesKey("email_for_notifications")
+        val EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY = stringPreferencesKey("email_for_notifications")
         val SCANNER_SOUND_MODE_KEY = booleanPreferencesKey("scanner_sound_mode")
         val DAYS_TO_NOTIFY_BEFORE_EXPIRATION = intPreferencesKey("days_to_notify_before_expiration")
         val SIZE_PRINTED_QR_CODES_KEY = stringPreferencesKey("size_printed_qr_codes")

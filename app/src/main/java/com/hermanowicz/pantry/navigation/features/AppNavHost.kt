@@ -86,7 +86,7 @@ fun AppNavHost() {
                 composable(route = AppScreens.MyPantry.route) {
                     MyPantryRoute(
                         onNavigateToProductDetails = {
-                            navController.navigate("${AppScreens.ProductDetails.route}/$it")
+                            navController.navigate("${AppScreens.ProductDetails.route}/${it.first};${it.second}")
                         },
                         onNavigateToFilterProduct = {
                             navController.navigate(AppScreens.FilterProduct.route)
@@ -102,7 +102,7 @@ fun AppNavHost() {
                         viewModel = myPantryViewModel
                     )
                 }
-                composable(route = "${AppScreens.ProductDetails.route}/{id}") {
+                composable(route = "${AppScreens.ProductDetails.route}/{idAndHashcode}") {
                     ProductDetailsRoute(
                         onNavigateToEditProducts = { navController.navigate("${AppScreens.EditProduct.route}/$it") },
                         openDrawer = { openDrawer() }
@@ -141,7 +141,13 @@ fun AppNavHost() {
                     )
                 }
                 composable(route = AppScreens.ScanProduct.route) {
-                    ScanProductRoute(openDrawer = { openDrawer() })
+                    ScanProductRoute(
+                        openDrawer = { openDrawer() },
+                        onNavigationToProductDetails = {
+                            navController.navigate("${AppScreens.ProductDetails.route}/${it.first};${it.second}")
+                        },
+                        onNavigationToNewProduct = { }
+                    )
                 }
                 composable(route = AppScreens.StorageLocations.route) {
                     StorageLocationsRoute(

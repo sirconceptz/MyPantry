@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.domain
 
 import android.content.Context
 import com.hermanowicz.pantry.data.model.Category
-import com.hermanowicz.pantry.utils.category.MainCategoriesTypes
+import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChemicalProductsCategoryTypes
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.category.detailCategory.FruitsCategoryTypes
@@ -28,69 +28,81 @@ class GetDetailsCategoriesUseCase @Inject constructor(
                 map[category.name] = context.getString(category.nameResId)
             }
         else {
-            when (enumValueOf<MainCategoriesTypes>(mainCategory)) {
-                MainCategoriesTypes.CHOOSE -> {
+            when (enumValueOf<MainCategories>(mainCategory)) {
+                MainCategories.CHOOSE -> {
                     enumValues<ChooseCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.OWN_CATEGORIES -> {
-                    map["CHOOSE"] = context.getString(MainCategoriesTypes.CHOOSE.nameResId)
+
+                MainCategories.OWN_CATEGORIES -> {
+                    map["CHOOSE"] = context.getString(MainCategories.CHOOSE.nameResId)
                     categories.forEach { category ->
                         map[category.name] = category.name
                     }
                 }
-                MainCategoriesTypes.STORE_PRODUCTS -> {
+
+                MainCategories.STORE_PRODUCTS -> {
                     enumValues<StoreProductsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.READY_MEALS -> {
+
+                MainCategories.READY_MEALS -> {
                     enumValues<ReadyMealsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.VEGETABLES -> {
+
+                MainCategories.VEGETABLES -> {
                     enumValues<VegetablesCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.FRUITS -> {
+
+                MainCategories.FRUITS -> {
                     enumValues<FruitsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.HERBS -> {
+
+                MainCategories.HERBS -> {
                     enumValues<HerbsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.LIQUORS -> {
+
+                MainCategories.LIQUORS -> {
                     enumValues<LiqueursCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.WINES -> {
+
+                MainCategories.WINES -> {
                     enumValues<WinesCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.MUSHROOMS -> {
+
+                MainCategories.MUSHROOMS -> {
                     enumValues<MushroomsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.VINEGARS -> {
+
+                MainCategories.VINEGARS -> {
                     enumValues<VinegarsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.CHEMICAL_PRODUCTS -> {
+
+                MainCategories.CHEMICAL_PRODUCTS -> {
                     enumValues<ChemicalProductsCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }
                 }
-                MainCategoriesTypes.OTHER -> {
+
+                MainCategories.OTHER -> {
                     enumValues<OtherCategoryTypes>().forEach { category ->
                         map[category.name] = context.getString(category.nameResId)
                     }

@@ -3,6 +3,7 @@ package com.hermanowicz.pantry.navigation.features.productDetails.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.domain.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
@@ -23,13 +24,16 @@ class ProductDetailsViewModel @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getGroupProductUseCase: GetGroupProductUseCase,
     private val savedStateHandle: SavedStateHandle,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Empty)
     val uiState: StateFlow<ProductDetailsUiState> = _uiState
 
-    private val stringId: String = savedStateHandle["id"] ?: "0"
-    val productId = stringId.toInt()
+    private val idAndHashcode: String = savedStateHandle["idAndHashcode"] ?: ";"
+    private val argumentsArray = idAndHashcode.split(";")
+    val productId = argumentsArray[0].toInt()
+    val productHashcode = argumentsArray[1]
 
     init {
         fetchProducts(productId)
@@ -41,12 +45,21 @@ class ProductDetailsViewModel @Inject constructor(
             try {
                 fetchDatabaseModeUseCase().collect { databaseMode ->
                     observeAllProductsUseCase(databaseMode).collect { products ->
-                        _uiState.value = ProductDetailsUiState.Loaded(
-                            ProductDetailsModel(
-                                groupProduct = getGroupProductUseCase(productId, products),
-                                loadingVisible = false
+                        if (checkIsProductsHashcodeCorrectUseCase(
+                                productId,
+                                productHashcode,
+                                products
                             )
-                        )
+                        ) {
+                            _uiState.value = ProductDetailsUiState.Loaded(
+                                ProductDetailsModel(
+                                    groupProduct = getGroupProductUseCase(productId, products),
+                                    loadingVisible = false
+                                )
+                            )
+                        } else {
+                            _uiState.value = ProductDetailsUiState.Error("No correct product")
+                        }
                     }
                 }
             } catch (e: Exception) {
