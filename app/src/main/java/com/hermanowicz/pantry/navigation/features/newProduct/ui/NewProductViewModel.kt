@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.navigation.features.newProduct.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
@@ -28,6 +29,7 @@ class NewProductViewModel @Inject constructor(
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
@@ -36,6 +38,8 @@ class NewProductViewModel @Inject constructor(
     var productDataState: StateFlow<NewProductDataState> = _productDataState.asStateFlow()
 
     private val numberPattern = Regex("^\\d+\$")
+
+    private val barcode: String = savedStateHandle["barcode"] ?: "x"
 
     init {
         fetchOwnCategories()

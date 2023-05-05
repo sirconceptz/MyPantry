@@ -54,7 +54,7 @@ fun AppDrawerView(
             onItemClick = onMyPantry
         ),
         DrawerMenuItemModel(
-            route = AppScreens.NewProduct.route,
+            route = "${AppScreens.NewProduct.route}/0",
             iconDrawableId = R.drawable.ic_add_item,
             text = stringResource(id = R.string.new_product),
             onItemClick = onNewProduct

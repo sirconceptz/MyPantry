@@ -60,7 +60,7 @@ fun AppNavHost() {
                     navController.navigate(AppScreens.MyPantry.route)
                     closeDrawer()
                 }, onNewProduct = {
-                    navController.navigate(AppScreens.NewProduct.route)
+                    navController.navigate("${AppScreens.NewProduct.route}/0")
                     closeDrawer()
                 }, onOwnCategories = {
                     navController.navigate(AppScreens.OwnCategories.route)
@@ -114,7 +114,7 @@ fun AppNavHost() {
                         openDrawer = { openDrawer() }
                     )
                 }
-                composable(route = AppScreens.NewProduct.route) {
+                composable(route = "${AppScreens.NewProduct.route}/{barcode}") {
                     NewProductRoute(
                         onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
                         openDrawer = { openDrawer() },
@@ -146,7 +146,9 @@ fun AppNavHost() {
                         onNavigationToProductDetails = {
                             navController.navigate("${AppScreens.ProductDetails.route}/${it.first};${it.second}")
                         },
-                        onNavigationToNewProduct = { }
+                        onNavigationToNewProduct = {
+                            navController.navigate("${AppScreens.NewProduct.route}/${it}")
+                        }
                     )
                 }
                 composable(route = AppScreens.StorageLocations.route) {
