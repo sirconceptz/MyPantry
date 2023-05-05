@@ -85,10 +85,8 @@ fun ScanProductScreen(
             DialogTextfield(
                 label = stringResource(id = R.string.put_barcode_manually),
                 value = uiState.barcodeManually,
-                onPositiveRequest = { },
-                onDismissRequest = {
-                    viewModel.onPutBarcodeManually(false)
-                })
+                onPositiveRequest = { viewModel.onNavigateToNewProduct(it) },
+                onDismissRequest = { viewModel.onPutBarcodeManually(false) })
         }
 
         LazyColumn(

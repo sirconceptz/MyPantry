@@ -4,10 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.GetGroupProductByBarcodeUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.SaveProductsUseCase
+import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductDataState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
@@ -29,6 +33,9 @@ class NewProductViewModel @Inject constructor(
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
+    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeAllProductsUseCase: ObserveAllProductsUseCase,
+    private val getGroupProductByBarcodeUseCase: GetGroupProductByBarcodeUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -43,11 +50,37 @@ class NewProductViewModel @Inject constructor(
 
     init {
         fetchOwnCategories()
+        fetchProductData(barcode)
     }
 
     private fun fetchOwnCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             _productDataState.update { it.copy(ownCategories = getOwnCategoriesUseCase()) }
+        }
+    }
+
+    private fun fetchProductData(barcode: String) {
+        viewModelScope.launch {
+            fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeAllProductsUseCase(databaseMode).collect { products ->
+                    val groupProduct = getGroupProductByBarcodeUseCase(barcode, products)
+                    _productDataState.value = NewProductDataState(
+                        name = groupProduct.product.name,
+                        expirationDate = groupProduct.product.expirationDate,
+                        productionDate = groupProduct.product.productionDate,
+                        composition = groupProduct.product.composition,
+                        quantity = groupProduct.quantity.toString(),
+                        healingProperties = groupProduct.product.healingProperties,
+                        dosage = groupProduct.product.dosage,
+                        hasSugar = groupProduct.product.hasSugar,
+                        hasSalt = groupProduct.product.hasSalt,
+                        isVege = groupProduct.product.isVege,
+                        isBio = groupProduct.product.isBio,
+                        weight = groupProduct.product.weight.toString(),
+                        volume = groupProduct.product.volume.toString()
+                    )
+                }
+            }
         }
     }
 

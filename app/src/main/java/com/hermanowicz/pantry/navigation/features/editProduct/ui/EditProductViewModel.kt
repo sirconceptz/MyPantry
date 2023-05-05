@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
-import com.hermanowicz.pantry.domain.GetGroupProductUseCase
+import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditProductViewModel @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
-    private val getGroupProductUseCase: GetGroupProductUseCase,
+    private val getGroupProductByIdUseCase: GetGroupProductByIdUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
@@ -62,7 +62,7 @@ class EditProductViewModel @Inject constructor(
         viewModelScope.launch {
             fetchDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
-                    val groupProduct = getGroupProductUseCase(productId, products)
+                    val groupProduct = getGroupProductByIdUseCase(productId, products)
                     _productDataState.value = EditProductDataState(
                         name = groupProduct.product.name,
                         expirationDate = groupProduct.product.expirationDate,

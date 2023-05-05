@@ -5,24 +5,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.domain.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.GetGroupProductUseCase
+import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
-    private val getGroupProductUseCase: GetGroupProductUseCase,
+    private val getGroupProductByIdUseCase: GetGroupProductByIdUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase
@@ -53,7 +50,7 @@ class ProductDetailsViewModel @Inject constructor(
                         ) {
                             _uiState.value = ProductDetailsUiState.Loaded(
                                 ProductDetailsModel(
-                                    groupProduct = getGroupProductUseCase(productId, products),
+                                    groupProduct = getGroupProductByIdUseCase(productId, products),
                                     loadingVisible = false
                                 )
                             )

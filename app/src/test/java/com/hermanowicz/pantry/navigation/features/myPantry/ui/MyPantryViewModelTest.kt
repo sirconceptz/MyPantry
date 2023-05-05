@@ -3,7 +3,7 @@ package com.hermanowicz.pantry.navigation.features.myPantry.ui
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.GetGroupProductListUseCase
-import com.hermanowicz.pantry.domain.GetGroupProductUseCase
+import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import io.mockk.every
@@ -37,8 +37,8 @@ class MyPantryViewModelTest {
         val mockGetGroupProductListUseCase = mockk<GetGroupProductListUseCase>()
         every { mockGetGroupProductListUseCase.invoke(any()) } returns groupsProduct
 
-        val mockGetGroupProductUseCase = mockk<GetGroupProductUseCase>()
-        every { mockGetGroupProductUseCase.invoke(any(), any()) } returns groupProduct1
+        val mockGetGroupProductByIdUseCase = mockk<GetGroupProductByIdUseCase>()
+        every { mockGetGroupProductByIdUseCase.invoke(any(), any()) } returns groupProduct1
 
         val mockObserveAllProductsUseCase = mockk<ObserveAllProductsUseCase>()
         every { mockObserveAllProductsUseCase.invoke() } returns flowOf(expectedProductList)
