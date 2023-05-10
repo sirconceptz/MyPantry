@@ -79,6 +79,7 @@ class EditProductViewModel @Inject constructor(
                         weight = groupProduct.product.weight.toString(),
                         volume = groupProduct.product.volume.toString(),
                         taste = groupProduct.product.taste,
+                        hashCode = groupProduct.product.hashCode,
                         productsIdList = groupProduct.idList
                     )
                 }
@@ -122,7 +123,8 @@ class EditProductViewModel @Inject constructor(
             isBio = productDataState.value.isBio,
             weight = productDataState.value.weight.toIntOrNull() ?: 0,
             volume = productDataState.value.volume.toIntOrNull() ?: 0,
-            taste = productDataState.value.taste
+            taste = productDataState.value.taste,
+            hashCode = productDataState.value.hashCode
         )
         viewModelScope.launch(Dispatchers.IO) {
             updateProductsUseCase(

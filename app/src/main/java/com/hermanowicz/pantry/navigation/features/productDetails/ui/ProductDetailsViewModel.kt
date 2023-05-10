@@ -3,12 +3,15 @@ package com.hermanowicz.pantry.navigation.features.productDetails.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.domain.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.DeleteProductsUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.ParseDeprecatedDatabaseProductsUseCase
+import com.hermanowicz.pantry.domain.StartBarcodeScannerUseCase
+import com.hermanowicz.pantry.domain.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
@@ -29,6 +32,8 @@ class ProductDetailsViewModel @Inject constructor(
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase,
     private val parseDeprecatedDatabaseProductsUseCase: ParseDeprecatedDatabaseProductsUseCase,
+    private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase,
+    private val updateProductsUseCase: UpdateProductsUseCase,
     private val deleteProductsUseCase: DeleteProductsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProductDetailsState())
@@ -41,7 +46,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val argumentsArray = idAndHashcode.split(";")
     val productId = argumentsArray[0].toInt()
     private val productHashcode = argumentsArray[1]
-    var productIdList: List<Int> = emptyList()
+    var groupProduct: GroupProduct = GroupProduct()
 
     init {
         fetchProducts(productId)
@@ -60,11 +65,10 @@ class ProductDetailsViewModel @Inject constructor(
                                 products
                             )
                         ) {
-                            val groupProduct = getGroupProductByIdUseCase(
+                            groupProduct = getGroupProductByIdUseCase(
                                 productId,
                                 parsedProducts
                             )
-                            productIdList = groupProduct.idList
                             _uiState.value = ProductDetailsUiState.Loaded(
                                 ProductDetailsModel(
                                     groupProduct = groupProduct,
@@ -82,14 +86,6 @@ class ProductDetailsViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.value = ProductDetailsUiState.Error(e.toString())
             }
-        }
-    }
-
-    fun onShowMenu(bool: Boolean) {
-        _state.update {
-            it.copy(
-                isMenuVisible = bool
-            )
         }
     }
 
@@ -111,52 +107,75 @@ class ProductDetailsViewModel @Inject constructor(
                 onShowDialogWarningDelete(true)
             }
         }
+        onShowMenu(false)
+    }
+
+    fun onScanBarcode() {
+        viewModelScope.launch(Dispatchers.IO) {
+            startBarcodeScannerUseCase().collect { data ->
+                updateProducts(data)
+            }
+        }
+    }
+
+    private fun updateProducts(barcode: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val product = groupProduct.product.copy(barcode = barcode)
+            updateProductsUseCase(
+                product,
+                groupProduct.idList,
+                groupProduct.quantity,
+                groupProduct.quantity
+            )
+        }
+    }
+
+    fun onShowMenu(bool: Boolean) {
+        _state.update {
+            it.copy(isMenuVisible = bool)
+        }
     }
 
     fun onNavigateToEditProduct(bool: Boolean) {
         _state.update {
-            it.copy(
-                onNavigateToEditProduct = bool
-            )
+            it.copy(onNavigateToEditProduct = bool)
         }
     }
 
     fun onNavigateToPrintQrCodes(bool: Boolean) {
         _state.update {
-            it.copy(
-                onNavigateToPrintQrCodes = bool
-            )
+            it.copy(onNavigateToPrintQrCodes = bool)
         }
     }
 
     fun onAddBarcode(bool: Boolean) {
         _state.update {
-            it.copy(
-                onAddBarcode = bool
-            )
+            it.copy(onAddBarcode = bool)
         }
     }
 
     fun onShowDialogWarningDelete(bool: Boolean) {
         _state.update {
-            it.copy(
-                isDialogWarningDeleteVisible = bool
-            )
+            it.copy(isDialogWarningDeleteVisible = bool)
         }
     }
 
     fun onDeleteProduct() {
-        viewModelScope.launch(Dispatchers.IO) {
-            deleteProductsUseCase(productIdList)
-        }
         onNavigateToMyPantry(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteProductsUseCase(groupProduct.idList)
+        }
     }
 
     fun onNavigateToMyPantry(bool: Boolean) {
         _state.update {
-            it.copy(
-                onNavigateToMyPantry = bool
-            )
+            it.copy(onNavigateToMyPantry = bool)
+        }
+    }
+
+    fun onGoToPermissionSettings(bool: Boolean) {
+        _state.update {
+            it.copy(goToPermissionSettings = bool)
         }
     }
 }

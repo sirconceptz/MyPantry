@@ -6,5 +6,6 @@ data class ProductDetailsState(
     val onNavigateToEditProduct: Boolean = false,
     val onNavigateToPrintQrCodes: Boolean = false,
     val onNavigateToMyPantry: Boolean = false,
+    val goToPermissionSettings: Boolean = false,
     val onAddBarcode: Boolean = false
 )

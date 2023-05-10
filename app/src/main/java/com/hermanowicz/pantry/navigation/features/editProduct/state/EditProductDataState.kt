@@ -32,6 +32,7 @@ data class EditProductDataState(
     val photoName: String = "",
     val photoDescription: String = "",
     val barcode: String = "",
+    val hashCode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
     var onNavigateBack: Boolean = false,

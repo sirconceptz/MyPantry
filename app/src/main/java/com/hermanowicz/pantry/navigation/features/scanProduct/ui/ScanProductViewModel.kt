@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanProductViewModel @Inject constructor(
     private val startQrCodeCodeScannerUseCase: StartQrCodeCodeScannerUseCase,
-    private val startBarcodeCodeScannerUseCase: StartBarcodeScannerUseCase
+    private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScanProductUiState())
@@ -31,7 +31,7 @@ class ScanProductViewModel @Inject constructor(
 
     fun onScanBarcode() {
         viewModelScope.launch {
-            startBarcodeCodeScannerUseCase().collect { data ->
+            startBarcodeScannerUseCase().collect { data ->
                 onNavigateToNewProduct(data)
             }
         }

@@ -1,6 +1,8 @@
 package com.hermanowicz.pantry.navigation.features.productDetails.ui
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,7 @@ import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDe
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
+import com.hermanowicz.pantry.utils.Permissions
 import timber.log.Timber
 
 @Composable
@@ -44,8 +47,24 @@ fun ProductDetailsScreen(
     val uiModel = updateUi(viewModel)
     val state by viewModel.state.collectAsState()
 
+    val cameraPermissions = Permissions.cameraPermissions
+
+    val launcherAddBarcode =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
+            var isGranted = true
+            for (permission in requestedPermissions) {
+                if (!permission.value)
+                    isGranted = false
+            }
+            if (isGranted) {
+                viewModel.onScanBarcode()
+            } else {
+                viewModel.onGoToPermissionSettings(true)
+            }
+        }
+
     if (state.onAddBarcode) {
-        onClickEditProducts(viewModel.productId)
+        launcherAddBarcode.launch(cameraPermissions.toTypedArray())
         viewModel.onAddBarcode(false)
     }
 
