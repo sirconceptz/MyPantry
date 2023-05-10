@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -111,8 +112,7 @@ private fun createEmailNotification(
             error.message
         )
     }
-    val myApp: App = App().getInstance()
-    myApp.addEmailToRequestQueue(requestJson)
+    App().addEmailToRequestQueue(requestJson)
 }
 
 private fun createPushNotification(
@@ -123,17 +123,17 @@ private fun createPushNotification(
 ) {
     val channelId = "my_channel_$productID"
     val notificationManager =
-        context.getSystemService(IntentService.NOTIFICATION_SERVICE) as NotificationManager
-    val name: CharSequence = "my_channel"
+        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    val name: CharSequence = context.getString(R.string.expiration_date)
     val description = "Products expiration dates notification channel"
     val importance = NotificationManager.IMPORTANCE_DEFAULT
-    val mChannel = NotificationChannel(channelId, name, importance)
-    mChannel.description = description
-    mChannel.enableLights(true)
-    mChannel.lightColor = Color.RED
-    mChannel.enableVibration(true)
-    mChannel.setShowBadge(false)
-    notificationManager.createNotificationChannel(mChannel)
+    val channel = NotificationChannel(channelId, name, importance)
+    channel.description = description
+    channel.enableLights(true)
+    channel.lightColor = Color.RED
+    channel.enableVibration(true)
+    channel.setShowBadge(false)
+    notificationManager.createNotificationChannel(channel)
     val notificationStatement = createStatement(context, productName, daysToNotification)
     val builder = NotificationCompat.Builder(context, channelId)
     builder.setContentTitle(context.getString(R.string.notification_title))

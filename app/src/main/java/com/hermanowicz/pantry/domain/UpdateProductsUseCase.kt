@@ -34,7 +34,7 @@ class UpdateProductsUseCase @Inject constructor(
             }
         }
         productRepository.update(mutableProducts.toList())
-        productRepository.delete(listToDelete)
+        productRepository.delete(listToDelete.map { it.id })
         productRepository.insert(listToAdd)
     }
 }

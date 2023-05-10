@@ -78,6 +78,7 @@ class EditProductViewModel @Inject constructor(
                         isBio = groupProduct.product.isBio,
                         weight = groupProduct.product.weight.toString(),
                         volume = groupProduct.product.volume.toString(),
+                        taste = groupProduct.product.taste,
                         productsIdList = groupProduct.idList
                     )
                 }
@@ -120,7 +121,8 @@ class EditProductViewModel @Inject constructor(
             isVege = productDataState.value.isVege,
             isBio = productDataState.value.isBio,
             weight = productDataState.value.weight.toIntOrNull() ?: 0,
-            volume = productDataState.value.volume.toIntOrNull() ?: 0
+            volume = productDataState.value.volume.toIntOrNull() ?: 0,
+            taste = productDataState.value.taste
         )
         viewModelScope.launch(Dispatchers.IO) {
             updateProductsUseCase(
@@ -247,5 +249,13 @@ class EditProductViewModel @Inject constructor(
         return getDetailsCategoriesUseCase(
             productDataState.value.ownCategories, productDataState.value.mainCategory
         )
+    }
+
+    fun onTasteSelect(taste: String) {
+        _productDataState.update {
+            it.copy(
+                taste = taste
+            )
+        }
     }
 }

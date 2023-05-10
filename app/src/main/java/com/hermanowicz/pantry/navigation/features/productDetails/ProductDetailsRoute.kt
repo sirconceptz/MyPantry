@@ -6,10 +6,14 @@ import com.hermanowicz.pantry.navigation.features.productDetails.ui.ProductDetai
 @Composable
 fun ProductDetailsRoute(
     onNavigateToEditProducts: (Int) -> Unit,
+    onNavigateToPrintQrCodes: (List<Int>) -> Unit,
+    onNavigateToMyPantry: () -> Unit,
     openDrawer: () -> Unit
 ) {
     ProductDetailsScreen(
         openDrawer = openDrawer,
-        onClickEditProducts = onNavigateToEditProducts
+        onClickEditProducts = onNavigateToEditProducts,
+        onNavigateToMyPantry = onNavigateToMyPantry,
+        onClickPrintQrCodes = onNavigateToPrintQrCodes
     )
 }

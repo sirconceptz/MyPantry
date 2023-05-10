@@ -31,8 +31,10 @@ class ProductLocalDataSourceImpl @Inject constructor(
         productDao.update(products)
     }
 
-    override suspend fun delete(products: List<ProductEntity>) {
-        productDao.delete(products)
+    override suspend fun delete(productIds: List<Int>) {
+        productIds.forEach { id ->
+            productDao.delete(id)
+        }
     }
 
     override suspend fun deleteAll() {

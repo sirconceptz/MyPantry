@@ -85,12 +85,12 @@ class ProductRepositoryImpl @Inject constructor(
             remoteDataSource.update(products.map { product -> product.toEntityModel() })
     }
 
-    override suspend fun delete(products: List<Product>) {
+    override suspend fun delete(productIds: List<Int>) {
         val databaseMode = fetchDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
-            localDataSource.delete(products.map { product -> product.toEntityModel() })
+            localDataSource.delete(productIds)
         else
-            remoteDataSource.delete(products.map { product -> product.toEntityModel() })
+            remoteDataSource.delete(productIds)
     }
 
     override suspend fun deleteAllCurrentDatabase() {

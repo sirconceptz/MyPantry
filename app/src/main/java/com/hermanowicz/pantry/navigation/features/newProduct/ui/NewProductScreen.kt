@@ -82,6 +82,8 @@ fun NewProductScreen(
                     onIsBioChange = { viewModel.onIsBioChange(it) },
                     onHasSugarChange = { viewModel.onHasSugarChange(it) },
                     onHasSaltChange = { viewModel.onHasSaltChange(it) },
+                    onTasteSelect = { viewModel.onTasteSelect(it) },
+                    onCleanTasteRadioGroup = { viewModel.onTasteSelect("") },
                     mainCategoryItemList = viewModel.getMainCategories(),
                     detailCategoryItemList = viewModel.getDetailCategories()
                 )

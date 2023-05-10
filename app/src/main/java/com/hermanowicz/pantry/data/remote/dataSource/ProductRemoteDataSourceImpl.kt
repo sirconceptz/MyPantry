@@ -90,10 +90,10 @@ class ProductRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun delete(products: List<ProductEntity>) {
+    override suspend fun delete(productIds: List<Int>) {
         if (userId.isNotEmpty()) {
-            products.forEach { product ->
-                databaseReference.child(userId).child(product.id.toString()).removeValue()
+            productIds.forEach { id ->
+                databaseReference.child(userId).child(id.toString()).removeValue()
             }
         }
     }

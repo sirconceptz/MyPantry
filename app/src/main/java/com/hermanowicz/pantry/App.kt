@@ -20,11 +20,9 @@ class App : Application(), Configuration.Provider {
     lateinit var hiltWorkerFactory: HiltWorkerFactory
 
     private var requestQueue: RequestQueue? = null
-    private lateinit var instance: App
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
@@ -34,10 +32,6 @@ class App : Application(), Configuration.Provider {
         Configuration.Builder()
             .setWorkerFactory(hiltWorkerFactory)
             .build()
-
-    fun getInstance(): App {
-        return instance
-    }
 
     fun getRequestQueue(): RequestQueue? {
         if (requestQueue == null) {

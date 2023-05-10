@@ -13,7 +13,7 @@ interface ProductRemoteDataSource {
     fun observeById(id: Int): Flow<ProductEntity?>
     suspend fun insert(products: List<ProductEntity>): List<Long>
     suspend fun update(products: List<ProductEntity>)
-    suspend fun delete(products: List<ProductEntity>)
+    suspend fun delete(productIds: List<Int>)
     suspend fun deleteAll()
 }
 

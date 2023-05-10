@@ -24,5 +24,9 @@ data class FilterProduct(
     val hasSalt: String = ProductAttributesValueType.ALL.name,
     val isVege: String = ProductAttributesValueType.ALL.name,
     val isBio: String = ProductAttributesValueType.ALL.name,
-    val taste: String = ""
+    val sweet: Boolean = false,
+    val sour: Boolean = false,
+    val sweetAndSour: Boolean = false,
+    val salty: Boolean = false,
+    val spicy: Boolean = false
 )

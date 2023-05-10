@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
@@ -17,8 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
+import com.hermanowicz.pantry.components.common.dialog.DialogWarning
 import com.hermanowicz.pantry.components.common.divider.DividerCardInside
+import com.hermanowicz.pantry.components.common.dropdown.DropdownProductDetailsOptions
 import com.hermanowicz.pantry.components.common.icons.EditIcon
+import com.hermanowicz.pantry.components.common.icons.MenuIcon
+import com.hermanowicz.pantry.components.common.icons.PrintIcon
 import com.hermanowicz.pantry.components.common.loading.LoadingDialog
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.data.model.GroupProduct
@@ -31,16 +36,54 @@ import timber.log.Timber
 @Composable
 fun ProductDetailsScreen(
     openDrawer: () -> Unit,
+    onClickPrintQrCodes: (List<Int>) -> Unit,
     onClickEditProducts: (Int) -> Unit,
+    onNavigateToMyPantry: () -> Unit,
     viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
     val uiModel = updateUi(viewModel)
+    val state by viewModel.state.collectAsState()
+
+    if (state.onAddBarcode) {
+        onClickEditProducts(viewModel.productId)
+        viewModel.onAddBarcode(false)
+    }
+
+    if (state.onNavigateToEditProduct) {
+        onClickEditProducts(viewModel.productId)
+        viewModel.onNavigateToEditProduct(false)
+    }
+
+    if (state.onNavigateToPrintQrCodes) {
+        onClickPrintQrCodes(uiModel.groupProduct.idList)
+        viewModel.onNavigateToPrintQrCodes(false)
+    }
+
+    if (state.onNavigateToMyPantry) {
+        onNavigateToMyPantry()
+        viewModel.onNavigateToMyPantry(false)
+    }
+
+    if (state.isDialogWarningDeleteVisible) {
+        DialogWarning(
+            label = stringResource(id = R.string.are_you_sure),
+            warning = stringResource(id = R.string.delete_product_warning),
+            onPositiveRequest = { viewModel.onDeleteProduct() },
+            onDismissRequest = { viewModel.onShowDialogWarningDelete(false) }
+        )
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.product_details),
         openDrawer = openDrawer,
         actions = {
             EditIcon(onClick = { onClickEditProducts(viewModel.productId) })
+            MenuIcon(onClick = { viewModel.onShowMenu(true) })
+            DropdownProductDetailsOptions(
+                expanded = state.isMenuVisible,
+                onShow = { viewModel.onShowMenu(!state.isMenuVisible) },
+                onSelect = { viewModel.onSelect(it) }
+            )
         }
     ) {
         LazyColumn(
@@ -116,6 +159,11 @@ fun ProductDetailsView(groupProduct: GroupProduct) {
         )
         DividerCardInside()
         ProductDetailItem(
+            label = stringResource(id = R.string.taste),
+            value = groupProduct.product.taste
+        )
+        DividerCardInside()
+        ProductDetailItem(
             label = stringResource(id = R.string.vege),
             value = if (groupProduct.product.isVege) stringResource(id = R.string.yes) else stringResource(
                 id = R.string.no
@@ -154,15 +202,18 @@ private fun updateUi(
             Timber.d("Product Details UI State - Empty")
             return ProductDetailsModel()
         }
+
         is ProductDetailsUiState.Loading -> {
             Timber.d("Product Details UI State - Loading")
             LoadingDialog()
             return ProductDetailsModel()
         }
+
         is ProductDetailsUiState.Loaded -> {
             Timber.d("Product Details UI State - Success")
             return state.data
         }
+
         is ProductDetailsUiState.Error -> {
             Timber.d("Product Details UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()

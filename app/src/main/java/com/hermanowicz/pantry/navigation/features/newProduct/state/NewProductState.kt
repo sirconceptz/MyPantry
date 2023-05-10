@@ -5,7 +5,7 @@ import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 
-data class NewProductDataState(
+data class NewProductState(
     val name: String = "",
     var showMainCategoryDropdown: Boolean = false,
     var showDetailCategoryDropdown: Boolean = false,

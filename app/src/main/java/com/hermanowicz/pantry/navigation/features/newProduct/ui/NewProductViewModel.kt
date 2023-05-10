@@ -11,8 +11,7 @@ import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.SaveProductsUseCase
-import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
-import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductDataState
+import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
@@ -41,16 +40,17 @@ class NewProductViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
 
-    private val _productDataState = MutableStateFlow(NewProductDataState())
-    var productDataState: StateFlow<NewProductDataState> = _productDataState.asStateFlow()
+    private val _productDataState = MutableStateFlow(NewProductState())
+    var productDataState: StateFlow<NewProductState> = _productDataState.asStateFlow()
 
     private val numberPattern = Regex("^\\d+\$")
 
-    private val barcode: String = savedStateHandle["barcode"] ?: "x"
+    private val barcode: String = savedStateHandle["barcode"] ?: "0"
 
     init {
         fetchOwnCategories()
-        fetchProductData(barcode)
+        if (barcode != "0")
+            fetchProductData(barcode)
     }
 
     private fun fetchOwnCategories() {
@@ -64,7 +64,7 @@ class NewProductViewModel @Inject constructor(
             fetchDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
                     val groupProduct = getGroupProductByBarcodeUseCase(barcode, products)
-                    _productDataState.value = NewProductDataState(
+                    _productDataState.value = NewProductState(
                         name = groupProduct.product.name,
                         expirationDate = groupProduct.product.expirationDate,
                         productionDate = groupProduct.product.productionDate,
@@ -139,7 +139,8 @@ class NewProductViewModel @Inject constructor(
             isVege = productDataState.value.isVege,
             isBio = productDataState.value.isBio,
             weight = productDataState.value.weight.toIntOrNull() ?: 0,
-            volume = productDataState.value.volume.toIntOrNull() ?: 0
+            volume = productDataState.value.volume.toIntOrNull() ?: 0,
+            taste = productDataState.value.taste
         )
         product = product.copy(hashCode = product.hashCode().toString())
         val products: MutableList<Product> = mutableListOf()
@@ -263,6 +264,14 @@ class NewProductViewModel @Inject constructor(
         _productDataState.update {
             it.copy(
                 onNavigateToMyPantry = bool
+            )
+        }
+    }
+
+    fun onTasteSelect(taste: String) {
+        _productDataState.update {
+            it.copy(
+                taste = taste
             )
         }
     }

@@ -6,6 +6,7 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
+import com.hermanowicz.pantry.utils.enums.Taste
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -39,7 +40,8 @@ class GetFilteredProductListUseCase @Inject constructor() :
                     filterProduct.isVege,
                     filterProduct.hasSugar,
                     filterProduct.hasSalt
-                ) && product.taste.contains(filterProduct.taste) && isExpirationDateInRange(
+                ) && tasteIsValid(product, filterProduct)
+                && isExpirationDateInRange(
                     product.expirationDate,
                     filterProduct.expirationDateMin,
                     filterProduct.expirationDateMax
@@ -51,6 +53,16 @@ class GetFilteredProductListUseCase @Inject constructor() :
             ) mutableProducts.add(product)
         }
         return mutableProducts.toList()
+    }
+
+    private fun tasteIsValid(product: Product, filterProduct: FilterProduct): Boolean {
+        return ((filterProduct.sweet && product.taste == Taste.SWEET.name) ||
+                (filterProduct.sour && product.taste == Taste.SOUR.name) ||
+                (filterProduct.sweetAndSour && product.taste == Taste.SWEET_AND_SOUR.name) ||
+                (filterProduct.salty && product.taste == Taste.SALTY.name) ||
+                (filterProduct.spicy && product.taste == Taste.SPICY.name) ||
+                (!filterProduct.sweet && !filterProduct.sour && !filterProduct.sweetAndSour &&
+                        !filterProduct.salty && !filterProduct.spicy))
     }
 
     private fun isMainCategoryValid(

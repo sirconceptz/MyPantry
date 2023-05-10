@@ -82,7 +82,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
 
     //Barcode
     implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'

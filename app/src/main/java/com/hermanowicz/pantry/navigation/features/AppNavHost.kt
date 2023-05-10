@@ -105,6 +105,16 @@ fun AppNavHost() {
                 composable(route = "${AppScreens.ProductDetails.route}/{idAndHashcode}") {
                     ProductDetailsRoute(
                         onNavigateToEditProducts = { navController.navigate("${AppScreens.EditProduct.route}/$it") },
+                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
+                        onNavigateToPrintQrCodes = {
+                            navController.navigate(
+                                "${AppScreens.PrintQRCodes.route}/${
+                                    it.joinToString(
+                                        ";"
+                                    )
+                                }"
+                            )
+                        },
                         openDrawer = { openDrawer() }
                     )
                 }

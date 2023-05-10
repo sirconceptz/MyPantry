@@ -11,22 +11,25 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.cards.FilterProductDetailsAttributesCard
 import com.hermanowicz.pantry.components.common.cards.ProductDetailsAttributesCard
+import com.hermanowicz.pantry.components.common.checkbox.ProductTasteCheckboxes
 import com.hermanowicz.pantry.components.common.dropdown.DropdownCard
 import com.hermanowicz.pantry.components.common.picker.DatePickerDouble
 import com.hermanowicz.pantry.components.common.picker.DatePickerPrimary
+import com.hermanowicz.pantry.components.common.radiogroup.ProductTasteRadioGroup
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabelError
 import com.hermanowicz.pantry.components.common.textfield.TextFieldDoubleAndLabel
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
-import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductDataState
+import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.PickerType
+import com.hermanowicz.pantry.utils.enums.Taste
 
 @Composable
 fun NewProductForm(
-    productDataState: NewProductDataState,
+    productDataState: NewProductState,
     onNameChange: (String) -> Unit,
     showMainCategoryDropdown: (Boolean) -> Unit,
     onMainCategoryChange: (String) -> Unit,
@@ -44,6 +47,8 @@ fun NewProductForm(
     onIsBioChange: (Boolean) -> Unit,
     onHasSugarChange: (Boolean) -> Unit,
     onHasSaltChange: (Boolean) -> Unit,
+    onTasteSelect: (String) -> Unit,
+    onCleanTasteRadioGroup: () -> Unit,
     mainCategoryItemList: Map<String, String>,
     detailCategoryItemList: Map<String, String>
 ) {
@@ -130,7 +135,6 @@ fun NewProductForm(
             placeholder = stringResource(id = R.string.volume),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
         )
-
         ProductDetailsAttributesCard(
             isVege = productDataState.isVege,
             isBio = productDataState.isBio,
@@ -140,6 +144,12 @@ fun NewProductForm(
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,
             onHasSaltChange = onHasSaltChange
+        )
+        ProductTasteRadioGroup(
+            itemList = Taste.toPairList(),
+            selectedItem = productDataState.taste,
+            onSelect = onTasteSelect,
+            onCleanAll = onCleanTasteRadioGroup
         )
     }
 }
@@ -164,6 +174,8 @@ fun EditProductForm(
     onIsBioChange: (Boolean) -> Unit,
     onHasSugarChange: (Boolean) -> Unit,
     onHasSaltChange: (Boolean) -> Unit,
+    onTasteSelect: (String) -> Unit,
+    onCleanTasteRadioGroup: () -> Unit,
     mainCategoryItemList: Map<String, String>,
     detailCategoryItemList: Map<String, String>
 ) {
@@ -255,9 +267,14 @@ fun EditProductForm(
             onIsVegeChange = onIsVegeChange,
             onIsBioChange = onIsBioChange,
             onHasSugarChange = onHasSugarChange,
-            onHasSaltChange = onHasSaltChange,
-
-            )
+            onHasSaltChange = onHasSaltChange
+        )
+        ProductTasteRadioGroup(
+            itemList = Taste.toPairList(),
+            selectedItem = productDataState.taste,
+            onSelect = onTasteSelect,
+            onCleanAll = onCleanTasteRadioGroup
+        )
     }
 }
 
@@ -288,6 +305,7 @@ fun FilterProductForm(
     showIsBioDropdown: (Boolean) -> Unit,
     showHasSugarDropdown: (Boolean) -> Unit,
     showHasSaltDropdown: (Boolean) -> Unit,
+    onTasteSelect: (selected: String, bool: Boolean) -> Unit,
     mainCategoryItemList: Map<String, String>,
     detailCategoryItemList: Map<String, String>
 ) {
@@ -390,6 +408,10 @@ fun FilterProductForm(
             isBioDropdownVisible = filterProductDataState.showIsBioDropdown,
             hasSugarDropdownVisible = filterProductDataState.showHasSugarDropdown,
             hasSaltDropdownVisible = filterProductDataState.showHasSaltDropdown,
+        )
+        ProductTasteCheckboxes(
+            filterProductDataState = filterProductDataState,
+            onSelect = onTasteSelect
         )
     }
 }

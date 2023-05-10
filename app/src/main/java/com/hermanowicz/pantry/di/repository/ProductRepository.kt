@@ -17,7 +17,7 @@ interface ProductRepository {
     suspend fun insert(products: List<Product>): List<Long>
     suspend fun insertRemote(products: List<Product>)
     suspend fun update(products: List<Product>)
-    suspend fun delete(products: List<Product>)
+    suspend fun delete(productIds: List<Int>)
     suspend fun deleteAllCurrentDatabase()
     suspend fun deleteAllRemote()
     suspend fun deleteAllLocal()

@@ -22,8 +22,8 @@ interface ProductDao {
     @Insert
     fun insert(products: List<ProductEntity>): List<Long>
 
-    @Delete
-    fun delete(products: List<ProductEntity>)
+    @Query("DELETE FROM products WHERE id = (:id)")
+    fun delete(id: Int)
 
     @Query("DELETE FROM products")
     fun deleteAll()

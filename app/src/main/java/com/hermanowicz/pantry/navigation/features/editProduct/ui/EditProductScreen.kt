@@ -63,7 +63,9 @@ fun EditProductScreen(
                     onHasSaltChange = { viewModel.onHasSaltChange(it) },
                     showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(it) },
                     mainCategoryItemList = viewModel.getMainCategories(),
-                    detailCategoryItemList = viewModel.getDetailCategories()
+                    detailCategoryItemList = viewModel.getDetailCategories(),
+                    onTasteSelect = { viewModel.onTasteSelect(it) },
+                    onCleanTasteRadioGroup = { viewModel.onTasteSelect("") },
                 )
             }
             item {

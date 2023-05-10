@@ -15,6 +15,7 @@ import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProduct
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
+import com.hermanowicz.pantry.utils.enums.Taste
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -97,7 +98,11 @@ class MyPantryViewModel @Inject constructor(
                     hasSalt = filterProductDataState.value.hasSalt,
                     isBio = filterProductDataState.value.isBio,
                     isVege = filterProductDataState.value.isVege,
-                    taste = filterProductDataState.value.taste
+                    sweet = filterProductDataState.value.sweet,
+                    sour = filterProductDataState.value.sour,
+                    sweetAndSour = filterProductDataState.value.sweetAndSour,
+                    salty = filterProductDataState.value.salty,
+                    spicy = filterProductDataState.value.spicy
                 )
             )
         }
@@ -281,5 +286,49 @@ class MyPantryViewModel @Inject constructor(
         return getDetailsCategoriesUseCase(
             filterProductDataState.value.ownCategories, filterProductDataState.value.mainCategory
         )
+    }
+
+    fun onTasteSelect(taste: String, bool: Boolean) {
+        when (taste) {
+            Taste.SWEET.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        sweet = bool
+                    )
+                }
+            }
+
+            Taste.SOUR.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        sour = bool
+                    )
+                }
+            }
+
+            Taste.SWEET_AND_SOUR.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        sweetAndSour = bool
+                    )
+                }
+            }
+
+            Taste.SALTY.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        salty = bool
+                    )
+                }
+            }
+
+            Taste.SPICY.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        spicy = bool
+                    )
+                }
+            }
+        }
     }
 }
