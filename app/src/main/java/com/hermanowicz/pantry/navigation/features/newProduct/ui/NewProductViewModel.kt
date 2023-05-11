@@ -3,10 +3,12 @@ package com.hermanowicz.pantry.navigation.features.newProduct.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.domain.CheckFormatIsNumberUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
-import com.hermanowicz.pantry.domain.GetGroupProductByBarcodeUseCase
+import com.hermanowicz.pantry.domain.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
@@ -34,7 +36,8 @@ class NewProductViewModel @Inject constructor(
     private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
-    private val getGroupProductByBarcodeUseCase: GetGroupProductByBarcodeUseCase,
+    private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
+    private val checkFormatIsNumberUseCase: CheckFormatIsNumberUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -43,7 +46,6 @@ class NewProductViewModel @Inject constructor(
     private val _productDataState = MutableStateFlow(NewProductState())
     var productDataState: StateFlow<NewProductState> = _productDataState.asStateFlow()
 
-    private val numberPattern = Regex("^\\d+\$")
 
     private val barcode: String = savedStateHandle["barcode"] ?: "0"
 
@@ -63,24 +65,89 @@ class NewProductViewModel @Inject constructor(
         viewModelScope.launch {
             fetchDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
-                    val groupProduct = getGroupProductByBarcodeUseCase(barcode, products)
-                    _productDataState.value = NewProductState(
-                        name = groupProduct.product.name,
-                        expirationDate = groupProduct.product.expirationDate,
-                        productionDate = groupProduct.product.productionDate,
-                        composition = groupProduct.product.composition,
-                        quantity = groupProduct.quantity.toString(),
-                        healingProperties = groupProduct.product.healingProperties,
-                        dosage = groupProduct.product.dosage,
-                        hasSugar = groupProduct.product.hasSugar,
-                        hasSalt = groupProduct.product.hasSalt,
-                        isVege = groupProduct.product.isVege,
-                        isBio = groupProduct.product.isBio,
-                        weight = groupProduct.product.weight.toString(),
-                        volume = groupProduct.product.volume.toString()
-                    )
+                    val groupProducts = getGroupProductListByBarcodeUseCase(barcode, products, null)
+                    if (groupProducts.size > 1) {
+                        onShowDialogMoreThanOneProductWithBarcode(true, groupProducts)
+                    } else if (groupProducts.size == 1) {
+                        val groupProduct = groupProducts[0]
+                        _productDataState.value = NewProductState(
+                            name = groupProduct.product.name,
+                            expirationDate = groupProduct.product.expirationDate,
+                            productionDate = groupProduct.product.productionDate,
+                            composition = groupProduct.product.composition,
+                            quantity = groupProduct.quantity.toString(),
+                            healingProperties = groupProduct.product.healingProperties,
+                            dosage = groupProduct.product.dosage,
+                            hasSugar = groupProduct.product.hasSugar,
+                            hasSalt = groupProduct.product.hasSalt,
+                            isVege = groupProduct.product.isVege,
+                            isBio = groupProduct.product.isBio,
+                            taste = groupProduct.product.taste,
+                            weight = groupProduct.product.weight.toString(),
+                            volume = groupProduct.product.volume.toString()
+                        )
+                    }
                 }
             }
+        }
+    }
+
+    private fun fetchProductData(barcode: String, productName: String) {
+        viewModelScope.launch {
+            fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeAllProductsUseCase(databaseMode).collect { products ->
+                    val groupProducts =
+                        getGroupProductListByBarcodeUseCase(barcode, products, productName)
+                    if (groupProducts.size > 1) {
+                        onShowDialogMoreThanOneProductWithBarcode(true, groupProducts)
+                    } else if (groupProducts.size == 1) {
+                        val groupProduct = groupProducts[0]
+                        _productDataState.value = NewProductState(
+                            name = groupProduct.product.name,
+                            expirationDate = groupProduct.product.expirationDate,
+                            productionDate = groupProduct.product.productionDate,
+                            composition = groupProduct.product.composition,
+                            quantity = groupProduct.quantity.toString(),
+                            healingProperties = groupProduct.product.healingProperties,
+                            dosage = groupProduct.product.dosage,
+                            hasSugar = groupProduct.product.hasSugar,
+                            hasSalt = groupProduct.product.hasSalt,
+                            isVege = groupProduct.product.isVege,
+                            isBio = groupProduct.product.isBio,
+                            taste = groupProduct.product.taste,
+                            weight = groupProduct.product.weight.toString(),
+                            volume = groupProduct.product.volume.toString()
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun onShowDialogMoreThanOneProductWithBarcode(
+        bool: Boolean,
+        groupProducts: List<GroupProduct>
+    ) {
+        _productDataState.update {
+            it.copy(
+                showDialogMoreThanOneProductWithBarcode = bool,
+                groupProductsWithBarcode = groupProducts
+            )
+        }
+        if (groupProducts.size > 1)
+            _productDataState.update {
+                it.copy(
+                    selectedProductName = groupProducts[0].product.name
+                )
+            }
+    }
+
+    fun onSelectGroupProduct(productName: String) {
+        _productDataState.update {
+            it.copy(
+                selectedProductName = productName,
+                showDropdownChooseNewProduct = false
+            )
         }
     }
 
@@ -191,7 +258,7 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (quantity.matches(numberPattern))
+        if (checkFormatIsNumberUseCase(quantity))
             _productDataState.update { it.copy(quantity = quantity) }
     }
 
@@ -208,12 +275,12 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onWeightChange(weight: String) {
-        if (weight.matches(numberPattern))
+        if (checkFormatIsNumberUseCase(weight))
             _productDataState.update { it.copy(weight = weight) }
     }
 
     fun onVolumeChange(volume: String) {
-        if (volume.matches(numberPattern))
+        if (checkFormatIsNumberUseCase(volume))
             _productDataState.update { it.copy(volume = volume) }
     }
 
@@ -274,5 +341,18 @@ class NewProductViewModel @Inject constructor(
                 taste = taste
             )
         }
+    }
+
+    fun showChooseNewProductDropdown(bool: Boolean) {
+        _productDataState.update {
+            it.copy(
+                showDropdownChooseNewProduct = bool
+            )
+        }
+    }
+
+    fun onPositiveClickProductWithBarcodeDialog() {
+        fetchProductData(barcode, productDataState.value.selectedProductName)
+        onShowDialogMoreThanOneProductWithBarcode(false, emptyList())
     }
 }

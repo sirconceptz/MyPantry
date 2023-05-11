@@ -25,7 +25,7 @@ import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonTransparent
 import com.hermanowicz.pantry.components.common.checkbox.CircleCheckbox
 import com.hermanowicz.pantry.components.common.divider.DividerCardInside
-import com.hermanowicz.pantry.components.common.dropdown.DropdownProductAttributes
+import com.hermanowicz.pantry.components.common.dropdown.DropdownPrimary
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.StorageLocation
@@ -287,7 +287,7 @@ fun FilterProductDetailsAttributesCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DropdownProductAttributes(
+                    DropdownPrimary(
                         textLeft = stringResource(id = R.string.vege),
                         mapKey = isVege,
                         itemMap = map,
@@ -303,7 +303,7 @@ fun FilterProductDetailsAttributesCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DropdownProductAttributes(
+                    DropdownPrimary(
                         textLeft = stringResource(id = R.string.bio),
                         mapKey = isBio,
                         itemMap = map,
@@ -319,7 +319,7 @@ fun FilterProductDetailsAttributesCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DropdownProductAttributes(
+                    DropdownPrimary(
                         textLeft = stringResource(id = R.string.sugar),
                         mapKey = hasSugar,
                         itemMap = map,
@@ -335,7 +335,7 @@ fun FilterProductDetailsAttributesCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    DropdownProductAttributes(
+                    DropdownPrimary(
                         textLeft = stringResource(id = R.string.salt),
                         mapKey = hasSalt,
                         itemMap = map,

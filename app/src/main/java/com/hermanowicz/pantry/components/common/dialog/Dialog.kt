@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
+import com.hermanowicz.pantry.components.common.dropdown.DropdownPrimary
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 
@@ -137,6 +138,64 @@ fun DialogAuthorInfo(
                     text = stringResource(id = R.string.author_app_website),
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun DialogChooseNewProduct(
+    label: String,
+    warning: String,
+    selectedProduct: String,
+    dropdownVisible: Boolean,
+    groupProductList: List<String>,
+    onSelectGroupProduct: (String) -> Unit,
+    showDropdown: (Boolean) -> Unit,
+    onPositiveRequest: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(LocalSpacing.current.small)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = LocalSpacing.current.medium,
+                        horizontal = LocalSpacing.current.small
+                    ),
+                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
+            ) {
+                Text(
+                    text = label,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = warning,
+                    textAlign = TextAlign.Justify
+                )
+                DropdownPrimary(
+                    value = selectedProduct,
+                    itemList = groupProductList,
+                    onClick = { showDropdown(true) },
+                    onChange = onSelectGroupProduct,
+                    visibleDropdown = dropdownVisible,
+                    onDismiss = { showDropdown(false) }
+                )
+                ButtonPrimary(
+                    text = stringResource(id = R.string.confirm), onClick = onPositiveRequest
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.close), onClick = onDismissRequest

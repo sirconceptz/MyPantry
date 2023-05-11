@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
+import com.hermanowicz.pantry.components.common.dialog.DialogChooseNewProduct
 import com.hermanowicz.pantry.components.common.dialog.DialogWarning
 import com.hermanowicz.pantry.components.common.form.NewProductForm
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
@@ -40,6 +41,24 @@ fun NewProductScreen(
             onNavigateToPrintQRCodes(state.productIdList)
             viewModel.onNavigateToPrintQRCodes(false)
         }
+    }
+
+    if (state.showDialogMoreThanOneProductWithBarcode) {
+        DialogChooseNewProduct(
+            label = stringResource(id = R.string.new_product),
+            warning = stringResource(
+                id = R.string.which_product_you_want_to_add
+            ),
+            selectedProduct = state.selectedProductName,
+            dropdownVisible = state.showDropdownChooseNewProduct,
+            groupProductList = state.groupProductsWithBarcode.map { it.product.name },
+            onSelectGroupProduct = { viewModel.onSelectGroupProduct(it) },
+            showDropdown = { viewModel.showChooseNewProductDropdown(it) },
+            onPositiveRequest = { viewModel.onPositiveClickProductWithBarcodeDialog() },
+            onDismissRequest = {
+                viewModel.onShowDialogMoreThanOneProductWithBarcode(false, emptyList())
+            }
+        )
     }
 
     if (state.showNavigateToPrintQRCodesDialog) {

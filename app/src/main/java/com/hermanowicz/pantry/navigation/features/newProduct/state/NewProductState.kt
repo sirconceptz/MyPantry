@@ -1,6 +1,7 @@
 package com.hermanowicz.pantry.navigation.features.newProduct.state
 
 import com.hermanowicz.pantry.data.model.Category
+import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
@@ -30,11 +31,15 @@ data class NewProductState(
     val taste: String = "",
     val photoName: String = "",
     val photoDescription: String = "",
-    val barcode: String = "",
+    var barcode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
     var showNavigateToPrintQRCodesDialog: Boolean = false,
+    var showDialogMoreThanOneProductWithBarcode: Boolean = false,
+    var groupProductsWithBarcode: List<GroupProduct> = emptyList(),
+    var showDropdownChooseNewProduct: Boolean = false,
     var onNavigateToMyPantry: Boolean = false,
     var onNavigateToPrintQRCodes: Boolean = false,
-    var productIdList: List<Long> = emptyList()
+    var productIdList: List<Long> = emptyList(),
+    var selectedProductName: String = ""
 )
