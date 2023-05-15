@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.receivers
 
-import android.app.IntentService
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -17,7 +16,6 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.hermanowicz.pantry.App
 import com.hermanowicz.pantry.MainActivity
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.domain.FetchDaysBeforeNotificationUseCase
