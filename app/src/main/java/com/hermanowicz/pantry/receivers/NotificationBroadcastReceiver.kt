@@ -13,7 +13,10 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.android.volley.Request
+import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.hermanowicz.pantry.App
 import com.hermanowicz.pantry.MainActivity
 import com.hermanowicz.pantry.R
@@ -99,20 +102,21 @@ private fun createEmailNotification(
     productName: String,
     daysToNotification: Int
 ) {
-    val params = HashMap<String?, String?>()
+    val params = HashMap<String, String>()
     params["to_email_address"] = emailAddressForNotifications
     params["subject"] = context.getString(R.string.notification_title)
     params["message"] = createStatement(context, productName, daysToNotification)
     val url = Constants.URL_API + Constants.API_MAIL_FILE
-    val requestJson = JsonObjectRequest(url,
-        (params as Map<*, *>?)?.let { JSONObject(it) },
+    val requestJson = JsonObjectRequest(
+        Request.Method.POST, url,
+        JSONObject((params as Map<*, *>)),
         { }) { error ->
         Timber.e(
-            "Error - Json parsing notification",
-            error.message
+            "Error - Json parsing notification " + error.message
         )
     }
-    App().addEmailToRequestQueue(requestJson)
+    val queue: RequestQueue = Volley.newRequestQueue(context)
+    queue.add(requestJson)
 }
 
 private fun createPushNotification(

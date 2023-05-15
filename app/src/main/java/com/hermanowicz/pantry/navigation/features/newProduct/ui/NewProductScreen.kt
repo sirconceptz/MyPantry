@@ -46,9 +46,7 @@ fun NewProductScreen(
     if (state.showDialogMoreThanOneProductWithBarcode) {
         DialogChooseNewProduct(
             label = stringResource(id = R.string.new_product),
-            warning = stringResource(
-                id = R.string.which_product_you_want_to_add
-            ),
+            warning = stringResource(id = R.string.which_product_you_want_to_add),
             selectedProduct = state.selectedProductName,
             dropdownVisible = state.showDropdownChooseNewProduct,
             groupProductList = state.groupProductsWithBarcode.map { it.product.name },
@@ -56,7 +54,10 @@ fun NewProductScreen(
             showDropdown = { viewModel.showChooseNewProductDropdown(it) },
             onPositiveRequest = { viewModel.onPositiveClickProductWithBarcodeDialog() },
             onDismissRequest = {
-                viewModel.onShowDialogMoreThanOneProductWithBarcode(false, emptyList())
+                viewModel.onShowDialogMoreThanOneProductWithBarcode(
+                    false,
+                    emptyList()
+                )
             }
         )
     }

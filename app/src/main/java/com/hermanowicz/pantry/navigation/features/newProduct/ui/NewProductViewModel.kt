@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.domain.CheckBarcodeIsEmptyUseCase
 import com.hermanowicz.pantry.domain.CheckFormatIsNumberUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
@@ -37,6 +38,7 @@ class NewProductViewModel @Inject constructor(
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
+    private val checkBarcodeIsEmptyUseCase: CheckBarcodeIsEmptyUseCase,
     private val checkFormatIsNumberUseCase: CheckFormatIsNumberUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -46,12 +48,11 @@ class NewProductViewModel @Inject constructor(
     private val _productDataState = MutableStateFlow(NewProductState())
     var productDataState: StateFlow<NewProductState> = _productDataState.asStateFlow()
 
-
     private val barcode: String = savedStateHandle["barcode"] ?: "0"
 
     init {
         fetchOwnCategories()
-        if (barcode != "0")
+        if (checkBarcodeIsEmptyUseCase(barcode))
             fetchProductData(barcode)
     }
 
