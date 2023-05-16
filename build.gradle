@@ -1,10 +1,12 @@
 buildscript {
     ext {
-        compose_version = '1.4.3'
+        compose_version = '1.5.0-alpha04'
         dagger_hilt_version = '2.45'
         hilt_navigation_version = '1.0.0'
         nav_version = "2.5.3"
         room_version = '2.5.1'
+        datastore_version = '1.0.0'
+        reveal_version = '1.0.2'
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.15'

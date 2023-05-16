@@ -9,12 +9,9 @@ import com.hermanowicz.pantry.di.repository.NotificationRepository
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.FetchDaysBeforeNotificationUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.receivers.NotificationBroadcastReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton

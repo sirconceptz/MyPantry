@@ -7,7 +7,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.hermanowicz.pantry.data.local.model.CategoryEntity
 import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
-import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow

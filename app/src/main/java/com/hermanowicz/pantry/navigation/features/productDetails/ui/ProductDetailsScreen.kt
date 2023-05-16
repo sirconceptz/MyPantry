@@ -25,7 +25,6 @@ import com.hermanowicz.pantry.components.common.divider.DividerCardInside
 import com.hermanowicz.pantry.components.common.dropdown.DropdownProductDetailsOptions
 import com.hermanowicz.pantry.components.common.icons.EditIcon
 import com.hermanowicz.pantry.components.common.icons.MenuIcon
-import com.hermanowicz.pantry.components.common.icons.PrintIcon
 import com.hermanowicz.pantry.components.common.loading.LoadingDialog
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.data.model.GroupProduct

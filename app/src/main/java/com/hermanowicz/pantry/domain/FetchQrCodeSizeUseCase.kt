@@ -1,7 +1,6 @@
 package com.hermanowicz.pantry.domain
 
 import com.hermanowicz.pantry.di.repository.SettingsRepository
-import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.QrCodeSize
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

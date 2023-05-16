@@ -8,8 +8,6 @@ import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
@@ -18,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject

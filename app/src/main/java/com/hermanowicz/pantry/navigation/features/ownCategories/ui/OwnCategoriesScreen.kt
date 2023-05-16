@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.cards.CategoryItemCard
 import com.hermanowicz.pantry.components.common.dialog.DialogItem
@@ -130,15 +129,18 @@ private fun updateCategoriesModel(
             Timber.d("Storage Locations UI State - Empty")
             return CategoriesModel()
         }
+
         is CategoriesUiState.Loading -> {
             Timber.d("Storage Locations UI State - Loading")
             LoadingDialog()
             return CategoriesModel()
         }
+
         is CategoriesUiState.Loaded -> {
             Timber.d("Storage Locations UI State - Success")
             return state.data
         }
+
         is CategoriesUiState.Error -> {
             Timber.d("Storage Locations UI State - Error")
             Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()

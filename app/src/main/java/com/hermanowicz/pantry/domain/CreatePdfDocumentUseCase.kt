@@ -1,7 +1,6 @@
 package com.hermanowicz.pantry.domain
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.pdf.PdfDocument
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.utils.PdfData

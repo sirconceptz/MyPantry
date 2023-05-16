@@ -6,8 +6,8 @@ import com.hermanowicz.pantry.data.settings.AppSettings
 import com.hermanowicz.pantry.domain.CheckIsUserLoggedUseCase
 import com.hermanowicz.pantry.domain.ClearDatabaseToFileUseCase
 import com.hermanowicz.pantry.domain.DeleteUserAccountUseCase
-import com.hermanowicz.pantry.domain.FetchAppSettingsUseCase
 import com.hermanowicz.pantry.domain.ExportDatabaseToCloudUseCase
+import com.hermanowicz.pantry.domain.FetchAppSettingsUseCase
 import com.hermanowicz.pantry.domain.FetchUserEmailOrUnloggedUseCase
 import com.hermanowicz.pantry.domain.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.ValidateEmailUseCase

@@ -2,9 +2,6 @@ package com.hermanowicz.pantry.domain
 
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.ProductRepository
-import com.hermanowicz.pantry.utils.enums.DatabaseMode
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UpdateProductsUseCase @Inject constructor(
