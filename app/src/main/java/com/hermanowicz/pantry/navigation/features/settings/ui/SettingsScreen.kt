@@ -139,10 +139,6 @@ fun SettingsScreen(
                         visibleDropdown = state.showCameraModeDropdown,
                         onDismiss = { viewModel.showCameraMode(false) })
                     DividerCardInside()
-                    SwitchPrimary(label = stringResource(id = R.string.scanner_sound),
-                        state = state.scannerSound,
-                        onStateChange = { viewModel.onChangeScannerSoundMode(!state.scannerSound) })
-                    DividerCardInside()
                     DropdownSettings(label = stringResource(id = R.string.qr_code_size),
                         mapKey = state.sizeQrCodes,
                         itemMap = QrCodeSize.toMap(),

@@ -7,6 +7,7 @@ import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.CheckBarcodeIsEmptyUseCase
 import com.hermanowicz.pantry.domain.CheckFormatIsNumberUseCase
+import com.hermanowicz.pantry.domain.CheckQuantityIsValidUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListByBarcodeUseCase
@@ -40,6 +41,7 @@ class NewProductViewModel @Inject constructor(
     private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
     private val checkBarcodeIsEmptyUseCase: CheckBarcodeIsEmptyUseCase,
     private val checkFormatIsNumberUseCase: CheckFormatIsNumberUseCase,
+    private val checkQuantityIsValidUseCase: CheckQuantityIsValidUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(NewProductUiState.Empty)
@@ -155,6 +157,8 @@ class NewProductViewModel @Inject constructor(
     fun onSaveClick() {
         if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
             _productDataState.update { it.copy(showErrorWrongName = true) }
+        else if (!checkQuantityIsValidUseCase(productDataState.value.quantity.toIntOrNull()))
+            _productDataState.update { it.copy(showErrorWrongQuantity = true) }
         else {
             viewModelScope.launch(Dispatchers.IO) {
                 val productIdList = saveProducts()
@@ -183,7 +187,12 @@ class NewProductViewModel @Inject constructor(
     }
 
     private fun cleanErrors() {
-        _productDataState.update { it.copy(showErrorWrongName = false) }
+        _productDataState.update {
+            it.copy(
+                showErrorWrongName = false,
+                showErrorWrongQuantity = false
+            )
+        }
     }
 
     private suspend fun saveProducts(): List<Long> {

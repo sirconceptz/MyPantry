@@ -7,7 +7,6 @@ import com.hermanowicz.pantry.utils.enums.QrCodeSize
 data class AppSettings(
     val databaseMode: String = DatabaseMode.LOCAL.name,
     val cameraMode: String = CameraMode.REAR.name,
-    val scannerSound: Boolean = true,
     val qrCodeSize: String = QrCodeSize.BIG.name,
     val daysToNotifyBeforeExpiration: Float = 3f,
     val emailForNotifications: String = "",

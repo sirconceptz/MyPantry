@@ -45,7 +45,6 @@ class SettingsViewModel @Inject constructor(
                 _settingsState.update {
                     it.copy(
                         databaseMode = appSettings.databaseMode,
-                        scannerSound = appSettings.scannerSound,
                         cameraToScanCodes = appSettings.cameraMode,
                         sizeQrCodes = appSettings.qrCodeSize,
                         daysToNotifyBeforeExpiration = appSettings.daysToNotifyBeforeExpiration,
@@ -82,7 +81,6 @@ class SettingsViewModel @Inject constructor(
         val appSettings = AppSettings(
             databaseMode = settingsState.value.databaseMode,
             cameraMode = settingsState.value.cameraToScanCodes,
-            scannerSound = settingsState.value.scannerSound,
             qrCodeSize = settingsState.value.sizeQrCodes,
             daysToNotifyBeforeExpiration = settingsState.value.daysToNotifyBeforeExpiration,
             emailForNotifications = settingsState.value.emailAddressForNotifications,
@@ -131,15 +129,6 @@ class SettingsViewModel @Inject constructor(
     fun showQrCodeSizeMode(bool: Boolean) {
         _settingsState.update {
             it.copy(showSizeQrCodesDropdown = bool)
-        }
-        updateAppSettings()
-    }
-
-    fun onChangeScannerSoundMode(scannerSound: Boolean) {
-        _settingsState.update {
-            it.copy(
-                scannerSound = scannerSound
-            )
         }
         updateAppSettings()
     }

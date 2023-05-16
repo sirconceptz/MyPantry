@@ -96,12 +96,14 @@ fun NewProductForm(
             onChangeDate = onProductionDateChange,
             pickerType = PickerType.ALL
         )
-        TextFieldAndLabel(
+        TextFieldAndLabelError(
             textfieldText = productDataState.quantity,
             labelText = stringResource(id = R.string.quantity),
             textEvent = onQuantityChange,
             placeholder = stringResource(id = R.string.quantity),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            showError = productDataState.showErrorWrongQuantity,
+            errorText = stringResource(id = R.string.error_wrong_quantity)
         )
         TextFieldAndLabel(
             textfieldText = productDataState.composition,

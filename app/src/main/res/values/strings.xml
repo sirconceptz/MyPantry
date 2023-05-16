@@ -90,7 +90,6 @@
     <string name="camera_to_scan_codes">Camera to scan codes</string>
     <string name="rear_camera">Rear camera</string>
     <string name="front_camera">Front camera</string>
-    <string name="scanner_sound">Scanner sound</string>
     <string name="export_local_database_to_cloud">Export local database to cloud</string>
     <string name="qr_code_size">Size of printed QR codes</string>
     <string name="big">Big</string>
@@ -107,27 +106,27 @@
     <string name="author_facebook" translatable="false">https://www.facebook.com/sirconceptz/</string>
     <string name="author_linkedin" translatable="false">https://www.linkedin.com/in/mateusz-hermanowicz-579064182/</string>
     <string name="author_app_website" translatable="false">https://www.mypantry.pl/kontakt/</string>
-    <string name="confirm" translatable="false">Confirm</string>
+    <string name="confirm">Confirm</string>
     <string name="statement_clear_database_warning">Do you want to clear database? All entries will be removed and the operation is irreversible.</string>
     <string name="statement_import_local_db_to_cloud_warning">Import the product database from the device to the cloud (to an internet account). CURRENTLY SAVED DATA IN THE CLOUD WILL BE DELETED AND REPLACED BY PHONE PRODUCTS.</string>
-    <string name="settings_choose_file_to_restore">Choose database file to restore</string>
     <string name="email">Email</string>
     <string name="unlogged">Unlogged</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign out</string>
     <string name="delete_account">Delete account</string>
-    <string name="statement_delete_account_warning">Are you sure you want to delete you account? This operation is irreversible. All your products, categories, storage locations and all info about you will be deleted.</string>
-    <string name="error_wrong_product_name">Wrong name length.</string>
+    <string name="statement_delete_account_warning">Are you sure you want to delete your account? This operation is irreversible. All your products, categories, storage locations, and all info about you will be deleted.</string>
+    <string name="error_wrong_product_name">Wrong name length. The maximum length is 40.</string>
+    <string name="error_wrong_quantity">The maximum quantity is 10000.</string>
     <string name="print_qr_codes">Print QR codes</string>
-    <string name="statement_would_you_like_to_print_qr_codes">Would you like to print qr codes for new added products?</string>
+    <string name="statement_would_you_like_to_print_qr_codes">Would you like to print QR codes for newly added products?</string>
     <string name="qr_codes_quantity">QR codes quantity</string>
     <string name="share_pdf_document">Share PDF document</string>
     <string name="notification_title">[My Pantry] Products expiration date is approaching</string>
-    <string name="notification_statement">%PRODUCT_NAME% is overdue. You have less than %DAYS% days to make it before this date.</string>
+    <string name="notification_statement">%PRODUCT_NAME% will be soon expired. You have less than %DAYS% days to make it before this date.</string>
     <string name="put_barcode_manually">Put barcode manually</string>
-    <string name="put_barcode_manually_statement">If you want to add new product to the database you can put the barcode manually if product was added previously by the app and barcode was scanned.</string>
+    <string name="put_barcode_manually_statement">If you want to add a new product to the database, you can manually put the barcode manually if the product was added previously by the app and the barcode was scanned.</string>
     <string name="scan_barcode">Scan barcode</string>
-    <string name="scan_barcode_statement">If you want to add new product to the database you can scan the barcode if product was added previously by the app and barcode was scanned.</string>
+    <string name="scan_barcode_statement">If you want to add a new product to the database you can scan the barcode if the product was added previously by the app and the barcode was scanned.</string>
     <string name="scan_qr_code">Scan QR code</string>
     <string name="scan_qr_code_statement">If you want to find more details about the product you can scan the qr code created previously by the app.</string>
     <string name="scan_qr_code_to_find_details">Scan qr code to find details</string>

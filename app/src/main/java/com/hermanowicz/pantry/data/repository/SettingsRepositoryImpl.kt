@@ -30,7 +30,6 @@ class SettingsRepositoryImpl @Inject constructor(
             context.dataStore.data.map { preferences ->
                 val databaseMode = preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
                 val cameraMode = preferences[CAMERA_MODE_KEY] ?: CameraMode.REAR.name
-                val scannerSoundMode = preferences[SCANNER_SOUND_MODE_KEY] ?: true
                 val qrCodeSize =
                     preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
                 val daysToNotifyBeforeExpiration =
@@ -42,7 +41,6 @@ class SettingsRepositoryImpl @Inject constructor(
                 AppSettings(
                     databaseMode = databaseMode,
                     cameraMode = cameraMode,
-                    scannerSound = scannerSoundMode,
                     daysToNotifyBeforeExpiration = daysToNotifyBeforeExpiration.toFloat(),
                     emailForNotifications = emailForNotifications,
                     qrCodeSize = qrCodeSize,
@@ -56,7 +54,6 @@ class SettingsRepositoryImpl @Inject constructor(
         context.dataStore.edit { preferences ->
             preferences[DATABASE_MODE_KEY] = appSettings.databaseMode
             preferences[CAMERA_MODE_KEY] = appSettings.cameraMode
-            preferences[SCANNER_SOUND_MODE_KEY] = appSettings.scannerSound
             preferences[SIZE_PRINTED_QR_CODES_KEY] = appSettings.qrCodeSize
             preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] =
                 appSettings.daysToNotifyBeforeExpiration.toInt()
@@ -106,7 +103,6 @@ class SettingsRepositoryImpl @Inject constructor(
         val DATABASE_MODE_KEY = stringPreferencesKey("database_mode")
         val CAMERA_MODE_KEY = stringPreferencesKey("camera_mode")
         val EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY = stringPreferencesKey("email_for_notifications")
-        val SCANNER_SOUND_MODE_KEY = booleanPreferencesKey("scanner_sound_mode")
         val DAYS_TO_NOTIFY_BEFORE_EXPIRATION = intPreferencesKey("days_to_notify_before_expiration")
         val SIZE_PRINTED_QR_CODES_KEY = stringPreferencesKey("size_printed_qr_codes")
         val PUSH_NOTIFICATIONS_KEY = booleanPreferencesKey("push_notifications")
