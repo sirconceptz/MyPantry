@@ -10,12 +10,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.cards.GroupProductItemCard
+import com.hermanowicz.pantry.components.common.dialog.DialogWarning
 import com.hermanowicz.pantry.components.common.loading.LoadingDialog
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.data.model.GroupProduct
@@ -33,6 +35,16 @@ fun MyPantryScreen(
 
     ) {
     val uiModel = updateUi(viewModel)
+    val errorSystemAlertSystemState by viewModel.errorAlertSystemState.collectAsState()
+
+    errorSystemAlertSystemState.activeErrorList.forEach { error ->
+        DialogWarning(
+            label = error.title,
+            warning = error.message,
+            onPositiveRequest = { viewModel.saveErrorAsDisplayedAndCloseDialog(error) },
+            onDismissRequest = { viewModel.saveErrorAsDisplayedAndCloseDialog(error) }
+        )
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.app_name),

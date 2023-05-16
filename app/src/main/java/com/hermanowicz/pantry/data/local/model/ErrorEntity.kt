@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
     tableName = "error"
 )
 data class ErrorEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    @PrimaryKey
     val errorCode: Int = 0
 )

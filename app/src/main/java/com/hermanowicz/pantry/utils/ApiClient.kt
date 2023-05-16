@@ -1,7 +1,7 @@
 package com.hermanowicz.pantry.utils
 
 import com.google.gson.GsonBuilder
-import com.hermanowicz.pantry.utils.Constants.URL_API
+import com.hermanowicz.pantry.utils.Constants.URL_MAIL_API
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,7 +23,7 @@ class ApiClient {
                 .build()
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
-                    .baseUrl(URL_API)
+                    .baseUrl(URL_MAIL_API)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()

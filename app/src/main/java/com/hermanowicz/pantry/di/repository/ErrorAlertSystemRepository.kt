@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.di.repository
 
+import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
 import com.hermanowicz.pantry.data.repository.ErrorAlertSystemRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -8,7 +9,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ErrorAlertSystemRepository {
-    fun observeAll(): Flow<List<Int>>
+    fun observeAllDisplayedErrors(): Flow<List<Int>>
+    suspend fun observeAllRemoteErrors(): List<ErrorAlert>
     suspend fun insert(errorCode: Int)
 }
 

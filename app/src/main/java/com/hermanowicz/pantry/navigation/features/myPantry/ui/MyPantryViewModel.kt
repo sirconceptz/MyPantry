@@ -3,13 +3,18 @@ package com.hermanowicz.pantry.navigation.features.myPantry.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
+import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
+import com.hermanowicz.pantry.domain.CheckIsErrorWasDisplayedUseCase
+import com.hermanowicz.pantry.domain.FetchActiveErrorAlertsUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
+import com.hermanowicz.pantry.domain.SaveErrorAsDisplayedUseCase
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
+import com.hermanowicz.pantry.navigation.features.myPantry.state.ErrorAlertSystemState
 import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
 import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
@@ -33,8 +38,14 @@ class MyPantryViewModel @Inject constructor(
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
-    private val getFilteredProductListUseCase: GetFilteredProductListUseCase
+    private val getFilteredProductListUseCase: GetFilteredProductListUseCase,
+    private val fetchActiveErrorAlertsUseCase: FetchActiveErrorAlertsUseCase,
+    private val checkIsErrorWasDisplayedUseCase: CheckIsErrorWasDisplayedUseCase,
+    private val saveErrorAsDisplayedUseCase: SaveErrorAsDisplayedUseCase
 ) : ViewModel() {
+    private val _errorAlertSystemState = MutableStateFlow(ErrorAlertSystemState())
+    val errorAlertSystemState: StateFlow<ErrorAlertSystemState> = _errorAlertSystemState
+
     private val _uiState = MutableStateFlow<MyPantryProductsUiState>(MyPantryProductsUiState.Empty)
     val uiState: StateFlow<MyPantryProductsUiState> = _uiState
 
@@ -44,6 +55,7 @@ class MyPantryViewModel @Inject constructor(
 
     init {
         observeProducts()
+        enableErrorAlertSystem()
     }
 
     fun observeProducts() {
@@ -328,6 +340,37 @@ class MyPantryViewModel @Inject constructor(
                         spicy = bool
                     )
                 }
+            }
+        }
+    }
+
+    private fun enableErrorAlertSystem() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val errorList = fetchActiveErrorAlertsUseCase()
+            errorList.forEach { error ->
+                val displayed = checkIsErrorWasDisplayedUseCase(error.title)
+                if (!displayed) {
+                    val newList = errorAlertSystemState.value.activeErrorList.toMutableList()
+                    newList.add(error)
+                    _errorAlertSystemState.update {
+                        it.copy(
+                            activeErrorList = newList
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun saveErrorAsDisplayedAndCloseDialog(error: ErrorAlert) {
+        viewModelScope.launch(Dispatchers.IO) {
+            saveErrorAsDisplayedUseCase(error.errorCode)
+            val newList = errorAlertSystemState.value.activeErrorList.toMutableList()
+            newList.remove(error)
+            _errorAlertSystemState.update {
+                it.copy(
+                    activeErrorList = newList
+                )
             }
         }
     }

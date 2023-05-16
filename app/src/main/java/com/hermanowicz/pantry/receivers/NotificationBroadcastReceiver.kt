@@ -104,7 +104,7 @@ private fun createEmailNotification(
     params["to_email_address"] = emailAddressForNotifications
     params["subject"] = context.getString(R.string.notification_title)
     params["message"] = createStatement(context, productName, daysToNotification)
-    val url = Constants.URL_API + Constants.API_MAIL_FILE
+    val url = Constants.URL_MAIL_API + Constants.API_MAIL_FILE
     val requestJson = JsonObjectRequest(
         Request.Method.POST, url,
         JSONObject((params as Map<*, *>)),
