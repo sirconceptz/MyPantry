@@ -26,6 +26,7 @@ import com.hermanowicz.pantry.navigation.features.printQRCodes.PrintQRCodesRoute
 import com.hermanowicz.pantry.navigation.features.productDetails.ProductDetailsRoute
 import com.hermanowicz.pantry.navigation.features.scanProduct.ScanProductRoute
 import com.hermanowicz.pantry.navigation.features.settings.SettingsRoute
+import com.hermanowicz.pantry.navigation.features.splashScreen.SplashScreenRoute
 import com.hermanowicz.pantry.navigation.features.storageLocations.StorageLocationsRoute
 import com.hermanowicz.pantry.navigation.features.storageLocations.ui.StorageLocationsViewModel
 import kotlinx.coroutines.launch
@@ -81,7 +82,7 @@ fun AppNavHost() {
             val ownCategoriesViewModel: OwnCategoriesViewModel = hiltViewModel()
             val storageLocationsViewModel: StorageLocationsViewModel = hiltViewModel()
             NavHost(
-                navController = navController, startDestination = AppScreens.MyPantry.route
+                navController = navController, startDestination = AppScreens.SplashScreen.route
             ) {
                 composable(route = AppScreens.MyPantry.route) {
                     MyPantryRoute(
@@ -122,6 +123,17 @@ fun AppNavHost() {
                     EditProductRoute(
                         onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
                         openDrawer = { openDrawer() }
+                    )
+                }
+                composable(route = "${AppScreens.EditProduct.route}/{id}") {
+                    EditProductRoute(
+                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
+                        openDrawer = { openDrawer() }
+                    )
+                }
+                composable(route = AppScreens.SplashScreen.route) {
+                    SplashScreenRoute(
+                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) }
                     )
                 }
                 composable(route = "${AppScreens.NewProduct.route}/{barcode}") {
