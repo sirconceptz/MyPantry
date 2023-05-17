@@ -1,12 +1,9 @@
 package com.hermanowicz.pantry.domain
 
 import android.content.Context
-import androidx.compose.ui.res.stringResource
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.category.detailCategory.ChemicalProductsCategoryTypes
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.category.detailCategory.FruitsCategoryTypes
 import com.hermanowicz.pantry.utils.category.detailCategory.HerbsCategoryTypes
 import com.hermanowicz.pantry.utils.category.detailCategory.LiqueursCategoryTypes
@@ -73,7 +70,7 @@ class GetDetailCategoryUseCase @Inject constructor(
                     return context.getString(category.nameResId)
                 }
             }
-            
+
             enumValues<MushroomsCategoryTypes>().forEach { category ->
                 if (category.name == product.detailCategory) {
                     return context.getString(category.nameResId)

@@ -36,7 +36,7 @@ fun DropdownCard(
 ) {
     val textRight = itemMap.getValue(mapKey)
 
-    Column() {
+    Column {
         Text(text = textLeft)
         Card(
             modifier = Modifier

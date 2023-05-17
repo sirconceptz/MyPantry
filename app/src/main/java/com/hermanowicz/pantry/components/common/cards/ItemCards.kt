@@ -178,7 +178,7 @@ fun ProductDetailsAttributesCard(
     onHasSugarChange: (Boolean) -> Unit,
     onHasSaltChange: (Boolean) -> Unit
 ) {
-    Column() {
+    Column {
         Text(text = stringResource(id = R.string.product_attributes))
         Card(
             modifier = Modifier

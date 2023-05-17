@@ -24,7 +24,7 @@ fun ProductTasteCheckboxes(
     filterProductDataState: FilterProductDataState,
     onSelect: (selected: String, bool: Boolean) -> Unit
 ) {
-    Column() {
+    Column {
         Text(text = stringResource(id = R.string.taste))
         Card(
             modifier = Modifier

@@ -79,7 +79,7 @@ fun ButtonPicker(text: String, onClick: () -> Unit) {
 @Composable
 private fun Preview() {
     Surface(color = Color.White) {
-        Column() {
+        Column {
             ButtonPrimary(text = "Test", onClick = { })
             ButtonTransparent(text = "Test", onClick = { })
             ButtonPicker(text = "Test", onClick = { })

@@ -26,7 +26,7 @@ fun ProductTasteRadioGroup(
     onSelect: (String) -> Unit,
     onCleanAll: () -> Unit
 ) {
-    Column() {
+    Column {
         Text(text = stringResource(id = R.string.taste))
         Card(
             modifier = Modifier

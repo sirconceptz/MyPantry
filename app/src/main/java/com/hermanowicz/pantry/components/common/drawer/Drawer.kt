@@ -85,7 +85,7 @@ fun AppDrawerView(
         )
     )
 
-    LazyColumn() {
+    LazyColumn {
         item {
             DrawerHeader()
         }

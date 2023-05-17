@@ -45,7 +45,7 @@ fun CircleCheckbox(
 @Composable
 fun previewCircleCheckBox() {
     Surface(color = White) {
-        Column() {
+        Column {
             CircleCheckbox(selected = true, onChecked = {})
             CircleCheckbox(selected = false, onChecked = {})
         }

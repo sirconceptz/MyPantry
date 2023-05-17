@@ -38,7 +38,7 @@ fun TextFieldAndLabel(
     singleLine: Boolean = true,
     maxLines: Int = 1,
 ) {
-    Column() {
+    Column {
         Text(text = labelText)
         TextField(
             value = textfieldText,
@@ -90,7 +90,7 @@ fun TextFieldAndLabelError(
     showError: Boolean,
     errorText: String
 ) {
-    Column() {
+    Column {
         Text(text = labelText)
         TextField(
             value = textfieldText,
@@ -125,7 +125,7 @@ fun TextFieldAndLabelError(
             keyboardActions = keyboardActions,
             visualTransformation = visualTransformation
         )
-        if(showError)
+        if (showError)
             Text(text = errorText, color = Color.Red)
     }
 }
@@ -141,7 +141,7 @@ fun TextFieldAndLabelDate(
     singleLine: Boolean = true,
     maxLines: Int = 1,
 ) {
-    Column() {
+    Column {
         Text(text = labelText)
         Box(modifier = Modifier.clickable { onClickTextfield() }) {
             TextField(
@@ -193,7 +193,7 @@ fun TextFieldDoubleAndLabelDate(
     singleLine: Boolean = true,
     maxLines: Int = 1,
 ) {
-    Column() {
+    Column {
         Text(text = labelText)
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -293,7 +293,7 @@ fun TextFieldDoubleAndLabel(
     singleLine: Boolean = true,
     maxLines: Int = 1,
 ) {
-    Column() {
+    Column {
         Text(text = labelText)
         Row(
             verticalAlignment = Alignment.CenterVertically
