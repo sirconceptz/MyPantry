@@ -21,7 +21,7 @@ import javax.inject.Inject
 class GetDetailsCategoriesUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) : (List<Category>, String) -> Map<String, String> {
-    override fun invoke(categories: List<Category>, mainCategory: String): Map<String, String> {
+    override fun invoke(ownCategories: List<Category>, mainCategory: String): Map<String, String> {
         val map: MutableMap<String, String> = mutableMapOf()
         if (mainCategory.isEmpty())
             enumValues<ChooseCategoryTypes>().forEach { category ->
@@ -37,7 +37,7 @@ class GetDetailsCategoriesUseCase @Inject constructor(
 
                 MainCategories.OWN_CATEGORIES -> {
                     map["CHOOSE"] = context.getString(MainCategories.CHOOSE.nameResId)
-                    categories.forEach { category ->
+                    ownCategories.forEach { category ->
                         map[category.name] = category.name
                     }
                 }

@@ -12,7 +12,7 @@ import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
-import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.SaveProductsUseCase
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
@@ -35,7 +35,8 @@ class NewProductViewModel @Inject constructor(
     private val saveProductsUseCase: SaveProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
-    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
+    private val observeDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
@@ -60,7 +61,11 @@ class NewProductViewModel @Inject constructor(
 
     private fun fetchOwnCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            _productDataState.update { it.copy(ownCategories = getOwnCategoriesUseCase()) }
+            observeDatabaseModeUseCase().collect { databaseMode ->
+                observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
+                    _productDataState.update { it.copy(ownCategories = ownCategories) }
+                }
+            }
         }
     }
 
@@ -129,7 +134,7 @@ class NewProductViewModel @Inject constructor(
 
     fun onShowDialogMoreThanOneProductWithBarcode(
         bool: Boolean,
-        groupProducts: List<GroupProduct>
+        groupProducts: List<GroupProduct> = emptyList()
     ) {
         _productDataState.update {
             it.copy(
@@ -363,6 +368,6 @@ class NewProductViewModel @Inject constructor(
 
     fun onPositiveClickProductWithBarcodeDialog() {
         fetchProductData(barcode, productDataState.value.selectedProductName)
-        onShowDialogMoreThanOneProductWithBarcode(false, emptyList())
+        onShowDialogMoreThanOneProductWithBarcode(false)
     }
 }

@@ -14,7 +14,6 @@ interface CategoryRepository {
     fun observeAll(databaseMode: DatabaseMode): Flow<List<Category>>
     fun getAllLocal(): List<Category>
     fun getMainCategories(): Map<String, String>
-    fun getOwnCategories(): List<Category>
     suspend fun getLastId(databaseMode: DatabaseMode): Int
     suspend fun insert(category: Category)
     suspend fun insertRemote(category: Category)

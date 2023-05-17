@@ -8,7 +8,7 @@ import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
-import com.hermanowicz.pantry.domain.GetOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
@@ -33,7 +33,8 @@ class EditProductViewModel @Inject constructor(
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
-    private val getOwnCategoriesUseCase: GetOwnCategoriesUseCase,
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
+    private val observeDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val savedStateHandle: SavedStateHandle,
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
 ) : ViewModel() {
@@ -54,7 +55,11 @@ class EditProductViewModel @Inject constructor(
 
     private fun fetchOwnCategories() {
         viewModelScope.launch(Dispatchers.IO) {
-            _productDataState.update { it.copy(ownCategories = getOwnCategoriesUseCase()) }
+            observeDatabaseModeUseCase().collect { databaseMode ->
+                observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
+                    _productDataState.update { it.copy(ownCategories = ownCategories) }
+                }
+            }
         }
     }
 

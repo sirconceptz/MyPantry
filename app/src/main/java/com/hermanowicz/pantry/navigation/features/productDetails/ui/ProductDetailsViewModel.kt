@@ -8,6 +8,7 @@ import com.hermanowicz.pantry.domain.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.DeleteProductsUseCase
 import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
+import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.ParseDeprecatedDatabaseProductsUseCase
 import com.hermanowicz.pantry.domain.StartBarcodeScannerUseCase
@@ -32,6 +33,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
     private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase,
     private val parseDeprecatedDatabaseProductsUseCase: ParseDeprecatedDatabaseProductsUseCase,
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
     private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val deleteProductsUseCase: DeleteProductsUseCase
@@ -58,28 +60,32 @@ class ProductDetailsViewModel @Inject constructor(
             try {
                 fetchDatabaseModeUseCase().collect { databaseMode ->
                     observeAllProductsUseCase(databaseMode).collect { products ->
-                        val parsedProducts = parseDeprecatedDatabaseProductsUseCase(products)
-                        if (checkIsProductsHashcodeCorrectUseCase(
-                                productId,
-                                productHashcode,
-                                products
-                            )
-                        ) {
-                            groupProduct = getGroupProductByIdUseCase(
-                                productId,
-                                parsedProducts
-                            )
-                            _uiState.value = ProductDetailsUiState.Loaded(
-                                ProductDetailsModel(
-                                    groupProduct = groupProduct,
-                                    loadingVisible = false
+                        observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
+                            val parsedProducts =
+                                parseDeprecatedDatabaseProductsUseCase(products, ownCategories)
+                            if (checkIsProductsHashcodeCorrectUseCase(
+                                    productId,
+                                    productHashcode,
+                                    products
                                 )
-                            )
-                        } else {
-                            if (!state.value.onNavigateToMyPantry) {
-                                _uiState.value = ProductDetailsUiState.Error("No correct product")
-                            } else
-                                _uiState.value = ProductDetailsUiState.Empty
+                            ) {
+                                groupProduct = getGroupProductByIdUseCase(
+                                    productId,
+                                    parsedProducts
+                                )
+                                _uiState.value = ProductDetailsUiState.Loaded(
+                                    ProductDetailsModel(
+                                        groupProduct = groupProduct,
+                                        loadingVisible = false
+                                    )
+                                )
+                            } else {
+                                if (!state.value.onNavigateToMyPantry) {
+                                    _uiState.value =
+                                        ProductDetailsUiState.Error("No correct product")
+                                } else
+                                    _uiState.value = ProductDetailsUiState.Empty
+                            }
                         }
                     }
                 }

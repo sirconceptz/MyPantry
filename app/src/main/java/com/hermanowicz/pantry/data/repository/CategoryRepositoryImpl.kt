@@ -61,10 +61,6 @@ class CategoryRepositoryImpl @Inject constructor(
         return map
     }
 
-    override fun getOwnCategories(): List<Category> {
-        return localDataSource.getAll().map { categoriesEntity -> categoriesEntity.toDomainModel() }
-    }
-
     override suspend fun getLastId(databaseMode: DatabaseMode): Int {
         return observeAll(databaseMode).map { categories ->
             categories.maxOf { it.id }
