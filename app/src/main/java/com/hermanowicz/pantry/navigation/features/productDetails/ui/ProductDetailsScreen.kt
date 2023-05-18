@@ -40,6 +40,7 @@ fun ProductDetailsScreen(
     openDrawer: () -> Unit,
     onClickPrintQrCodes: (List<Int>) -> Unit,
     onClickEditProducts: (Int) -> Unit,
+    onClickAddPhoto: (List<Int>) -> Unit,
     onNavigateToMyPantry: () -> Unit,
     viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
@@ -65,6 +66,11 @@ fun ProductDetailsScreen(
     if (state.onAddBarcode) {
         launcherAddBarcode.launch(cameraPermissions.toTypedArray())
         viewModel.onAddBarcode(false)
+    }
+
+    if (state.onNavigateToAddPhoto) {
+        onClickAddPhoto(uiModel.groupProduct.idList)
+        viewModel.onNavigateToAddPhoto(false)
     }
 
     if (state.onNavigateToEditProduct) {

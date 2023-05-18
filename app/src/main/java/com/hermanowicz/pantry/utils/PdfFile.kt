@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.utils
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.pdf.PdfDocument
@@ -11,8 +10,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 
 object PdfFile {
     const val PDF_PATH = "Download/MyPantry"
@@ -45,11 +42,6 @@ object PdfFile {
         } catch (e: IOException) {
             Timber.tag("Can't save the PDF file").e(e.toString())
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun generatePdfFileName(): String {
-        return SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) + ".pdf"
     }
 
     fun getPdfFile(fileName: String): File {

@@ -7,7 +7,7 @@ import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.di.local.dataSource.CategoryLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
 import com.hermanowicz.pantry.di.repository.CategoryRepository
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,7 +22,7 @@ import javax.inject.Singleton
 class CategoryRepositoryImpl @Inject constructor(
     private val localDataSource: CategoryLocalDataSource,
     private val remoteDataSource: CategoryRemoteDataSource,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     @ApplicationContext private val context: Context
 ) : CategoryRepository {
     override fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Category> {
@@ -68,7 +68,7 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(category: Category) {
-        if (fetchDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
+        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
             localDataSource.insert(category.toEntityModel())
         else {
             val id = getLastId(DatabaseMode.ONLINE) + 1
@@ -81,7 +81,7 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(category: Category) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.update(category.toEntityModel())
         else
@@ -89,7 +89,7 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun delete(category: Category) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.delete(category.toEntityModel())
         else
@@ -97,7 +97,7 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllCurrentDatabase() {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.deleteAll()
         else

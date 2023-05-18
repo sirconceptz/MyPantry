@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.domain.DeleteStorageLocationUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.SaveStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.UpdateStorageLocationUseCase
@@ -26,7 +26,7 @@ class StorageLocationsViewModel @Inject constructor(
     private val saveStorageLocationsUseCase: SaveStorageLocationsUseCase,
     private val deleteStorageLocationUseCase: DeleteStorageLocationUseCase,
     private val updateStorageLocationUseCase: UpdateStorageLocationUseCase,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<StorageLocationsUiState>(StorageLocationsUiState.Empty)
     val uiState: StateFlow<StorageLocationsUiState> = _uiState
@@ -43,7 +43,7 @@ class StorageLocationsViewModel @Inject constructor(
         _uiState.value = StorageLocationsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeDatabaseModeUseCase().collect { databaseMode ->
                     observeAllStorageLocationsUseCase(databaseMode).collect {
                         _uiState.value = StorageLocationsUiState.Loaded(
                             StorageLocationsModel(

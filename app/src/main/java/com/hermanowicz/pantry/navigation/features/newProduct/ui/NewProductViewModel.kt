@@ -8,7 +8,7 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.CheckBarcodeIsEmptyUseCase
 import com.hermanowicz.pantry.domain.CheckFormatIsNumberUseCase
 import com.hermanowicz.pantry.domain.CheckQuantityIsValidUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.GetMainCategoriesUseCase
@@ -36,8 +36,8 @@ class NewProductViewModel @Inject constructor(
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
-    private val observeDatabaseModeUseCase: FetchDatabaseModeUseCase,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
+    private val fetchDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
     private val checkBarcodeIsEmptyUseCase: CheckBarcodeIsEmptyUseCase,

@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.domain.CreatePdfDocumentUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.GetProductListByIdsProductsUseCase
 import com.hermanowicz.pantry.navigation.features.printQRCodes.state.PrintQRCodesUiState
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PrintQRCodesViewModel @Inject constructor(
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val getProductListByIdsProductsUseCase: GetProductListByIdsProductsUseCase,
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase,
     private val createPdfDocumentUseCase: CreatePdfDocumentUseCase,
@@ -42,7 +42,7 @@ class PrintQRCodesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 combine(
-                    fetchDatabaseModeUseCase(),
+                    observeDatabaseModeUseCase(),
                     fetchQrCodeSizeUseCase()
                 ) { databaseMode, qrCodeSize ->
                     getProductListByIdsProductsUseCase(
@@ -67,13 +67,6 @@ class PrintQRCodesViewModel @Inject constructor(
 //                    )
 //                }
             }
-        }
-    }
-
-
-    fun onNavigateBack(bool: Boolean) {
-        _uiState.update {
-            it.copy(onNavigateBack = bool)
         }
     }
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.domain.DeleteCategoryUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
@@ -26,7 +26,7 @@ class OwnCategoriesViewModel @Inject constructor(
     private val saveCategoryUseCase: SaveCategoryUseCase,
     private val updateCategoryUseCase: UpdateCategoryUseCase,
     private val deleteCategoryUseCase: DeleteCategoryUseCase,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Empty)
     val uiState: StateFlow<CategoriesUiState> = _uiState
@@ -43,7 +43,7 @@ class OwnCategoriesViewModel @Inject constructor(
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeDatabaseModeUseCase().collect { databaseMode ->
                     observeAllOwnCategoriesUseCase(databaseMode).collect {
                         _uiState.value = CategoriesUiState.Loaded(
                             CategoriesModel(

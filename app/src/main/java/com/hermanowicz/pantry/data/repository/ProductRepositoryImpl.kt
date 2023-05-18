@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.local.dataSource.ProductLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.ProductRemoteDataSource
 import com.hermanowicz.pantry.di.repository.ProductRepository
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 class ProductRepositoryImpl @Inject constructor(
     private val localDataSource: ProductLocalDataSource,
     private val remoteDataSource: ProductRemoteDataSource,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ProductRepository {
     override fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Product> {
         return if (databaseMode == DatabaseMode.LOCAL) {
@@ -60,7 +60,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(products: List<Product>): List<Long> {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         var id = getLastId(DatabaseMode.ONLINE)
         return if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.insert(products.map { product -> product.toEntityModel() })
@@ -77,7 +77,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(products: List<Product>) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.update(products.map { product -> product.toEntityModel() })
         else
@@ -85,7 +85,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun delete(productIds: List<Int>) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.delete(productIds)
         else
@@ -93,7 +93,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllCurrentDatabase() {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.deleteAll()
         else

@@ -6,12 +6,9 @@ import com.hermanowicz.pantry.utils.Permissions
 
 @Composable
 fun PrintQRCodesRoute(
-    openDrawer: () -> Unit,
-    onNavigateBack: () -> Unit
+    openDrawer: () -> Unit
 ) {
     PrintQRCodesScreen(
-        openDrawer = openDrawer,
-        onNavigateBack = onNavigateBack,
-        writePermissions = Permissions.writePermissions
+        openDrawer = openDrawer
     )
 }

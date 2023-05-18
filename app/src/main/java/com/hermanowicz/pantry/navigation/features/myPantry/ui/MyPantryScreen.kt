@@ -62,7 +62,7 @@ fun MyPantryScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = LocalSpacing.current.medium)
+                .padding(horizontal = LocalSpacing.current.small)
         ) {
             item {
                 ShowProducts(uiModel.groupsProduct, onClickGroupProduct)

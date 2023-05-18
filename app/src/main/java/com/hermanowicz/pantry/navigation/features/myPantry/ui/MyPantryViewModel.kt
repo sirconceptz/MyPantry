@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
 import com.hermanowicz.pantry.domain.CheckIsErrorWasDisplayedUseCase
 import com.hermanowicz.pantry.domain.FetchActiveErrorAlertsUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductListUseCase
@@ -37,7 +37,7 @@ class MyPantryViewModel @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val getFilteredProductListUseCase: GetFilteredProductListUseCase,
     private val fetchActiveErrorAlertsUseCase: FetchActiveErrorAlertsUseCase,
     private val checkIsErrorWasDisplayedUseCase: CheckIsErrorWasDisplayedUseCase,
@@ -62,7 +62,7 @@ class MyPantryViewModel @Inject constructor(
         _uiState.value = MyPantryProductsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeDatabaseModeUseCase().collect { databaseMode ->
                     observeAllProductsUseCase(databaseMode).map { products ->
                         getFilteredProductListUseCase(
                             products,

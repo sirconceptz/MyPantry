@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.domain.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.DeleteProductsUseCase
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
@@ -30,7 +30,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
     private val getGroupProductByIdUseCase: GetGroupProductByIdUseCase,
     private val savedStateHandle: SavedStateHandle,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase,
     private val parseDeprecatedDatabaseProductsUseCase: ParseDeprecatedDatabaseProductsUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
@@ -58,7 +58,7 @@ class ProductDetailsViewModel @Inject constructor(
         _uiState.value = ProductDetailsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                fetchDatabaseModeUseCase().collect { databaseMode ->
+                observeDatabaseModeUseCase().collect { databaseMode ->
                     observeAllProductsUseCase(databaseMode).collect { products ->
                         observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
                             val parsedProducts =
@@ -99,6 +99,10 @@ class ProductDetailsViewModel @Inject constructor(
         when (option) {
             ProductDetailsOption.ADD_BARCODE.name -> {
                 onAddBarcode(true)
+            }
+
+            ProductDetailsOption.ADD_PHOTO.name -> {
+                onNavigateToAddPhoto(true)
             }
 
             ProductDetailsOption.PRINT_QR_CODES.name -> {
@@ -151,6 +155,12 @@ class ProductDetailsViewModel @Inject constructor(
     fun onNavigateToPrintQrCodes(bool: Boolean) {
         _state.update {
             it.copy(onNavigateToPrintQrCodes = bool)
+        }
+    }
+
+    fun onNavigateToAddPhoto(bool: Boolean) {
+        _state.update {
+            it.copy(onNavigateToAddPhoto = bool)
         }
     }
 

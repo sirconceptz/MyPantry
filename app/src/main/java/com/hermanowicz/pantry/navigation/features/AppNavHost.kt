@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hermanowicz.pantry.components.common.drawer.AppDrawerView
+import com.hermanowicz.pantry.navigation.features.addPhoto.AddPhotoRoute
 import com.hermanowicz.pantry.navigation.features.editProduct.EditProductRoute
 import com.hermanowicz.pantry.navigation.features.filterProduct.FilterProductRoute
 import com.hermanowicz.pantry.navigation.features.myPantry.MyPantryRoute
@@ -116,12 +117,15 @@ fun AppNavHost() {
                                 }"
                             )
                         },
-                        openDrawer = { openDrawer() }
-                    )
-                }
-                composable(route = "${AppScreens.EditProduct.route}/{id}") {
-                    EditProductRoute(
-                        onNavigateToMyPantry = { navController.navigate(AppScreens.MyPantry.route) },
+                        onNavigateToAddPhoto = {
+                            navController.navigate(
+                                "${AppScreens.AddPhoto.route}/${
+                                    it.joinToString(
+                                        ";"
+                                    )
+                                }"
+                            )
+                        },
                         openDrawer = { openDrawer() }
                     )
                 }
@@ -153,8 +157,11 @@ fun AppNavHost() {
                 }
                 composable(route = "${AppScreens.PrintQRCodes.route}/{productIdList}") {
                     PrintQRCodesRoute(
-                        openDrawer = { openDrawer() },
-                        onNavigateBack = { navController.popBackStack() })
+                        openDrawer = { openDrawer() })
+                }
+                composable(route = "${AppScreens.AddPhoto.route}/{productIdList}") {
+                    AddPhotoRoute(
+                        openDrawer = { openDrawer() })
                 }
                 composable(route = AppScreens.OwnCategories.route) {
                     OwnCategoriesRoute(

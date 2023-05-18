@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.NotificationRepository
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.FetchDaysBeforeNotificationUseCase
 import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.receivers.NotificationBroadcastReceiver
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 class NotificationRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fetchDaysBeforeNotificationUseCase: FetchDaysBeforeNotificationUseCase,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase,
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase
 ) : NotificationRepository {
     override suspend fun createNotification(products: List<Product>) {
@@ -65,7 +65,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createNotificationForAllProducts() {
-        fetchDatabaseModeUseCase().collect { databaseMode ->
+        observeDatabaseModeUseCase().collect { databaseMode ->
             observeAllProductsUseCase(databaseMode).collect { products ->
                 createNotification(products)
             }
@@ -73,7 +73,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun cancelNotificationForAllProducts() {
-        fetchDatabaseModeUseCase().collect { databaseMode ->
+        observeDatabaseModeUseCase().collect { databaseMode ->
             observeAllProductsUseCase(databaseMode).collect { products ->
                 cancelNotification(products)
             }

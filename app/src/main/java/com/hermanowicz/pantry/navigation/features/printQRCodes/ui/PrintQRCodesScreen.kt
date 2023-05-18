@@ -34,21 +34,16 @@ import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.domain.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.PdfFile
+import com.hermanowicz.pantry.utils.Permissions
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PrintQRCodesScreen(
     openDrawer: () -> Unit,
-    onNavigateBack: () -> Unit,
-    viewModel: PrintQRCodesViewModel = hiltViewModel(),
-    writePermissions: List<String>
+    viewModel: PrintQRCodesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(key1 = uiState.onNavigateBack) {
-        //onNavigateBack()
-        //viewModel.onNavigateBack(false)
-    }
+    val writePermissions = Permissions.writePermissions
 
     val launcherPrintQrCodes =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->

@@ -139,4 +139,6 @@
     <string name="are_you_sure">Jesteś pewny?</string>
     <string name="delete_product_warning">Czy chcesz usunąć ten produkt?</string>
     <string name="which_product_you_want_to_add">Który produkt chcesz dodać?</string>
+    <string name="add_photo">Dodaj zdjęcie</string>
+    <string name="take_photo">Zrób zdjęcie</string>
 </resources>

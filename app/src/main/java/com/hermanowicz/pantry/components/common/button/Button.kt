@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.components.common.button
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,18 +24,22 @@ import com.hermanowicz.pantry.ui.theme.Shapes
 
 @Composable
 fun ButtonPrimary(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit
 ) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp)
-            .padding(vertical = LocalSpacing.current.tiny),
-        onClick = onClick
-    ) {
-        Text(text = text)
+    Box(modifier = modifier) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp)
+                .padding(vertical = LocalSpacing.current.tiny),
+            onClick = onClick
+        ) {
+            Text(text = text)
+        }
     }
+
 }
 
 @Composable

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class FetchDatabaseModeUseCase @Inject constructor(
+class ObserveDatabaseModeUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : () -> Flow<DatabaseMode> {
     override fun invoke(): Flow<DatabaseMode> {

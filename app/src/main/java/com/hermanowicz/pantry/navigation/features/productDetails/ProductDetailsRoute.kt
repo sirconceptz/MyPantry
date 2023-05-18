@@ -6,6 +6,7 @@ import com.hermanowicz.pantry.navigation.features.productDetails.ui.ProductDetai
 @Composable
 fun ProductDetailsRoute(
     onNavigateToEditProducts: (Int) -> Unit,
+    onNavigateToAddPhoto: (List<Int>) -> Unit,
     onNavigateToPrintQrCodes: (List<Int>) -> Unit,
     onNavigateToMyPantry: () -> Unit,
     openDrawer: () -> Unit
@@ -14,6 +15,7 @@ fun ProductDetailsRoute(
         openDrawer = openDrawer,
         onClickEditProducts = onNavigateToEditProducts,
         onNavigateToMyPantry = onNavigateToMyPantry,
-        onClickPrintQrCodes = onNavigateToPrintQrCodes
+        onClickPrintQrCodes = onNavigateToPrintQrCodes,
+        onClickAddPhoto = onNavigateToAddPhoto
     )
 }

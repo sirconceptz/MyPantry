@@ -14,10 +14,11 @@ import javax.inject.Inject
 
 class CreatePdfDocumentUseCase @Inject constructor(
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase,
+    private val getFileNameUseCase: GetFileNameUseCase,
     @ApplicationContext private val context: Context
 ) : suspend (List<Product>) -> String {
     override suspend fun invoke(products: List<Product>): String {
-        val pdfFileName = PdfFile.generatePdfFileName()
+        val pdfFileName = getFileNameUseCase("pdf")
         val qrCodeSize = fetchQrCodeSizeUseCase().first()
         val productLabelList: List<ProductLabel> =
             PrintQRData.getProductLabelList(products, qrCodeSize)

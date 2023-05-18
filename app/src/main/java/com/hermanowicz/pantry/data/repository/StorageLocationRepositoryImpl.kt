@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.di.local.dataSource.StorageLocationLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.StorageLocationRemoteDataSource
 import com.hermanowicz.pantry.di.repository.StorageLocationRepository
-import com.hermanowicz.pantry.domain.FetchDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 class StorageLocationRepositoryImpl @Inject constructor(
     private val localDataSource: StorageLocationLocalDataSource,
     private val remoteDataSource: StorageLocationRemoteDataSource,
-    private val fetchDatabaseModeUseCase: FetchDatabaseModeUseCase
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : StorageLocationRepository {
     override fun observeById(id: Int, databaseMode: DatabaseMode): Flow<StorageLocation> {
         return localDataSource.observeById(id).filterNotNull().map { storageLocationEntity ->
@@ -50,7 +50,7 @@ class StorageLocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(storageLocation: StorageLocation) {
-        if (fetchDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
+        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
             localDataSource.insert(storageLocation.toEntityModel())
         else {
             val id = getLastId(DatabaseMode.ONLINE) + 1
@@ -63,7 +63,7 @@ class StorageLocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun update(storageLocation: StorageLocation) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.update(storageLocation.toEntityModel())
         else
@@ -71,7 +71,7 @@ class StorageLocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun delete(storageLocation: StorageLocation) {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.delete(storageLocation.toEntityModel())
         else
@@ -79,7 +79,7 @@ class StorageLocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllCurrentDatabase() {
-        val databaseMode = fetchDatabaseModeUseCase().first()
+        val databaseMode = observeDatabaseModeUseCase().first()
         if (databaseMode == DatabaseMode.LOCAL)
             localDataSource.deleteAll()
         else

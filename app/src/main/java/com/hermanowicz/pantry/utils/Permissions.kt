@@ -24,4 +24,6 @@ object Permissions {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
+
+    val cameraAndWritePermissions = listOf(cameraPermissions, writePermissions).flatten()
 }
