@@ -11,6 +11,8 @@ import java.io.File
 interface PhotoRepository {
     fun createAndGetPhotoFile(): File?
     fun decodePhotoFromGallery(fileName: String): Bitmap?
+    fun decodeStringToBitmap(string: String): Bitmap
+    fun encodeImageToString(bm: Bitmap): String
     var fileName: String?
 }
 

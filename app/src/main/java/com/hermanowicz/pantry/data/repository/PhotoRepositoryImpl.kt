@@ -5,10 +5,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Environment
+import android.util.Base64
 import com.hermanowicz.pantry.di.repository.PhotoRepository
 import com.hermanowicz.pantry.utils.Constants.PHOTO_DIRECTORY
 import com.hermanowicz.pantry.utils.Constants.PHOTO_EXTENSION
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -49,5 +51,19 @@ class PhotoRepositoryImpl @Inject constructor(
         return context.getExternalFilesDir(
             Environment.DIRECTORY_PICTURES + File.separator + PHOTO_DIRECTORY
         )
+    }
+
+    override fun decodeStringToBitmap(string: String): Bitmap {
+        val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+    }
+
+    override fun encodeImageToString(bm: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        val encoded = Base64.encodeToString(b, Base64.DEFAULT)
+        fileName = encoded
+        return encoded
     }
 }

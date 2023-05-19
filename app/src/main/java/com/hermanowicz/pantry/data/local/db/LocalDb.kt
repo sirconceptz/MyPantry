@@ -15,7 +15,6 @@ const val LOCAL_DB_NAME = "MyPantry.db"
         ProductEntity::class,
         CategoryEntity::class,
         StorageLocationEntity::class,
-        PhotoEntity::class,
         ErrorEntity::class
     ],
     version = 1

@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.domain.CreateAndGetPhotoFileUseCase
 import com.hermanowicz.pantry.domain.DecodePhotoFromGalleryUseCase
+import com.hermanowicz.pantry.domain.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.GetPhotoFileNameUseCase
 import com.hermanowicz.pantry.domain.GetProductListByIdsProductsUseCase
 import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.SetPhotoFileUseCase
+import com.hermanowicz.pantry.domain.UpdatePhotoInProductListUseCase
 import com.hermanowicz.pantry.domain.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.addPhoto.state.AddPhotoUiState
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,14 +31,17 @@ class AddPhotoViewModel @Inject constructor(
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val createAndGetPhotoFileUseCase: CreateAndGetPhotoFileUseCase,
     private val getPhotoFileNameUseCase: GetPhotoFileNameUseCase,
-    private val updateProductsUseCase: UpdateProductsUseCase,
+    private val updatePhotoInProductListUseCase: UpdatePhotoInProductListUseCase,
     private val decodePhotoFromGalleryUseCase: DecodePhotoFromGalleryUseCase,
+    private val fetchPhotoBitmapUseCase: FetchPhotoBitmapUseCase,
     private val setPhotoFileUseCase: SetPhotoFileUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddPhotoUiState())
     var uiState: StateFlow<AddPhotoUiState> = _uiState.asStateFlow()
+
+    lateinit var databaseMode: DatabaseMode
 
     init {
         val savedProductIdList = savedStateHandle["productIdList"] ?: "0"
@@ -48,6 +54,7 @@ class AddPhotoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 observeDatabaseModeUseCase().collect { databaseMode ->
+                    this@AddPhotoViewModel.databaseMode = databaseMode
                     getProductListByIdsProductsUseCase(
                         databaseMode,
                         productIdList
@@ -60,7 +67,9 @@ class AddPhotoViewModel @Inject constructor(
                         if (products.isNotEmpty()) {
                             val fileName = products[0].photoName
                             setPhotoFileUseCase(fileName)
-                            onPhotoSavedCorrectlyInGallery(fileName)
+                            val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
+                            setPhotoPreview(photoBitmap)
+                            //onPhotoSavedCorrectlyInGallery(fileName)
                         }
                     }
                 }
@@ -106,15 +115,8 @@ class AddPhotoViewModel @Inject constructor(
 
     fun savePhotoToDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            val photoFileName = getPhotoFileNameUseCase()
-            val idList = uiState.value.productList.map { it.id }
-            val product = uiState.value.productList[0].copy(photoName = photoFileName ?: "")
-            updateProductsUseCase(
-                product,
-                idList,
-                idList.size,
-                idList.size
-            )
+            val photoFileName = getPhotoFileNameUseCase() ?: ""
+            updatePhotoInProductListUseCase(photoFileName, uiState.value.productList, databaseMode)
         }
     }
 
