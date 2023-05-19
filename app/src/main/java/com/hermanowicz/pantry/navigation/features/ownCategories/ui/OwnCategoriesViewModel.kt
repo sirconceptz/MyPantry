@@ -11,10 +11,9 @@ import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
-import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsModel
-import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,6 +43,7 @@ class OwnCategoriesViewModel @Inject constructor(
         observeCategories()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeCategories() {
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {

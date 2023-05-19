@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.navigation.features.myPantry.ui
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
@@ -24,11 +23,11 @@ import com.hermanowicz.pantry.utils.RegexFormats
 import com.hermanowicz.pantry.utils.enums.Taste
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -63,6 +62,7 @@ class MyPantryViewModel @Inject constructor(
         enableErrorAlertSystem()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun observeProducts() {
         _uiState.value = MyPantryProductsUiState.Loading
         viewModelScope.launch(Dispatchers.Default) {
