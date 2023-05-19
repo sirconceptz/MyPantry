@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -15,7 +16,11 @@ import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.QrCodeSize
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +32,14 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override val appSettings: Flow<AppSettings>
         get() =
-            context.dataStore.data.map { preferences ->
+            context.dataStore.data.catch { e ->
+                if (e is IOException) {
+                    Timber.e("PREFERENCE", "Error reading preferences", e)
+                    emit(emptyPreferences())
+                } else {
+                    throw e
+                }
+            }.map { preferences ->
                 val databaseMode = preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
                 val cameraMode = preferences[CAMERA_MODE_KEY] ?: CameraMode.REAR.name
                 val qrCodeSize =
@@ -47,7 +59,7 @@ class SettingsRepositoryImpl @Inject constructor(
                     pushNotifications = pushNotifications,
                     emailNotifications = emailNotifications
                 )
-            }
+            }.distinctUntilChanged()
 
 
     override suspend fun updateAppSettings(appSettings: AppSettings) {
@@ -67,37 +79,37 @@ class SettingsRepositoryImpl @Inject constructor(
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
-            }
+            }.distinctUntilChanged()
 
     override val qrCodeSize: Flow<String>
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
-            }
+            }.distinctUntilChanged()
 
     override val daysBeforeNotification: Flow<Int>
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] ?: 3
-            }
+            }.distinctUntilChanged()
 
     override val isPushNotificationsEnabled: Flow<Boolean>
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[PUSH_NOTIFICATIONS_KEY] ?: true
-            }
+            }.distinctUntilChanged()
 
     override val isEmailNotificationsEnabled: Flow<Boolean>
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[EMAIL_NOTIFICATIONS_KEY] ?: false
-            }
+            }.distinctUntilChanged()
 
     override val emailAddressForNotifications: Flow<String>
         get() =
             context.dataStore.data.map { preferences ->
                 preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] ?: ""
-            }
+            }.distinctUntilChanged()
 
     companion object {
         val DATABASE_MODE_KEY = stringPreferencesKey("database_mode")

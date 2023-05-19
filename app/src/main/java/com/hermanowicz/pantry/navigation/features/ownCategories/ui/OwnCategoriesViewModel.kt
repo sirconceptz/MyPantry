@@ -11,11 +11,16 @@ import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
+import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsModel
+import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,12 +44,14 @@ class OwnCategoriesViewModel @Inject constructor(
         observeCategories()
     }
 
-    fun observeCategories() {
+    private fun observeCategories() {
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeDatabaseModeUseCase().collect { databaseMode ->
-                    observeAllOwnCategoriesUseCase(databaseMode).collect {
+                observeDatabaseModeUseCase()
+                    .flatMapLatest { databaseMode ->
+                        observeAllOwnCategoriesUseCase(databaseMode)
+                    }.onEach {
                         _uiState.value = CategoriesUiState.Loaded(
                             CategoriesModel(
                                 categories = it,
@@ -52,7 +59,7 @@ class OwnCategoriesViewModel @Inject constructor(
                             )
                         )
                     }
-                }
+                    .launchIn(viewModelScope)
             } catch (e: Exception) {
                 _uiState.value = CategoriesUiState.Error(e.toString())
             }

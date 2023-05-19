@@ -41,7 +41,7 @@ class SettingsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            fetchAppSettingsUseCase().map { appSettings ->
+            fetchAppSettingsUseCase().collect { appSettings ->
                 _settingsState.update {
                     it.copy(
                         databaseMode = appSettings.databaseMode,
@@ -58,7 +58,7 @@ class SettingsViewModel @Inject constructor(
                         isUserLogged = checkIsUserLoggedUseCase()
                     )
                 }
-            }.collect()
+            }
         }
     }
 
@@ -74,7 +74,6 @@ class SettingsViewModel @Inject constructor(
             )
         }
         updateAppSettings()
-        reObserveDatabase(true)
     }
 
     private fun updateAppSettings() {
@@ -233,17 +232,6 @@ class SettingsViewModel @Inject constructor(
             exportDatabaseToCloudUseCase()
         }
         showExportDatabaseToCloudDialog(false)
-    }
-
-    fun reObserveDatabase(bool: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(2000)
-            _settingsState.update {
-                it.copy(
-                    reObserveDatabase = bool
-                )
-            }
-        }
     }
 
     fun showUserEmail() {

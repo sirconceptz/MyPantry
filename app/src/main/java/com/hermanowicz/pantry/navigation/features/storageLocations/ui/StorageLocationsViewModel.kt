@@ -8,6 +8,8 @@ import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.SaveStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.UpdateStorageLocationUseCase
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsModel
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsState
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsUiState
@@ -16,6 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,12 +45,14 @@ class StorageLocationsViewModel @Inject constructor(
         observeStorageLocations()
     }
 
-    fun observeStorageLocations() {
+    private fun observeStorageLocations() {
         _uiState.value = StorageLocationsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeDatabaseModeUseCase().collect { databaseMode ->
-                    observeAllStorageLocationsUseCase(databaseMode).collect {
+                observeDatabaseModeUseCase()
+                    .flatMapLatest { databaseMode ->
+                        observeAllStorageLocationsUseCase(databaseMode)
+                    }.onEach {
                         _uiState.value = StorageLocationsUiState.Loaded(
                             StorageLocationsModel(
                                 storageLocations = it,
@@ -52,7 +60,7 @@ class StorageLocationsViewModel @Inject constructor(
                             )
                         )
                     }
-                }
+                    .launchIn(viewModelScope)
             } catch (e: Exception) {
                 _uiState.value = StorageLocationsUiState.Error(e.toString())
             }

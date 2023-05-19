@@ -188,13 +188,6 @@ fun AppNavHost() {
                 }
                 composable(route = AppScreens.Settings.route) {
                     SettingsRoute(
-                        observeNewDatabase = {
-                            reObserveDatabases(
-                                myPantryViewModel,
-                                ownCategoriesViewModel,
-                                storageLocationsViewModel
-                            )
-                        },
                         openDrawer = { openDrawer() }
                     )
                 }
@@ -203,14 +196,4 @@ fun AppNavHost() {
     }
 
 
-}
-
-private fun reObserveDatabases(
-    myPantryViewModel: MyPantryViewModel,
-    ownCategoriesViewModel: OwnCategoriesViewModel,
-    storageLocationsViewModel: StorageLocationsViewModel
-) {
-    myPantryViewModel.observeProducts()
-    ownCategoriesViewModel.observeCategories()
-    storageLocationsViewModel.observeStorageLocations()
 }

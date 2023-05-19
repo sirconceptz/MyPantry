@@ -10,6 +10,7 @@ data class SettingsState(
     val showDatabaseModeDropdown: Boolean = false,
     val cameraToScanCodes: String = CameraMode.REAR.name,
     val showCameraModeDropdown: Boolean = false,
+    val scannerSound: Boolean = true,
     val sizeQrCodes: String = QrCodeSize.BIG.name,
     val daysToNotifyBeforeExpiration: Float = 3f,
     val emailAddressForNotifications: String = "",
@@ -24,7 +25,6 @@ data class SettingsState(
     val showChangeNotificationsEmailDialog: Boolean = false,
     val showExportDatabaseToCloudDialog: Boolean = false,
     val showSignInForm: Boolean = false,
-    val reObserveDatabase: Boolean = false,
     val isUserLogged: Boolean = false,
     val showDeleteAccountDialog: Boolean = false
 )

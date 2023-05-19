@@ -54,16 +54,10 @@ import com.hermanowicz.pantry.utils.enums.QrCodeSize
 @Composable
 fun SettingsScreen(
     openDrawer: () -> Unit,
-    observeNewDatabase: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.settingsState.collectAsState()
     val context = LocalContext.current
-
-    if (state.reObserveDatabase) {
-        observeNewDatabase()
-        viewModel.reObserveDatabase(false)
-    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.settings), openDrawer = openDrawer
@@ -260,6 +254,6 @@ fun SignInForm(state: SettingsState, hideSignInForm: () -> Unit, showUserEmail: 
 @Composable
 private fun Preview() {
     MyPantryTheme {
-        SettingsScreen({}, {})
+        SettingsScreen({})
     }
 }

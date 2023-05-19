@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.navigation.features.myPantry.ui
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
@@ -26,7 +27,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -60,15 +65,18 @@ class MyPantryViewModel @Inject constructor(
 
     fun observeProducts() {
         _uiState.value = MyPantryProductsUiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
+
             try {
-                observeDatabaseModeUseCase().collect { databaseMode ->
-                    observeAllProductsUseCase(databaseMode).map { products ->
+                observeDatabaseModeUseCase()
+                    .flatMapLatest { databaseMode ->
+                        observeAllProductsUseCase(databaseMode)
+                    }.map { products ->
                         getFilteredProductListUseCase(
                             products,
                             filterProductDataState.value.filterProduct
                         )
-                    }.collect {
+                    }.onEach {
                         _uiState.value = MyPantryProductsUiState.Loaded(
                             MyPantryModel(
                                 groupsProduct = getGroupProductListUseCase(it),
@@ -76,7 +84,7 @@ class MyPantryViewModel @Inject constructor(
                             )
                         )
                     }
-                }
+                    .launchIn(viewModelScope)
             } catch (e: Exception) {
                 _uiState.value = MyPantryProductsUiState.Error(e.toString())
             }
