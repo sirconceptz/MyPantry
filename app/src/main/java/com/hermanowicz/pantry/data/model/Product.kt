@@ -20,6 +20,5 @@ data class Product(
     val isBio: Boolean = false,
     val taste: String = "",
     val photoName: String = "",
-    val photoDescription: String = "",
     val barcode: String = ""
 )

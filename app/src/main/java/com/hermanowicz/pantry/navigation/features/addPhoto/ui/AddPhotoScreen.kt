@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.navigation.features.addPhoto.ui
 
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -22,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
-import com.hermanowicz.pantry.domain.GoToPermissionSettingsUseCase
+import com.hermanowicz.pantry.domain.settings.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.Permissions
 

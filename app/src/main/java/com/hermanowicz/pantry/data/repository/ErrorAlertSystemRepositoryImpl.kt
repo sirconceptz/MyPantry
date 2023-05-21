@@ -5,8 +5,8 @@ import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
 import com.hermanowicz.pantry.di.local.dataSource.ErrorAlertSystemLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.ErrorAlertSystemRemoteDataSource
 import com.hermanowicz.pantry.di.repository.ErrorAlertSystemRepository
-import com.hermanowicz.pantry.domain.GetErrorCodeUseCase
-import com.hermanowicz.pantry.domain.ParseHtmlToStringUseCase
+import com.hermanowicz.pantry.domain.errorAlertSystem.GetErrorCodeUseCase
+import com.hermanowicz.pantry.domain.utils.ParseHtmlToStringUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber

@@ -6,9 +6,9 @@ import android.content.Context
 import android.content.Intent
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.NotificationRepository
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.FetchDaysBeforeNotificationUseCase
-import com.hermanowicz.pantry.domain.ObserveAllProductsUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.settings.FetchDaysBeforeNotificationUseCase
+import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.receivers.NotificationBroadcastReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first

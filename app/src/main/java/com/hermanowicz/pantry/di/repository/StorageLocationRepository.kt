@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 interface StorageLocationRepository {
     fun observeById(id: Int, databaseMode: DatabaseMode): Flow<StorageLocation>
     fun observeAll(databaseMode: DatabaseMode): Flow<List<StorageLocation>>
-    fun getAllLocal(): List<StorageLocation>
     suspend fun getLastId(databaseMode: DatabaseMode): Int
     suspend fun insert(storageLocation: StorageLocation)
     suspend fun insertRemote(storageLocation: StorageLocation)

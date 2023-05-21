@@ -23,7 +23,6 @@ fun ProductEntity.toDomainModel() = Product(
     isBio = isBio,
     taste = taste,
     photoName = photoName,
-    photoDescription = photoDescription,
     barcode = barcode
 )
 
@@ -47,6 +46,5 @@ fun Product.toEntityModel() = ProductEntity(
     isBio = isBio,
     taste = taste,
     photoName = photoName,
-    photoDescription = photoDescription,
     barcode = barcode
 )

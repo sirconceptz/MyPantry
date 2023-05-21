@@ -21,7 +21,7 @@ import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
 import com.hermanowicz.pantry.components.common.dialog.DialogTextfield
 import com.hermanowicz.pantry.components.common.spacer.SpacerMedium
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
-import com.hermanowicz.pantry.domain.GoToPermissionSettingsUseCase
+import com.hermanowicz.pantry.domain.settings.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 
 @Composable

@@ -18,10 +18,10 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.hermanowicz.pantry.MainActivity
 import com.hermanowicz.pantry.R
-import com.hermanowicz.pantry.domain.FetchDaysBeforeNotificationUseCase
-import com.hermanowicz.pantry.domain.FetchEmailAddressForNotificationsUseCase
-import com.hermanowicz.pantry.domain.FetchIsEmailNotificationsEnabledUseCase
-import com.hermanowicz.pantry.domain.FetchIsPushNotificationsEnabledUseCase
+import com.hermanowicz.pantry.domain.settings.FetchDaysBeforeNotificationUseCase
+import com.hermanowicz.pantry.domain.settings.FetchEmailAddressForNotificationsUseCase
+import com.hermanowicz.pantry.domain.settings.FetchIsEmailNotificationsEnabledUseCase
+import com.hermanowicz.pantry.domain.settings.FetchIsPushNotificationsEnabledUseCase
 import com.hermanowicz.pantry.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

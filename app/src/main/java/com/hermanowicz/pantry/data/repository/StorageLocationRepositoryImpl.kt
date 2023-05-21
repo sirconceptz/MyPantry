@@ -6,9 +6,10 @@ import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.di.local.dataSource.StorageLocationLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.StorageLocationRemoteDataSource
 import com.hermanowicz.pantry.di.repository.StorageLocationRepository
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -24,18 +25,18 @@ class StorageLocationRepositoryImpl @Inject constructor(
     override fun observeById(id: Int, databaseMode: DatabaseMode): Flow<StorageLocation> {
         return localDataSource.observeById(id).filterNotNull().map { storageLocationEntity ->
             storageLocationEntity.toDomainModel()
-        }
+        }.distinctUntilChanged()
     }
 
     override fun observeAll(databaseMode: DatabaseMode): Flow<List<StorageLocation>> {
         return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.observeAll().map { storageLocationEntities ->
                 storageLocationEntities.map { storageLocationEntity -> storageLocationEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         } else {
             remoteDataSource.observeAll().map { storageLocationEntities ->
                 storageLocationEntities.map { storageLocationEntity -> storageLocationEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         }
     }
 
@@ -43,10 +44,6 @@ class StorageLocationRepositoryImpl @Inject constructor(
         return observeAll(databaseMode).map { storageLocations ->
             storageLocations.maxOf { it.id }
         }.first()
-    }
-
-    override fun getAllLocal(): List<StorageLocation> {
-        return localDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun insert(storageLocation: StorageLocation) {

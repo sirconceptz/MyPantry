@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 interface ProductRepository {
     fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Product>
     fun observeAll(databaseMode: DatabaseMode): Flow<List<Product>>
-    fun getAllLocal(): List<Product>
     suspend fun getLastId(databaseMode: DatabaseMode): Int
     suspend fun insert(products: List<Product>): List<Long>
     suspend fun insertRemote(products: List<Product>)

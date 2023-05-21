@@ -8,6 +8,7 @@ enum class Taste(val nameResId: Int) {
     SWEET(R.string.sweet),
     SOUR(R.string.sour),
     SWEET_AND_SOUR(R.string.sweet_and_sour),
+    BITTER(R.string.bitter),
     SALTY(R.string.salty),
     SPICY(R.string.spicy);
 

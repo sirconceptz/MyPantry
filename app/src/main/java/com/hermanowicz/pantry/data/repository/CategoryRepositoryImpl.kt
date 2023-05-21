@@ -7,11 +7,12 @@ import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.di.local.dataSource.CategoryLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
 import com.hermanowicz.pantry.di.repository.CategoryRepository
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -29,11 +30,11 @@ class CategoryRepositoryImpl @Inject constructor(
         return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.observeById(id).filterNotNull().map { categoryEntity ->
                 categoryEntity.toDomainModel()
-            }
+            }.distinctUntilChanged()
         } else {
             remoteDataSource.observeById(id).filterNotNull().map { categoryEntity ->
                 categoryEntity.toDomainModel()
-            }
+            }.distinctUntilChanged()
         }
     }
 
@@ -41,16 +42,12 @@ class CategoryRepositoryImpl @Inject constructor(
         return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.observeAll().map { categoryEntities ->
                 categoryEntities.map { categoryEntity -> categoryEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         } else {
             remoteDataSource.observeAll().map { categoryEntities ->
                 categoryEntities.map { categoryEntity -> categoryEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         }
-    }
-
-    override fun getAllLocal(): List<Category> {
-        return localDataSource.getAll().map { it.toDomainModel() }
     }
 
     override fun getMainCategories(): Map<String, String> {

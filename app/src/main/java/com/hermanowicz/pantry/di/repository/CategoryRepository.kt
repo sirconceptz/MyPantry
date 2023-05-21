@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 interface CategoryRepository {
     fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Category>
     fun observeAll(databaseMode: DatabaseMode): Flow<List<Category>>
-    fun getAllLocal(): List<Category>
     fun getMainCategories(): Map<String, String>
     suspend fun getLastId(databaseMode: DatabaseMode): Int
     suspend fun insert(category: Category)

@@ -3,11 +3,11 @@ package com.hermanowicz.pantry.navigation.features.ownCategories.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Category
-import com.hermanowicz.pantry.domain.DeleteCategoryUseCase
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.ObserveAllOwnCategoriesUseCase
-import com.hermanowicz.pantry.domain.SaveCategoryUseCase
-import com.hermanowicz.pantry.domain.UpdateCategoryUseCase
+import com.hermanowicz.pantry.domain.category.DeleteCategoryUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.SaveCategoryUseCase
+import com.hermanowicz.pantry.domain.category.UpdateCategoryUseCase
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState

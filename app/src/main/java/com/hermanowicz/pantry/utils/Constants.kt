@@ -6,7 +6,6 @@ object Constants {
     const val URL_MAIL_API = "https://www.mypantry.pl/api/"
     const val URL_ERROR_ALERT_SYSTEM_API = "https://www.mypantry.pl/wp-json/wp/v2/"
     const val API_MAIL_FILE = "mail.php"
-    const val REQUEST_IMAGE_CAPTURE_CODE = 15
     const val PHOTO_EXTENSION = ".jpg"
     const val PHOTO_DIRECTORY = "MyPantry"
 }

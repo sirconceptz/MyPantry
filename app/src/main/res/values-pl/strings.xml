@@ -133,6 +133,7 @@
     <string name="taste">Smak</string>
     <string name="sour">Kwaśny</string>
     <string name="sweet_and_sour">Słodko-kwaśny</string>
+    <string name="bitter">Gorzki</string>
     <string name="salty">Słony</string>
     <string name="spicy">Pikantny</string>
     <string name="add_barcode">Dodaj kod kreskowy</string>

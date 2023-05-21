@@ -6,9 +6,10 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.local.dataSource.ProductLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.ProductRemoteDataSource
 import com.hermanowicz.pantry.di.repository.ProductRepository
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -25,11 +26,11 @@ class ProductRepositoryImpl @Inject constructor(
         return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.observeById(id).filterNotNull().map { productEntity ->
                 productEntity.toDomainModel()
-            }
+            }.distinctUntilChanged()
         } else {
             remoteDataSource.observeById(id).filterNotNull().map { productEntity ->
                 productEntity.toDomainModel()
-            }
+            }.distinctUntilChanged()
         }
     }
 
@@ -37,16 +38,12 @@ class ProductRepositoryImpl @Inject constructor(
         return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.observeAll().map { productEntities ->
                 productEntities.map { productEntity -> productEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         } else {
             remoteDataSource.observeAll().map { productEntities ->
                 productEntities.map { productEntity -> productEntity.toDomainModel() }
-            }
+            }.distinctUntilChanged()
         }
-    }
-
-    override fun getAllLocal(): List<Product> {
-        return localDataSource.getAll().map { it.toDomainModel() }
     }
 
     override suspend fun getLastId(databaseMode: DatabaseMode): Int {

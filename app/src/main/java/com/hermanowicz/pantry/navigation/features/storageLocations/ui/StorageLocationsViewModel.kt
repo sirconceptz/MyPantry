@@ -3,11 +3,11 @@ package com.hermanowicz.pantry.navigation.features.storageLocations.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.StorageLocation
-import com.hermanowicz.pantry.domain.DeleteStorageLocationUseCase
-import com.hermanowicz.pantry.domain.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.ObserveAllStorageLocationsUseCase
-import com.hermanowicz.pantry.domain.SaveStorageLocationsUseCase
-import com.hermanowicz.pantry.domain.UpdateStorageLocationUseCase
+import com.hermanowicz.pantry.domain.storageLocation.DeleteStorageLocationUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
+import com.hermanowicz.pantry.domain.storageLocation.SaveStorageLocationsUseCase
+import com.hermanowicz.pantry.domain.storageLocation.UpdateStorageLocationUseCase
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsModel
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsState
 import com.hermanowicz.pantry.navigation.features.storageLocations.state.StorageLocationsUiState

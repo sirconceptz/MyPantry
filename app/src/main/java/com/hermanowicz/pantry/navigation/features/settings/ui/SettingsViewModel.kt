@@ -3,24 +3,21 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.settings.AppSettings
-import com.hermanowicz.pantry.domain.CheckIsUserLoggedUseCase
-import com.hermanowicz.pantry.domain.ClearDatabaseToFileUseCase
-import com.hermanowicz.pantry.domain.DeleteUserAccountUseCase
-import com.hermanowicz.pantry.domain.ExportDatabaseToCloudUseCase
-import com.hermanowicz.pantry.domain.FetchAppSettingsUseCase
-import com.hermanowicz.pantry.domain.FetchUserEmailOrUnloggedUseCase
-import com.hermanowicz.pantry.domain.UpdateAppSettingsUseCase
-import com.hermanowicz.pantry.domain.ValidateEmailUseCase
+import com.hermanowicz.pantry.domain.utils.CheckIsUserLoggedUseCase
+import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
+import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
+import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
+import com.hermanowicz.pantry.domain.settings.FetchAppSettingsUseCase
+import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
+import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
+import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 import com.hermanowicz.pantry.utils.enums.EmailValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,7 +26,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val fetchAppSettingsUseCase: FetchAppSettingsUseCase,
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
-    private val clearDatabaseToFileUseCase: ClearDatabaseToFileUseCase,
+    private val clearDatabaseUseCase: ClearDatabaseUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase,
     private val fetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase,
@@ -178,7 +175,7 @@ class SettingsViewModel @Inject constructor(
 
     fun onConfirmClearDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            clearDatabaseToFileUseCase()
+            clearDatabaseUseCase()
         }
         showClearDatabaseDialog(false)
     }

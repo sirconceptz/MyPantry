@@ -135,6 +135,7 @@
     <string name="taste">Taste</string>
     <string name="sour">Sour</string>
     <string name="sweet_and_sour">Sweet and sour</string>
+    <string name="bitter">Bitter</string>
     <string name="salty">Salty</string>
     <string name="spicy">Spicy</string>
     <string name="add_barcode">Add barcode</string>
