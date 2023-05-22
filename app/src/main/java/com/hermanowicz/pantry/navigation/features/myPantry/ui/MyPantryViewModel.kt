@@ -4,15 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
+import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.CheckIsErrorWasDisplayedUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.FetchActiveErrorAlertsUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.errorAlertSystem.SaveErrorAsDisplayedUseCase
 import com.hermanowicz.pantry.domain.product.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductListUseCase
-import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
-import com.hermanowicz.pantry.domain.errorAlertSystem.SaveErrorAsDisplayedUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
 import com.hermanowicz.pantry.navigation.features.myPantry.state.ErrorAlertSystemState
 import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
@@ -25,12 +25,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,44 +50,35 @@ class MyPantryViewModel @Inject constructor(
     private val _errorAlertSystemState = MutableStateFlow(ErrorAlertSystemState())
     val errorAlertSystemState: StateFlow<ErrorAlertSystemState> = _errorAlertSystemState
 
-    private val _uiState = MutableStateFlow<MyPantryProductsUiState>(MyPantryProductsUiState.Empty)
-    val uiState: StateFlow<MyPantryProductsUiState> = _uiState
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<MyPantryProductsUiState> = observeDatabaseModeUseCase()
+        .flatMapLatest { databaseMode ->
+            observeAllProductsUseCase(databaseMode)
+        }
+        .map { products ->
+            val filteredProductList = getFilteredProductListUseCase(
+                products,
+                filterProductDataState.value.filterProduct
+            )
+            MyPantryProductsUiState.Loaded(
+                MyPantryModel(
+                    groupsProduct = getGroupProductListUseCase(filteredProductList),
+                    loadingVisible = false
+                )
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = MyPantryProductsUiState.Loading,
+        )
 
     private val _filterProductDataState = MutableStateFlow(FilterProductDataState())
     var filterProductDataState: StateFlow<FilterProductDataState> =
         _filterProductDataState.asStateFlow()
 
     init {
-        observeProducts()
         enableErrorAlertSystem()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun observeProducts() {
-        _uiState.value = MyPantryProductsUiState.Loading
-        viewModelScope.launch() {
-            try {
-                observeDatabaseModeUseCase()
-                    .flatMapLatest { databaseMode ->
-                        observeAllProductsUseCase(databaseMode)
-                    }.map { products ->
-                        getFilteredProductListUseCase(
-                            products,
-                            filterProductDataState.value.filterProduct
-                        )
-                    }.onEach {
-                        _uiState.value = MyPantryProductsUiState.Loaded(
-                            MyPantryModel(
-                                groupsProduct = getGroupProductListUseCase(it),
-                                loadingVisible = false
-                            )
-                        )
-                    }
-                    .launchIn(viewModelScope)
-            } catch (e: Exception) {
-                _uiState.value = MyPantryProductsUiState.Error(e.toString())
-            }
-        }
     }
 
     fun onCleanClick() {
@@ -125,7 +116,6 @@ class MyPantryViewModel @Inject constructor(
                 )
             )
         }
-        observeProducts()
         onNavigateBack(true)
     }
 
