@@ -155,11 +155,15 @@ fun DropdownSettings(
     onClick: () -> Unit,
     onChange: (String) -> Unit,
     visibleDropdown: Boolean,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    enabled: Boolean = true
 ) {
     val value = itemMap.getValue(mapKey)
 
-    Row(modifier = Modifier.clickable { onClick() }) {
+    Row(modifier = Modifier.clickable {
+        if (enabled)
+            onClick()
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

@@ -12,6 +12,7 @@ import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,7 @@ class SettingsViewModel @Inject constructor(
                         isUserLogged = checkIsUserLoggedUseCase()
                     )
                 }
+                disableOnlineFeaturesIfUnlogged()
             }
         }
     }
@@ -238,6 +240,7 @@ class SettingsViewModel @Inject constructor(
                 isUserLogged = checkIsUserLoggedUseCase()
             )
         }
+        disableOnlineFeaturesIfUnlogged()
     }
 
     fun showDeleteAccountDialog(bool: Boolean) {
@@ -248,7 +251,23 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private fun enableDatabaseModeDropdown(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                databaseModeDropdownEnabled = bool
+            )
+        }
+    }
+
     fun onConfirmDeleteAccount() {
         deleteUserAccountUseCase()
+    }
+
+    private fun disableOnlineFeaturesIfUnlogged() {
+        val isUserLogged = checkIsUserLoggedUseCase()
+        if (!isUserLogged) {
+            onChangeDatabaseMode(DatabaseMode.LOCAL.name)
+        }
+        enableDatabaseModeDropdown(isUserLogged)
     }
 }

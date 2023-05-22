@@ -114,13 +114,16 @@ fun SettingsScreen(
                 SpacerMedium()
                 TextLabel(text = stringResource(id = R.string.main_settings))
                 CardWhiteBgWithBorder {
-                    DropdownSettings(label = stringResource(id = R.string.database_mode),
+                    DropdownSettings(
+                        label = stringResource(id = R.string.database_mode),
                         mapKey = state.databaseMode,
                         itemMap = DatabaseMode.toMap(),
                         onClick = { viewModel.showDatabaseMode(true) },
                         onChange = { viewModel.onChangeDatabaseMode(it) },
                         visibleDropdown = state.showDatabaseModeDropdown,
-                        onDismiss = { viewModel.showDatabaseMode(false) })
+                        onDismiss = { viewModel.showDatabaseMode(false) },
+                        enabled = state.databaseModeDropdownEnabled
+                    )
                     DividerCardInside()
                     TextSettingsButton(label = stringResource(id = R.string.export_local_database_to_cloud),
                         onClick = { viewModel.showExportDatabaseToCloudDialog(true) })
