@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -270,7 +271,6 @@ private fun updateUi(
 
         is ProductDetailsUiState.Error -> {
             Timber.d("Product Details UI State - Error")
-            Toast.makeText(LocalContext.current, "Error", Toast.LENGTH_SHORT).show()
             return ProductDetailsModel()
         }
     }
@@ -286,12 +286,10 @@ fun ProductDetailItem(label: String, value: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = label,
-            color = Black
+            text = label
         )
         Text(
-            text = value,
-            color = Black
+            text = value
         )
     }
 }

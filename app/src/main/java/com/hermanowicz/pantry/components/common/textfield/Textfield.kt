@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -47,7 +48,7 @@ fun TextFieldAndLabel(
             },
             modifier = Modifier
                 .background(
-                    color = Color.White,
+                    color = MaterialTheme.colors.surface,
                     shape = Shapes.medium,
                 )
                 .fillMaxWidth()
@@ -99,7 +100,7 @@ fun TextFieldAndLabelError(
             },
             modifier = Modifier
                 .background(
-                    color = Color.White,
+                    color = MaterialTheme.colors.surface,
                     shape = Shapes.medium,
                 )
                 .fillMaxWidth()
@@ -151,7 +152,7 @@ fun TextFieldAndLabelDate(
                 enabled = false,
                 modifier = Modifier
                     .background(
-                        color = Color.White,
+                        color = MaterialTheme.colors.surface,
                         shape = Shapes.medium,
                     )
                     .fillMaxWidth()
@@ -210,7 +211,7 @@ fun TextFieldDoubleAndLabelDate(
                     enabled = false,
                     modifier = Modifier
                         .background(
-                            color = Color.White,
+                            color = MaterialTheme.colors.surface,
                             shape = Shapes.medium,
                         )
                         .border(
@@ -250,7 +251,7 @@ fun TextFieldDoubleAndLabelDate(
                     enabled = false,
                     modifier = Modifier
                         .background(
-                            color = Color.White,
+                            color = MaterialTheme.colors.surface,
                             shape = Shapes.medium,
                         )
                         .border(
@@ -307,7 +308,7 @@ fun TextFieldDoubleAndLabel(
                     onValueChange = textLeftEvent,
                     modifier = Modifier
                         .background(
-                            color = Color.White,
+                            color = MaterialTheme.colors.surface,
                             shape = Shapes.medium,
                         )
                         .border(
@@ -345,7 +346,7 @@ fun TextFieldDoubleAndLabel(
                     onValueChange = textRightEvent,
                     modifier = Modifier
                         .background(
-                            color = Color.White,
+                            color = MaterialTheme.colors.surface,
                             shape = Shapes.medium,
                         )
                         .border(

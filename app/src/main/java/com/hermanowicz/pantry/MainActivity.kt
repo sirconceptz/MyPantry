@@ -19,9 +19,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(applicationContext)
         analytics = Firebase.analytics
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         setContent {
             MyPantryTheme {
                 AppNavHost()

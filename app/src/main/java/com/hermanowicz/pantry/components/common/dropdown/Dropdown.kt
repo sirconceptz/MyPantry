@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,12 +39,10 @@ fun DropdownCard(
 
     Column {
         Text(text = textLeft)
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick() }
-                .border(BorderStroke(1.dp, Color.Black), Shapes.medium)
-        ) {
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .border(BorderStroke(1.dp, Color.Black), Shapes.medium)) {
             Column(
                 modifier = Modifier.padding(LocalSpacing.current.medium)
             ) {
@@ -53,6 +52,7 @@ fun DropdownCard(
                 ) {
                     Text(
                         text = textRight,
+                        color = MaterialTheme.colors.onSurface
                     )
                     DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
                         itemMap.forEach { item ->
@@ -60,7 +60,7 @@ fun DropdownCard(
                                 onChange(item.key)
                                 onDismiss()
                             }) {
-                                Text(text = item.value)
+                                Text(text = item.value, color = MaterialTheme.colors.onSurface)
                             }
                         }
                     }
@@ -127,10 +127,11 @@ fun DropdownPrimary(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = value)
+                Text(text = value, color = MaterialTheme.colors.onSurface)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = value,
+                    color = MaterialTheme.colors.onSurface
                 )
                 DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
                     itemList.forEach { item ->
@@ -138,7 +139,7 @@ fun DropdownPrimary(
                             onChange(item)
                             onDismiss()
                         }) {
-                            Text(text = item)
+                            Text(text = item, color = MaterialTheme.colors.onSurface)
                         }
                     }
                 }
@@ -161,23 +162,31 @@ fun DropdownSettings(
     val value = itemMap.getValue(mapKey)
 
     Row(modifier = Modifier.clickable {
-        if (enabled)
-            onClick()
+        if (enabled) onClick()
     }) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(LocalSpacing.current.medium)
         ) {
-            Text(text = label, style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold))
-            Text(text = value, style = TextStyle(fontSize = 14.sp))
+            Text(
+                text = label, style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+            )
+            Text(
+                text = value,
+                style = TextStyle(fontSize = 14.sp, color = MaterialTheme.colors.onSurface)
+            )
             DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
                 itemMap.forEach { item ->
                     DropdownMenuItem(onClick = {
                         onChange(item.key)
                         onDismiss()
                     }) {
-                        Text(text = item.value)
+                        Text(text = item.value, color = MaterialTheme.colors.onSurface)
                     }
                 }
             }
@@ -187,20 +196,15 @@ fun DropdownSettings(
 
 @Composable
 fun DropdownProductDetailsOptions(
-    expanded: Boolean,
-    onShow: (Boolean) -> Unit,
-    onSelect: (String) -> Unit
+    expanded: Boolean, onShow: (Boolean) -> Unit, onSelect: (String) -> Unit
 ) {
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { onShow(!expanded) }
-    ) {
+    DropdownMenu(expanded = expanded, onDismissRequest = { onShow(!expanded) }) {
         val itemList: List<Pair<String, String>> = ProductDetailsOption.toPairList()
         itemList.forEach { option ->
             DropdownMenuItem(onClick = {
                 onSelect(option.first)
             }) {
-                Text(text = option.second)
+                Text(text = option.second, color = MaterialTheme.colors.onSurface)
             }
         }
 

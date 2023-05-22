@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -100,7 +101,7 @@ fun AppDrawerView(
                         .clickable {
                             item.onItemClick
                         },
-                    backgroundColor = if (isSelected) Blue200 else Color.White,
+                    backgroundColor = if (isSelected) Blue200 else MaterialTheme.colors.surface,
                     elevation = 0.dp,
                     shape = RoundedCornerShape(12.dp)
                 ) {

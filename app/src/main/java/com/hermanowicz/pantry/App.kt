@@ -1,8 +1,11 @@
 package com.hermanowicz.pantry
 
 import android.app.Application
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,6 +18,8 @@ class App : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

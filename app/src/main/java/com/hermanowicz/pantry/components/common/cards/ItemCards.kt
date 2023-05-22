@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -65,16 +66,24 @@ fun GroupProductItemCard(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
             ) {
                 if (groupProduct.product.hasSugar) Text(
-                    text = stringResource(R.string.sugar), fontSize = 14.sp
+                    text = stringResource(R.string.sugar),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onSurface
                 )
                 if (groupProduct.product.hasSalt) Text(
-                    text = stringResource(R.string.salt), fontSize = 14.sp
+                    text = stringResource(R.string.salt),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onSurface
                 )
                 if (groupProduct.product.isVege) Text(
-                    text = stringResource(R.string.vege), fontSize = 14.sp
+                    text = stringResource(R.string.vege),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onSurface
                 )
                 if (groupProduct.product.isBio) Text(
-                    text = stringResource(R.string.bio), fontSize = 14.sp
+                    text = stringResource(R.string.bio),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colors.onSurface
                 )
             }
         }
@@ -103,13 +112,15 @@ fun StorageLocationItemCard(
                 text = storageLocation.name,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = storageLocation.description,
                 fontSize = 15.sp,
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Justify,
+                color = MaterialTheme.colors.onSurface
             )
             if (isEditMode) {
                 Spacer(modifier = Modifier.height(30.dp))
@@ -146,13 +157,15 @@ fun CategoryItemCard(
                 text = category.name,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onSurface
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = category.description,
                 fontSize = 15.sp,
-                textAlign = TextAlign.Justify
+                textAlign = TextAlign.Justify,
+                color = MaterialTheme.colors.onSurface
             )
             if (isEditMode) {
                 Spacer(modifier = Modifier.height(30.dp))
