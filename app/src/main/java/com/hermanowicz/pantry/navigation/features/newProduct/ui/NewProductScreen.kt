@@ -110,7 +110,7 @@ fun NewProductScreen(
             }
             item {
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
-                ButtonPrimary(text = stringResource(id = R.string.save_products),
+                ButtonPrimary(text = stringResource(id = R.string.save),
                     onClick = { viewModel.onSaveClick() })
             }
         }

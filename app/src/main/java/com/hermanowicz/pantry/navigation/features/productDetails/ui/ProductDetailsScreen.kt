@@ -158,6 +158,11 @@ fun ProductDetailsView(groupProduct: GroupProduct, state: ProductDetailsState) {
         )
         DividerCardInside()
         ProductDetailItem(
+            label = stringResource(id = R.string.quantity),
+            value = groupProduct.quantity.toString()
+        )
+        DividerCardInside()
+        ProductDetailItem(
             label = stringResource(id = R.string.main_category),
             value = groupProduct.product.mainCategory
         )

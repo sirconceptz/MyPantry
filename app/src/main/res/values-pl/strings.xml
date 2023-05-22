@@ -12,7 +12,6 @@
     <string name="dosage">Dawka</string>
     <string name="weight">Waga</string>
     <string name="volume">Objętość</string>
-    <string name="save_products">Zapisz produkty</string>
     <string name="save">Zapisz</string>
     <string name="settings">Ustawienia</string>
     <string name="my_pantry">Moja spiżarnia</string>
@@ -23,7 +22,7 @@
     <string name="own_categories">Własne kategorie</string>
     <string name="storage_locations">Miejsca przechowywania</string>
     <string name="product_details">Dane produktu</string>
-    <string name="what_do_you_want_to_do">Co chciałbyś zrobić?</string>
+    <string name="what_do_you_want_to_do">Co chcesz zrobić?</string>
     <string name="sugar">Cukier</string>
     <string name="salt">Sól</string>
     <string name="vege">Wege</string>

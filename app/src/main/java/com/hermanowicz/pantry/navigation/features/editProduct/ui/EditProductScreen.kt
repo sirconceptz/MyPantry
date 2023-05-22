@@ -71,7 +71,7 @@ fun EditProductScreen(
             item {
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
                 ButtonPrimary(
-                    text = stringResource(id = R.string.save_products),
+                    text = stringResource(id = R.string.save),
                     onClick = { viewModel.onSaveClick() }
                 )
             }
