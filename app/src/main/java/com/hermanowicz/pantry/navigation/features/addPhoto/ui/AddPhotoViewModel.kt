@@ -68,18 +68,16 @@ class AddPhotoViewModel @Inject constructor(
                             setPhotoFileUseCase(fileName)
                             val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
                             setPhotoPreview(photoBitmap)
-                            //onPhotoSavedCorrectlyInGallery(fileName)
                         }
                     }
                 }
             } catch (e: Exception) {
-//                _uiState.update {
-//                    it.copy(
-//                        productList = emptyList(),
-//                        qrCodesQuantity = 0,
-//                        onNavigateBack = true
-//                    )
-//                }
+                _uiState.update {
+                    it.copy(
+                        productList = emptyList(),
+                        onNavigateBack = true
+                    )
+                }
             }
         }
     }

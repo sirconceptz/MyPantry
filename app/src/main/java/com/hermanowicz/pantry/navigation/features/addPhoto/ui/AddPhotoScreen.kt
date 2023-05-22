@@ -93,7 +93,7 @@ fun AddPhotoScreen(
                     ) {
                         Image(
                             modifier = Modifier
-                                .fillParentMaxWidth(0.5f)
+                                .fillMaxWidth()
                                 .align(Alignment.Center),
                             bitmap = uiState.photoPreview!!.asImageBitmap(),
                             contentScale = ContentScale.Crop,

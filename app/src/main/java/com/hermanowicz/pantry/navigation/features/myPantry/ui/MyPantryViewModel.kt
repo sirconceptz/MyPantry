@@ -65,8 +65,7 @@ class MyPantryViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun observeProducts() {
         _uiState.value = MyPantryProductsUiState.Loading
-        viewModelScope.launch(Dispatchers.Default) {
-
+        viewModelScope.launch() {
             try {
                 observeDatabaseModeUseCase()
                     .flatMapLatest { databaseMode ->

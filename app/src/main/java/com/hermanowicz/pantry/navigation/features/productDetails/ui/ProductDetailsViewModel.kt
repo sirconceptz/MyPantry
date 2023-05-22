@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.navigation.features.productDetails.ui
 
+import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,8 @@ import com.hermanowicz.pantry.domain.product.DeleteProductsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
+import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.ParseDeprecatedDatabaseProductsUseCase
 import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
@@ -36,6 +39,8 @@ class ProductDetailsViewModel @Inject constructor(
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
     private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
+    private val setPhotoFileUseCase: SetPhotoFileUseCase,
+    private val fetchPhotoBitmapUseCase: FetchPhotoBitmapUseCase,
     private val deleteProductsUseCase: DeleteProductsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProductDetailsState())
@@ -79,6 +84,13 @@ class ProductDetailsViewModel @Inject constructor(
                                         loadingVisible = false
                                     )
                                 )
+                                if (products.isNotEmpty()) {
+                                    val fileName = products[0].photoName
+                                    setPhotoFileUseCase(fileName)
+                                    val photoBitmap =
+                                        fetchPhotoBitmapUseCase(fileName, databaseMode)
+                                    setPhotoPreview(photoBitmap)
+                                }
                             } else {
                                 if (!state.value.onNavigateToMyPantry) {
                                     _uiState.value =
@@ -192,6 +204,12 @@ class ProductDetailsViewModel @Inject constructor(
     fun onGoToPermissionSettings(bool: Boolean) {
         _state.update {
             it.copy(goToPermissionSettings = bool)
+        }
+    }
+
+    private fun setPhotoPreview(bitmap: Bitmap?) {
+        _state.update {
+            it.copy(photoPreview = bitmap)
         }
     }
 }

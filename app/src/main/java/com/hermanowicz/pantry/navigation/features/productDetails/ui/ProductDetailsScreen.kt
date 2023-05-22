@@ -3,8 +3,11 @@ package com.hermanowicz.pantry.navigation.features.productDetails.ui
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +34,7 @@ import com.hermanowicz.pantry.components.common.loading.LoadingDialog
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
+import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
@@ -116,16 +122,35 @@ fun ProductDetailsScreen(
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
             item {
-                ProductDetailsView(uiModel.groupProduct)
+                ProductDetailsView(uiModel.groupProduct, state)
             }
         }
     }
 }
 
 @Composable
-fun ProductDetailsView(groupProduct: GroupProduct) {
+fun ProductDetailsView(groupProduct: GroupProduct, state: ProductDetailsState) {
+    if (state.photoPreview != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = LocalSpacing.current.medium,
+                    bottom = LocalSpacing.current.small
+                )
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxHeight(0.3f)
+                    .align(Alignment.Center),
+                bitmap = state.photoPreview.asImageBitmap(),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
+        }
+    }
     CardWhiteBgWithBorder(
-        modifier = Modifier.padding(top = LocalSpacing.current.medium)
+        modifier = Modifier.padding(vertical = LocalSpacing.current.medium)
     ) {
         ProductDetailItem(
             label = stringResource(id = R.string.name),
