@@ -143,4 +143,5 @@
     <string name="which_product_you_want_to_add">Which product do you want to add?</string>
     <string name="add_photo">Add photo</string>
     <string name="take_photo">Take photo</string>
+    <string name="notifications">Notifications</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,12 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,10 +30,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.FirebaseAuth
 import com.hermanowicz.pantry.BuildConfig
 import com.hermanowicz.pantry.R
@@ -58,6 +68,32 @@ fun SettingsScreen(
 ) {
     val state by viewModel.settingsState.collectAsState()
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = state.pushNotificationsStateChanged) {
+        if (state.pushNotificationsStateChanged) {
+            val intent = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", context.packageName, null)
+            )
+            context.startActivity(intent)
+            viewModel.onChangeNotificationsStateChanged(false)
+        }
+    }
+
+    val systemUiController = rememberSystemUiController()
+    OnLifecycleEvent { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.updateAppSettings()
+            }
+
+            Lifecycle.Event.ON_START -> {
+                systemUiController.isStatusBarVisible = false
+            }
+
+            else -> Unit
+        }
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.settings), openDrawer = openDrawer
@@ -157,17 +193,10 @@ fun SettingsScreen(
                         steps = 12
                     )
                     DividerCardInside()
-                    TextSettingsButtonWithValue(
-                        label = stringResource(id = R.string.email_address_for_notifications),
-                        value = state.emailAddressForNotifications,
-                        onClick = { viewModel.showEmailAddressDialog(true) },
-                        enabled = true
-                    )
-                    DividerCardInside()
                     SwitchPrimary(
                         label = stringResource(id = R.string.push_notifications),
                         state = state.pushNotifications,
-                        onStateChange = { viewModel.onChangePushNotifications(!state.pushNotifications) },
+                        onStateChange = { viewModel.onChangePushNotificationsEnabled(!state.pushNotifications) },
                         enabled = true
                     )
                     DividerCardInside()
@@ -177,6 +206,13 @@ fun SettingsScreen(
                         onStateChange = { viewModel.onChangeEmailNotifications(!state.emailNotifications) },
                         enabled = state.emailNotificationsCheckboxEnabled
                     )
+                    TextSettingsButtonWithValue(
+                        label = stringResource(id = R.string.email_address_for_notifications),
+                        value = state.emailAddressForNotifications,
+                        onClick = { viewModel.showEmailAddressDialog(true) },
+                        enabled = true
+                    )
+                    DividerCardInside()
                 }
             }
             item {
@@ -249,6 +285,24 @@ fun SignInForm(state: SettingsState, hideSignInForm: () -> Unit, showUserEmail: 
             FirebaseAuth.getInstance().signOut()
             showUserEmail()
             hideSignInForm()
+        }
+    }
+}
+
+@Composable
+fun OnLifecycleEvent(onEvent: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) {
+    val eventHandler = rememberUpdatedState(onEvent)
+    val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
+
+    DisposableEffect(lifecycleOwner.value) {
+        val lifecycle = lifecycleOwner.value.lifecycle
+        val observer = LifecycleEventObserver { owner, event ->
+            eventHandler.value(owner, event)
+        }
+
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
         }
     }
 }

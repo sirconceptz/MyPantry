@@ -16,6 +16,7 @@ import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -75,7 +76,7 @@ class SettingsViewModel @Inject constructor(
         updateAppSettings()
     }
 
-    private fun updateAppSettings() {
+    fun updateAppSettings() {
         val appSettings = AppSettings(
             databaseMode = settingsState.value.databaseMode,
             cameraMode = settingsState.value.cameraToScanCodes,
@@ -83,9 +84,11 @@ class SettingsViewModel @Inject constructor(
             daysToNotifyBeforeExpiration = settingsState.value.daysToNotifyBeforeExpiration,
             emailForNotifications = settingsState.value.emailAddressForNotifications,
             pushNotifications = settingsState.value.pushNotifications,
-            emailNotifications = settingsState.value.emailNotifications
+            emailNotifications = settingsState.value.emailNotifications,
+            pushNotificationsChanged = settingsState.value.pushNotificationsStateChanged
         )
         viewModelScope.launch(Dispatchers.IO) {
+            delay(2500)
             updateAppSettingsUseCase(appSettings)
         }
     }
@@ -140,10 +143,11 @@ class SettingsViewModel @Inject constructor(
         updateAppSettings()
     }
 
-    fun onChangePushNotifications(bool: Boolean) {
+    fun onChangePushNotificationsEnabled(bool: Boolean) {
         _settingsState.update {
             it.copy(
-                pushNotifications = bool
+                pushNotifications = bool,
+                pushNotificationsStateChanged = true
             )
         }
         updateAppSettings()
@@ -157,6 +161,18 @@ class SettingsViewModel @Inject constructor(
             )
         }
         updateAppSettings()
+    }
+
+    fun onChangeNotificationsStateChanged(bool: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(3000)
+            _settingsState.update {
+                it.copy(
+                    pushNotificationsStateChanged = bool
+                )
+            }
+            updateAppSettings()
+        }
     }
 
     fun showAuthorDialog(bool: Boolean) {

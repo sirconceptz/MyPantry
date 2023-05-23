@@ -11,5 +11,6 @@ data class AppSettings(
     val daysToNotifyBeforeExpiration: Float = 3f,
     val emailForNotifications: String = "",
     val pushNotifications: Boolean = true,
+    val pushNotificationsChanged: Boolean = false,
     val emailNotifications: Boolean = false
 )
