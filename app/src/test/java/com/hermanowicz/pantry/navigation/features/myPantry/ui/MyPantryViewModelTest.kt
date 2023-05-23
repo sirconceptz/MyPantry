@@ -1,111 +1,110 @@
 package com.hermanowicz.pantry.navigation.features.myPantry.ui
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
+import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
+import com.hermanowicz.pantry.domain.errorAlertSystem.CheckIsErrorWasDisplayedUseCase
+import com.hermanowicz.pantry.domain.errorAlertSystem.FetchActiveErrorAlertsUseCase
+import com.hermanowicz.pantry.domain.errorAlertSystem.SaveErrorAsDisplayedUseCase
+import com.hermanowicz.pantry.domain.product.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductListUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
-import io.mockk.every
-import io.mockk.mockk
-import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.flow.flowOf
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
+import com.hermanowicz.pantry.utils.enums.Taste
+import io.mockk.*
+import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
-//
-//class MyPantryViewModelTest {
-//
-//    @Test
-//    fun `given viewmodel initialized when ui state observed then ui state is Loading`() {
-//        //       val mockProduct1 by lazy { mockk<Product>() }
-////        val mockProduct2 = mockk<Product>()
-////        val mockGroupProduct1 = mockk<GroupProduct>()
-////        val mockGroupProduct2 = mockk<GroupProduct>()
-//
-//        val product1 = Product(id = 1, name = "Test 1")
-//        val product2 = Product(id = 2, name = "Test 2")
-//        val expectedProductList = listOf(product1, product2)
-//
-//        val groupProduct1 = GroupProduct(product = product1, quantity = 5)
-//        val groupProduct2 = GroupProduct(product = product2, quantity = 3)
-//        val groupsProduct = listOf(groupProduct1, groupProduct2)
-//
-////        every { mockProduct1 } returns product1
-////        every { mockProduct2 } returns product2
-////        every { mockGroupProduct1 } returns groupProduct1
-////        every { mockGroupProduct2 } returns groupProduct1
-//
-//        val mockGetGroupProductListUseCase = mockk<GetGroupProductListUseCase>()
-//        every { mockGetGroupProductListUseCase.invoke(any()) } returns groupsProduct
-//
-//        val mockGetGroupProductUseCase = mockk<GetGroupProductUseCase>()
-//        every { mockGetGroupProductUseCase.invoke(any(), any()) } returns groupProduct1
-//
-//        val mockObserveAllProductsUseCase = mockk<ObserveAllProductsUseCase>()
-//        every { mockObserveAllProductsUseCase.invoke() } returns flowOf(expectedProductList)
-//
-//        // given
-//        val viewModel =
-//            MyPantryViewModel(mockGetGroupProductListUseCase, mockObserveAllProductsUseCase)
-//
-//        // when
-//        val uiState = viewModel.uiState.value
-//
-//        // then
-//        assertTrue(uiState is MyPantryProductsUiState.Loading)
-//    }
-////
-////    @Test
-////    fun `given fetchProducts called when data loaded then ui state is Loaded`() {
-////        // given
-////
-////        val mockFlow = flow { emit(expectedProductList) }
-////        whenever(mockObserveAllProductsUseCase()).thenReturn(mockFlow)
-////        whenever(mockGetGroupProductListUseCase(expectedProductList)).thenReturn(mockGroupsProduct)
-////
-////        val viewModel =
-////            MyPantryViewModel(mockGetGroupProductListUseCase, mockObserveAllProductsUseCase)
-////
-////        // when
-////        viewModel.fetchProducts()
-////        val uiState = viewModel.uiState.value
-////
-////        // then
-////        assertTrue(uiState is MyPantryUiState.Loaded)
-////    }
-////
-////    @Test
-////    fun `given fetchProducts called when loading data then ui state is Loading`() {
-////        // given
-////        val mockFlow = flow {
-////            emit(expectedProductList)
-////        }
-////        whenever(mockObserveAllProductsUseCase()).thenReturn(mockFlow)
-////
-////        val viewModel =
-////            MyPantryViewModel(mockGetGroupProductListUseCase, mockObserveAllProductsUseCase)
-////
-////        // when
-////        viewModel.fetchProducts()
-////        val uiState = viewModel.uiState.value
-////
-////        // then
-////        assertTrue(uiState is MyPantryUiState.Loading)
-////    }
-////
-////    @Test
-////    fun `given fetchProducts called when data loading throws exception then ui state is Error`() {
-////        // given
-////        val mockException = RuntimeException("mock exception")
-////        whenever(mockObserveAllProductsUseCase()).thenThrow(mockException)
-////
-////        val viewModel =
-////            MyPantryViewModel(mockGetGroupProductListUseCase, mockObserveAllProductsUseCase)
-////
-////        // when
-////        viewModel.fetchProducts()
-////        val uiState = viewModel.uiState.value
-////
-////        // then
-////        assertTrue(uiState is MyPantryUiState.Error)
-////    }
-//}
+@ExperimentalCoroutinesApi
+class MyPantryViewModelTest {
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private lateinit var viewModel: MyPantryViewModel
+    private val getGroupProductListUseCase: GetGroupProductListUseCase = mockk()
+    private val observeAllProductsUseCase: ObserveAllProductsUseCase = mockk()
+    private val getMainCategoriesUseCase: GetMainCategoriesUseCase = mockk()
+    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase = mockk()
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase = mockk()
+    private val getFilteredProductListUseCase: GetFilteredProductListUseCase = mockk()
+    private val fetchActiveErrorAlertsUseCase: FetchActiveErrorAlertsUseCase = mockk()
+    private val checkIsErrorWasDisplayedUseCase: CheckIsErrorWasDisplayedUseCase = mockk()
+    private val saveErrorAsDisplayedUseCase: SaveErrorAsDisplayedUseCase = mockk()
+
+    private val testDispatcher = UnconfinedTestDispatcher()
+
+    private val testDatabaseMode = DatabaseMode.LOCAL
+    private val testErrorAlertList = listOf(ErrorAlert(15, "Error 15", "Test"))
+    private val testGroupProductList = listOf(
+        GroupProduct(product = Product(id = 1, photoName = "photo1"), quantity = 1),
+        GroupProduct(product = Product(id = 2, photoName = "photo2"), quantity = 2),
+        GroupProduct(product = Product(id = 3, photoName = "photo3"), quantity = 3),
+    )
+
+    @Before
+    fun setup() {
+        coEvery {
+            getGroupProductListUseCase(
+                any()
+            )
+        } returns testGroupProductList
+        every { observeDatabaseModeUseCase() } returns flowOf(testDatabaseMode)
+        every { runBlocking { fetchActiveErrorAlertsUseCase() } } returns testErrorAlertList
+        every { runBlocking { checkIsErrorWasDisplayedUseCase(any()) } } returns false
+
+        Dispatchers.setMain(testDispatcher)
+
+        viewModel = MyPantryViewModel(
+            getGroupProductListUseCase,
+            observeAllProductsUseCase,
+            getMainCategoriesUseCase,
+            getDetailsCategoriesUseCase,
+            observeDatabaseModeUseCase,
+            getFilteredProductListUseCase,
+            fetchActiveErrorAlertsUseCase,
+            checkIsErrorWasDisplayedUseCase,
+            saveErrorAsDisplayedUseCase
+        )
+    }
+
+    @After
+    fun cleanup() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `onCleanClick should update filterProductDataState with empty FilterProduct`() {
+        // When
+        viewModel.onCleanClick()
+
+        // Then
+        val expectedState = FilterProductDataState()
+        assertEquals(expectedState, viewModel.filterProductDataState.value)
+    }
+
+    @Test
+    fun `onFilterDataChange should update filterProductDataState`() {
+        // Given
+        val newData = FilterProductDataState(salty = true)
+
+        // When
+        viewModel.onFilterTasteSelect(Taste.SALTY.name, true)
+
+        // Then
+        assertEquals(newData, viewModel.filterProductDataState.value)
+    }
+}

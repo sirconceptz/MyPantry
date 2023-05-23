@@ -24,7 +24,7 @@ class ErrorAlertSystemRepositoryImpl @Inject constructor(
         return localDataSource.observeAll().map { it.map { error -> error.errorCode } }
     }
 
-    override suspend fun observeAllRemoteErrors(): List<ErrorAlert> {
+    override suspend fun fetchAllRemoteErrors(): List<ErrorAlert> {
         return try {
             remoteDataSource.observeAll().map { wpError ->
                 val title = parseHtmlToStringUseCase(wpError.title?.rendered ?: "")

@@ -8,6 +8,6 @@ class FetchActiveErrorAlertsUseCase @Inject constructor(
     private val errorAlertSystemRepository: ErrorAlertSystemRepository
 ) : suspend () -> List<ErrorAlert> {
     override suspend fun invoke(): List<ErrorAlert> {
-        return errorAlertSystemRepository.observeAllRemoteErrors()
+        return errorAlertSystemRepository.fetchAllRemoteErrors()
     }
 }

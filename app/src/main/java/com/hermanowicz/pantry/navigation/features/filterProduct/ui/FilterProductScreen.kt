@@ -64,7 +64,7 @@ fun FilterProductScreen(
                     onIsBioChange = { viewModel.onFilterIsBioChange(it) },
                     onHasSugarChange = { viewModel.onFilterHasSugarChange(it) },
                     onHasSaltChange = { viewModel.onFilterHasSaltChange(it) },
-                    onTasteSelect = { taste, bool -> viewModel.onTasteSelect(taste, bool) },
+                    onTasteSelect = { taste, bool -> viewModel.onFilterTasteSelect(taste, bool) },
                     showMainCategoryDropdown = { viewModel.showFilterMainCategoryDropdown(it) },
                     mainCategoryItemList = viewModel.getFilterMainCategories(),
                     detailCategoryItemList = viewModel.getFilterDetailCategories(),

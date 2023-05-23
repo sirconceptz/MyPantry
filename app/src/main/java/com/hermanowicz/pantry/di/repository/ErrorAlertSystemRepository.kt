@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ErrorAlertSystemRepository {
     fun observeAllDisplayedErrors(): Flow<List<Int>>
-    suspend fun observeAllRemoteErrors(): List<ErrorAlert>
+    suspend fun fetchAllRemoteErrors(): List<ErrorAlert>
     suspend fun insert(errorCode: Int)
 }
 

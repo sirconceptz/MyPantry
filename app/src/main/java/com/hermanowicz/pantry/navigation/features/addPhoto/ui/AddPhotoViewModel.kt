@@ -8,17 +8,19 @@ import com.hermanowicz.pantry.domain.photo.CreateAndGetPhotoFileUseCase
 import com.hermanowicz.pantry.domain.photo.DecodePhotoFromGalleryUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.GetPhotoFileNameUseCase
-import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
+import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdatePhotoInProductListUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.addPhoto.state.AddPhotoUiState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -49,26 +51,27 @@ class AddPhotoViewModel @Inject constructor(
         fetchProducts(productIdList)
     }
 
-    private fun fetchProducts(productIdList: List<Int>) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun fetchProducts(productIdList: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeDatabaseModeUseCase().collect { databaseMode ->
+                observeDatabaseModeUseCase().flatMapLatest { databaseMode ->
                     this@AddPhotoViewModel.databaseMode = databaseMode
                     getProductListByIdsProductsUseCase(
                         databaseMode,
                         productIdList
-                    ).collect { products ->
-                        _uiState.update {
-                            it.copy(
-                                productList = products
-                            )
-                        }
-                        if (products.isNotEmpty()) {
-                            val fileName = products[0].photoName
-                            setPhotoFileUseCase(fileName)
-                            val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
-                            setPhotoPreview(photoBitmap)
-                        }
+                    )
+                }.collect { products ->
+                    _uiState.update {
+                        it.copy(
+                            productList = products
+                        )
+                    }
+                    if (products.isNotEmpty()) {
+                        val fileName = products[0].photoName
+                        setPhotoFileUseCase(fileName)
+                        val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
+                        setPhotoPreview(photoBitmap)
                     }
                 }
             } catch (e: Exception) {
@@ -86,7 +89,7 @@ class AddPhotoViewModel @Inject constructor(
         return createAndGetPhotoFileUseCase()
     }
 
-    private fun setPhotoPreview(bitmap: Bitmap?) {
+    fun setPhotoPreview(bitmap: Bitmap?) {
         _uiState.update {
             it.copy(photoPreview = bitmap)
         }

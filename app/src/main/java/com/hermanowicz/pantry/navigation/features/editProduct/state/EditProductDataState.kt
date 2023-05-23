@@ -35,6 +35,6 @@ data class EditProductDataState(
     val hashCode: String = "",
     var showErrorWrongName: Boolean = false,
     var showErrorWrongQuantity: Boolean = false,
-    var onNavigateBack: Boolean = false,
+    var onNavigateToMyPantry: Boolean = false,
     val productsIdList: List<Int> = emptyList()
 )

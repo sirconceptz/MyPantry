@@ -125,11 +125,6 @@ private fun updateStorageLocationsModel(
     viewModel: StorageLocationsViewModel
 ): StorageLocationsModel {
     when (val state = viewModel.uiState.collectAsState().value) {
-        is StorageLocationsUiState.Empty -> {
-            Timber.d("Storage Locations UI State - Empty")
-            return StorageLocationsModel()
-        }
-
         is StorageLocationsUiState.Loading -> {
             Timber.d("Storage Locations UI State - Loading")
             LoadingDialog()

@@ -65,7 +65,7 @@ fun MyPantryScreen(
                 .padding(horizontal = LocalSpacing.current.small)
         ) {
             item {
-                ShowProducts(uiModel.groupsProduct, onClickGroupProduct)
+                ShowProducts(uiModel.groupProductList, onClickGroupProduct)
             }
         }
     }
@@ -76,11 +76,6 @@ private fun updateUi(
     viewModel: MyPantryViewModel
 ): MyPantryModel {
     when (val state = viewModel.uiState.collectAsState().value) {
-        is MyPantryProductsUiState.Empty -> {
-            Timber.d("My Pantry UI State - Empty")
-            return MyPantryModel()
-        }
-
         is MyPantryProductsUiState.Loading -> {
             Timber.d("My Pantry UI State - Loading")
             LoadingDialog()

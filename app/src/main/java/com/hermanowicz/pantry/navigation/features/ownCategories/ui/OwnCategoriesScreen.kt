@@ -125,11 +125,6 @@ private fun updateCategoriesModel(
     viewModel: OwnCategoriesViewModel
 ): CategoriesModel {
     when (val state = viewModel.uiState.collectAsState().value) {
-        is CategoriesUiState.Empty -> {
-            Timber.d("Storage Locations UI State - Empty")
-            return CategoriesModel()
-        }
-
         is CategoriesUiState.Loading -> {
             Timber.d("Storage Locations UI State - Loading")
             LoadingDialog()

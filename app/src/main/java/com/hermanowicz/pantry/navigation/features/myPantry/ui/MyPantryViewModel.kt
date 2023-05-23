@@ -62,7 +62,7 @@ class MyPantryViewModel @Inject constructor(
             )
             MyPantryProductsUiState.Loaded(
                 MyPantryModel(
-                    groupsProduct = getGroupProductListUseCase(filteredProductList),
+                    groupProductList = getGroupProductListUseCase(filteredProductList),
                     loadingVisible = false
                 )
             )
@@ -297,7 +297,7 @@ class MyPantryViewModel @Inject constructor(
         )
     }
 
-    fun onTasteSelect(taste: String, bool: Boolean) {
+    fun onFilterTasteSelect(taste: String, bool: Boolean) {
         when (taste) {
             Taste.SWEET.name -> {
                 _filterProductDataState.update {

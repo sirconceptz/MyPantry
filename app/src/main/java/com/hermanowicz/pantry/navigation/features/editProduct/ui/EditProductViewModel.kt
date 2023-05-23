@@ -12,7 +12,6 @@ import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
-import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
@@ -49,7 +48,7 @@ class EditProductViewModel @Inject constructor(
         fetchProductData(productId)
     }
 
-    private fun fetchOwnCategories() {
+    fun fetchOwnCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             observeDatabaseModeUseCase().collect { databaseMode ->
                 observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
@@ -59,8 +58,8 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun fetchProductData(productId: Int) {
-        viewModelScope.launch {
+    fun fetchProductData(productId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
             fetchDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
                     val groupProduct = getGroupProductByIdUseCase(productId, products)
@@ -97,11 +96,11 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    private fun cleanErrors() {
+    fun cleanErrors() {
         _productDataState.update { it.copy(showErrorWrongName = false) }
     }
 
-    private fun updateProducts() {
+    fun updateProducts() {
         var mainCategory = ""
         var detailCategory = ""
         if (productDataState.value.mainCategory != MainCategories.CHOOSE.name)
@@ -139,7 +138,7 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onNavigateToMyPantry(bool: Boolean) {
-        _productDataState.update { it.copy(onNavigateBack = bool) }
+        _productDataState.update { it.copy(onNavigateToMyPantry = bool) }
     }
 
     fun onNameChange(name: String) {
