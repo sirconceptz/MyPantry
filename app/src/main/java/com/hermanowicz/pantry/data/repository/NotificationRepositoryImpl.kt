@@ -10,6 +10,7 @@ import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.settings.FetchDaysBeforeNotificationUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.receivers.NotificationBroadcastReceiver
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import java.util.Calendar
@@ -20,7 +21,6 @@ import javax.inject.Singleton
 class NotificationRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val fetchDaysBeforeNotificationUseCase: FetchDaysBeforeNotificationUseCase,
-    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase
 ) : NotificationRepository {
     override suspend fun createNotification(products: List<Product>) {
@@ -47,36 +47,34 @@ class NotificationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun cancelNotification(products: List<Product>) {
-        products.forEach { product ->
-            if (product.expirationDate != "-" && product.expirationDate.isNotEmpty()) {
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    product.id,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-                pendingIntent.cancel()
-                alarmManager.cancel(pendingIntent)
-            }
+    override fun cancelNotification(productIdList: List<Int>) {
+        productIdList.forEach { productId ->
+            cancelNotification(productId)
         }
     }
 
-    override suspend fun createNotificationForAllProducts() {
-        observeDatabaseModeUseCase().collect { databaseMode ->
-            observeAllProductsUseCase(databaseMode).collect { products ->
-                createNotification(products)
-            }
+    private fun cancelNotification(productId: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            productId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        pendingIntent.cancel()
+        alarmManager.cancel(pendingIntent)
+    }
+
+    override suspend fun createNotificationForAllProducts(databaseMode: DatabaseMode) {
+        observeAllProductsUseCase(databaseMode).collect { products ->
+            createNotification(products)
         }
     }
 
-    override suspend fun cancelNotificationForAllProducts() {
-        observeDatabaseModeUseCase().collect { databaseMode ->
-            observeAllProductsUseCase(databaseMode).collect { products ->
-                cancelNotification(products)
-            }
+    override suspend fun cancelNotificationForAllProducts(databaseMode: DatabaseMode) {
+        observeAllProductsUseCase(databaseMode).collect { products ->
+            cancelNotification(products.map { it.id })
         }
     }
 

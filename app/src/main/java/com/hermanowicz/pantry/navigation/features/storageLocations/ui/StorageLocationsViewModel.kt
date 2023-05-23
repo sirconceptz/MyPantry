@@ -3,8 +3,8 @@ package com.hermanowicz.pantry.navigation.features.storageLocations.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.StorageLocation
-import com.hermanowicz.pantry.domain.storageLocation.DeleteStorageLocationUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.DeleteStorageLocationUseCase
 import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.storageLocation.SaveStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.storageLocation.UpdateStorageLocationUseCase
@@ -15,11 +15,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,39 +33,28 @@ class StorageLocationsViewModel @Inject constructor(
     private val updateStorageLocationUseCase: UpdateStorageLocationUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<StorageLocationsUiState>(StorageLocationsUiState.Empty)
-    val uiState: StateFlow<StorageLocationsUiState> = _uiState
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<StorageLocationsUiState> = observeDatabaseModeUseCase()
+        .flatMapLatest { databaseMode ->
+            observeAllStorageLocationsUseCase(databaseMode)
+        }
+        .map { storageLocations ->
+            StorageLocationsUiState.Loaded(
+                StorageLocationsModel(
+                    storageLocations = storageLocations,
+                    loadingVisible = false
+                )
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = StorageLocationsUiState.Loading,
+        )
     private val _storageLocationsState = MutableStateFlow(StorageLocationsState())
     var storageLocationState: StateFlow<StorageLocationsState> =
         _storageLocationsState.asStateFlow()
-
-    init {
-        observeStorageLocations()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun observeStorageLocations() {
-        _uiState.value = StorageLocationsUiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                observeDatabaseModeUseCase()
-                    .flatMapLatest { databaseMode ->
-                        observeAllStorageLocationsUseCase(databaseMode)
-                    }.onEach {
-                        _uiState.value = StorageLocationsUiState.Loaded(
-                            StorageLocationsModel(
-                                storageLocations = it,
-                                loadingVisible = false
-                            )
-                        )
-                    }
-                    .launchIn(viewModelScope)
-            } catch (e: Exception) {
-                _uiState.value = StorageLocationsUiState.Error(e.toString())
-            }
-        }
-    }
 
     fun onNameChange(name: String) {
         _storageLocationsState.update { it.copy(name = name) }

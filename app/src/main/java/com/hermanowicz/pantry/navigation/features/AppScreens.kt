@@ -3,16 +3,16 @@ package com.hermanowicz.pantry.navigation.features
 sealed class AppScreens(
     val route: String
 ) {
-    object MyPantry : AppScreens("my_pantry") // home screen
-    object NewProduct : AppScreens("new_product")
     object AddPhoto : AppScreens("add_photo")
-    object PrintQRCodes : AppScreens("print_qr_codes")
+    object EditProduct : AppScreens("edit_product")
     object FilterProduct : AppScreens("filter_product")
-    object ProductDetails : AppScreens("product_details")
+    object MyPantry : AppScreens("my_pantry")               // home screen
+    object NewProduct : AppScreens("new_product")
     object OwnCategories : AppScreens("own_categories")
+    object PrintQRCodes : AppScreens("print_qr_codes")
+    object ProductDetails : AppScreens("product_details")
     object ScanProduct : AppScreens("scan_product")
     object Settings : AppScreens("settings")
-    object StorageLocations : AppScreens("storage_locations")
-    object EditProduct : AppScreens("edit_product")
     object SplashScreen : AppScreens("splash_screen")
+    object StorageLocations : AppScreens("storage_locations")
 }

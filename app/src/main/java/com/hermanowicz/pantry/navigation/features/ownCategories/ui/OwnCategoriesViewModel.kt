@@ -8,6 +8,8 @@ import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.category.UpdateCategoryUseCase
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
+import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
@@ -15,11 +17,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,39 +37,29 @@ class OwnCategoriesViewModel @Inject constructor(
     private val deleteCategoryUseCase: DeleteCategoryUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Empty)
-    val uiState: StateFlow<CategoriesUiState> = _uiState
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<CategoriesUiState> = observeDatabaseModeUseCase()
+        .flatMapLatest { databaseMode ->
+            observeAllOwnCategoriesUseCase(databaseMode)
+        }
+        .map { categories ->
+            CategoriesUiState.Loaded(
+                CategoriesModel(
+                    categories = categories,
+                    loadingVisible = false
+                )
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = CategoriesUiState.Loading,
+        )
 
     private val _categoriesState = MutableStateFlow(CategoriesState())
     var categoriesState: StateFlow<CategoriesState> =
         _categoriesState.asStateFlow()
-
-    init {
-        observeCategories()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun observeCategories() {
-        _uiState.value = CategoriesUiState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                observeDatabaseModeUseCase()
-                    .flatMapLatest { databaseMode ->
-                        observeAllOwnCategoriesUseCase(databaseMode)
-                    }.onEach {
-                        _uiState.value = CategoriesUiState.Loaded(
-                            CategoriesModel(
-                                categories = it,
-                                loadingVisible = false
-                            )
-                        )
-                    }
-                    .launchIn(viewModelScope)
-            } catch (e: Exception) {
-                _uiState.value = CategoriesUiState.Error(e.toString())
-            }
-        }
-    }
 
     fun onClickSaveCategory() {
         val category = Category(

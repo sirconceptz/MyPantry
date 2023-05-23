@@ -12,6 +12,7 @@ import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
+import com.hermanowicz.pantry.domain.product.DeleteNotificationForProductsUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.ParseDeprecatedDatabaseProductsUseCase
 import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
@@ -41,7 +42,8 @@ class ProductDetailsViewModel @Inject constructor(
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val setPhotoFileUseCase: SetPhotoFileUseCase,
     private val fetchPhotoBitmapUseCase: FetchPhotoBitmapUseCase,
-    private val deleteProductsUseCase: DeleteProductsUseCase
+    private val deleteProductsUseCase: DeleteProductsUseCase,
+    private val deleteNotificationForProductsUseCase: DeleteNotificationForProductsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProductDetailsState())
     val state: StateFlow<ProductDetailsState> = _state

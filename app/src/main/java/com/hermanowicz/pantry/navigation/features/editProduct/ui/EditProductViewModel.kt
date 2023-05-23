@@ -38,10 +38,6 @@ class EditProductViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val fetchDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(NewProductUiState.Empty)
-    var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
-
     private val _productDataState = MutableStateFlow(EditProductDataState())
     var productDataState: StateFlow<EditProductDataState> = _productDataState.asStateFlow()
 

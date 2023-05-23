@@ -8,4 +8,5 @@ object Constants {
     const val API_MAIL_FILE = "mail.php"
     const val PHOTO_EXTENSION = ".jpg"
     const val PHOTO_DIRECTORY = "MyPantry"
+    const val PDF_PATH = "Download/MyPantry"
 }
