@@ -9,6 +9,7 @@ import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
 import com.hermanowicz.pantry.domain.settings.FetchAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
+import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
@@ -33,7 +34,8 @@ class SettingsViewModel @Inject constructor(
     private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase,
     private val fetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase,
     private val deleteUserAccountUseCase: DeleteUserAccountUseCase,
-    private val checkIsUserLoggedUseCase: CheckIsUserLoggedUseCase
+    private val checkIsUserLoggedUseCase: CheckIsUserLoggedUseCase,
+    private val reCreateNotificationsForAllProductsUseCase: ReCreateNotificationsForAllProductsUseCase
 ) : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
     var settingsState: StateFlow<SettingsState> = _settingsState.asStateFlow()
@@ -73,7 +75,24 @@ class SettingsViewModel @Inject constructor(
                 showDatabaseModeDropdown = false
             )
         }
+        recreateNotifications(databaseMode)
         updateAppSettings()
+    }
+
+    private fun recreateNotifications(databaseMode: String) {
+        val mode = enumValueOf<DatabaseMode>(databaseMode)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (mode == DatabaseMode.LOCAL)
+                reCreateNotificationsForAllProductsUseCase(
+                    oldDatabaseMode = DatabaseMode.ONLINE,
+                    newDatabaseMode = DatabaseMode.LOCAL
+                )
+            else
+                reCreateNotificationsForAllProductsUseCase(
+                    oldDatabaseMode = DatabaseMode.LOCAL,
+                    newDatabaseMode = DatabaseMode.ONLINE
+                )
+        }
     }
 
     fun updateAppSettings() {
