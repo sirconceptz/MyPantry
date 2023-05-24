@@ -235,10 +235,12 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onChangeEmailAddressForNotifications(emailAddress: String) {
+        val parsedAddress = emailAddress.replace("\\s".toRegex(), "")
+
         _settingsState.update {
-            when (validateEmailUseCase(emailAddress)) {
+            when (validateEmailUseCase(parsedAddress)) {
                 EmailValidation.VALID -> it.copy(
-                    emailAddressForNotifications = emailAddress,
+                    emailAddressForNotifications = parsedAddress,
                     emailNotificationsCheckboxEnabled = true,
                     showChangeNotificationsEmailDialog = false
                 )

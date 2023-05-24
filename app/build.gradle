@@ -16,7 +16,7 @@ android {
         applicationId "com.hermanowicz.pantry"
         minSdk 26
         targetSdk 33
-        versionCode 71
+        versionCode 72
         versionName "4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -105,7 +105,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
     implementation 'com.google.firebase:firebase-auth:22.0.0'
-    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.3.2'
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
