@@ -93,6 +93,7 @@ class EditProductViewModel @Inject constructor(
         else {
             updateProducts()
             cleanErrors()
+            onNavigateToMyPantry(true)
         }
     }
 

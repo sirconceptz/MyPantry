@@ -80,6 +80,16 @@ fun ProductTasteCheckboxes(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Text(text = stringResource(id = Taste.BITTER.nameResId))
+                    CircleCheckbox(
+                        selected = filterProductDataState.bitter,
+                        onChecked = { onSelect(Taste.BITTER.name, !filterProductDataState.bitter) })
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(text = stringResource(id = Taste.SALTY.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.salty,

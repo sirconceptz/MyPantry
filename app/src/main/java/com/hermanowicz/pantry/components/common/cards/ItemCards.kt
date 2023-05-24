@@ -63,27 +63,31 @@ fun GroupProductItemCard(
                 fontSize = 15.sp
             )
             Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 20.dp,
+                    alignment = Alignment.End
+                )
             ) {
-                if (groupProduct.product.hasSugar) Text(
+                Text(
                     text = stringResource(R.string.sugar),
                     fontSize = 14.sp,
-                    color = MaterialTheme.colors.onSurface
+                    color = if (groupProduct.product.hasSugar) MaterialTheme.colors.onSurface else MaterialTheme.colors.surface
                 )
-                if (groupProduct.product.hasSalt) Text(
+                Text(
                     text = stringResource(R.string.salt),
                     fontSize = 14.sp,
-                    color = MaterialTheme.colors.onSurface
+                    color = if (groupProduct.product.hasSalt) MaterialTheme.colors.onSurface else MaterialTheme.colors.surface
                 )
-                if (groupProduct.product.isVege) Text(
+                Text(
                     text = stringResource(R.string.vege),
                     fontSize = 14.sp,
-                    color = MaterialTheme.colors.onSurface
+                    color = if (groupProduct.product.isVege) MaterialTheme.colors.onSurface else MaterialTheme.colors.surface
                 )
-                if (groupProduct.product.isBio) Text(
+                Text(
                     text = stringResource(R.string.bio),
                     fontSize = 14.sp,
-                    color = MaterialTheme.colors.onSurface
+                    color = if (groupProduct.product.isBio) MaterialTheme.colors.onSurface else MaterialTheme.colors.surface
                 )
             }
         }
@@ -239,7 +243,7 @@ fun ProductDetailsAttributesCard(
                     Text(text = stringResource(R.string.sugar))
                     CircleCheckbox(
                         selected = hasSugar,
-                        onChecked = { onHasSugarChange(!isVege) }
+                        onChecked = { onHasSugarChange(!hasSugar) }
                     )
                 }
                 DividerCardInside()

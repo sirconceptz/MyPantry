@@ -35,6 +35,7 @@ data class FilterProductDataState(
     val sweet: Boolean = false,
     val sour: Boolean = false,
     val sweetAndSour: Boolean = false,
+    val bitter: Boolean = false,
     val salty: Boolean = false,
     val spicy: Boolean = false,
     var showErrorWrongName: Boolean = false,

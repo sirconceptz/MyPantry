@@ -3,6 +3,7 @@ package com.hermanowicz.pantry.navigation.features.myPantry.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.FilterProduct
+import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
 import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
@@ -50,15 +51,25 @@ class MyPantryViewModel @Inject constructor(
     private val _errorAlertSystemState = MutableStateFlow(ErrorAlertSystemState())
     val errorAlertSystemState: StateFlow<ErrorAlertSystemState> = _errorAlertSystemState
 
+    private val _filterProductDataState = MutableStateFlow(FilterProductDataState())
+    var filterProductDataState: StateFlow<FilterProductDataState> =
+        _filterProductDataState.asStateFlow()
+
+    private lateinit var products: List<Product>
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<MyPantryProductsUiState> = observeDatabaseModeUseCase()
         .flatMapLatest { databaseMode ->
             observeAllProductsUseCase(databaseMode)
         }
-        .map { products ->
+        .flatMapLatest {
+            products = it
+            filterProductDataState
+        }
+        .map { filterProductDataState ->
             val filteredProductList = getFilteredProductListUseCase(
                 products,
-                filterProductDataState.value.filterProduct
+                filterProductDataState.filterProduct
             )
             MyPantryProductsUiState.Loaded(
                 MyPantryModel(
@@ -73,16 +84,23 @@ class MyPantryViewModel @Inject constructor(
             initialValue = MyPantryProductsUiState.Loading,
         )
 
-    private val _filterProductDataState = MutableStateFlow(FilterProductDataState())
-    var filterProductDataState: StateFlow<FilterProductDataState> =
-        _filterProductDataState.asStateFlow()
 
     init {
         enableErrorAlertSystem()
     }
 
     fun onCleanClick() {
-        _filterProductDataState.update { it.copy(filterProduct = FilterProduct()) }
+        _filterProductDataState.update {
+            it.copy(
+                filterProduct = FilterProduct(),
+                sweet = false,
+                sweetAndSour = false,
+                sour = false,
+                salty = false,
+                bitter = false,
+                spicy = false
+            )
+        }
     }
 
     fun onSearchClick() {
@@ -319,6 +337,14 @@ class MyPantryViewModel @Inject constructor(
                 _filterProductDataState.update {
                     it.copy(
                         sweetAndSour = bool
+                    )
+                }
+            }
+
+            Taste.BITTER.name -> {
+                _filterProductDataState.update {
+                    it.copy(
+                        bitter = bool
                     )
                 }
             }
