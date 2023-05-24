@@ -40,8 +40,10 @@ class ProductRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else
+            } else {
                 trySend(emptyList())
+                awaitClose { }
+            }
         }
     }
 
@@ -65,8 +67,10 @@ class ProductRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else
+            } else {
                 trySend(null)
+                awaitClose { }
+            }
         }
     }
 

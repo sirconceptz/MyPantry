@@ -3,15 +3,15 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.settings.AppSettings
-import com.hermanowicz.pantry.domain.utils.CheckIsUserLoggedUseCase
-import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
+import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
 import com.hermanowicz.pantry.domain.settings.FetchAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
 import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
+import com.hermanowicz.pantry.domain.utils.CheckIsUserLoggedUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
@@ -83,15 +83,9 @@ class SettingsViewModel @Inject constructor(
         val mode = enumValueOf<DatabaseMode>(databaseMode)
         viewModelScope.launch(Dispatchers.IO) {
             if (mode == DatabaseMode.LOCAL)
-                reCreateNotificationsForAllProductsUseCase(
-                    oldDatabaseMode = DatabaseMode.ONLINE,
-                    newDatabaseMode = DatabaseMode.LOCAL
-                )
+                reCreateNotificationsForAllProductsUseCase(DatabaseMode.ONLINE, DatabaseMode.LOCAL)
             else
-                reCreateNotificationsForAllProductsUseCase(
-                    oldDatabaseMode = DatabaseMode.LOCAL,
-                    newDatabaseMode = DatabaseMode.ONLINE
-                )
+                reCreateNotificationsForAllProductsUseCase(DatabaseMode.LOCAL, DatabaseMode.ONLINE)
         }
     }
 
@@ -107,7 +101,6 @@ class SettingsViewModel @Inject constructor(
             pushNotificationsChanged = settingsState.value.pushNotificationsStateChanged
         )
         viewModelScope.launch(Dispatchers.IO) {
-            delay(2500)
             updateAppSettingsUseCase(appSettings)
         }
     }

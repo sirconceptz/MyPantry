@@ -42,7 +42,10 @@ class StorageLocationRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else trySend(emptyList())
+            } else {
+                trySend(emptyList())
+                awaitClose { }
+            }
         }
     }
 
@@ -66,7 +69,10 @@ class StorageLocationRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else trySend(null)
+            } else {
+                trySend(null)
+                awaitClose { }
+            }
         }
     }
 

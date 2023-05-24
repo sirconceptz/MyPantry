@@ -206,13 +206,13 @@ fun SettingsScreen(
                         onStateChange = { viewModel.onChangeEmailNotifications(!state.emailNotifications) },
                         enabled = state.emailNotificationsCheckboxEnabled
                     )
+                    DividerCardInside()
                     TextSettingsButtonWithValue(
                         label = stringResource(id = R.string.email_address_for_notifications),
                         value = state.emailAddressForNotifications,
                         onClick = { viewModel.showEmailAddressDialog(true) },
                         enabled = true
                     )
-                    DividerCardInside()
                 }
             }
             item {

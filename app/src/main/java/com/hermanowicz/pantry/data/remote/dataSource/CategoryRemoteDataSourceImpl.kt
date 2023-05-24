@@ -41,8 +41,10 @@ class CategoryRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else
+            } else {
                 trySend(emptyList())
+                awaitClose { }
+            }
         }
     }
 
@@ -66,8 +68,10 @@ class CategoryRemoteDataSourceImpl @Inject constructor(
                     }
                 })
                 awaitClose { ref.removeEventListener(listener) }
-            } else
+            } else {
                 trySend(null)
+                awaitClose { }
+            }
         }
     }
 

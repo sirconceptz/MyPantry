@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.google.firebase.auth.FirebaseAuth
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.NotificationRepository
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
@@ -67,14 +68,18 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createNotificationForAllProducts(databaseMode: DatabaseMode) {
-        observeAllProductsUseCase(databaseMode).collect { products ->
-            createNotification(products)
-        }
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val products = if (databaseMode == DatabaseMode.ONLINE && userId.isNotEmpty())
+            observeAllProductsUseCase(databaseMode).first()
+        else
+            observeAllProductsUseCase(DatabaseMode.LOCAL).first()
+        createNotification(products)
     }
 
     override suspend fun cancelNotificationForAllProducts(databaseMode: DatabaseMode) {
-        observeAllProductsUseCase(databaseMode).collect { products ->
-            cancelNotification(products.map { it.id })
+        val products = observeAllProductsUseCase(databaseMode).first()
+        products.forEach { product ->
+            cancelNotification(products.map { product.id })
         }
     }
 
