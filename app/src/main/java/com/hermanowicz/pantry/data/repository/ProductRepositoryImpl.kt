@@ -51,7 +51,7 @@ class ProductRepositoryImpl @Inject constructor(
             observeAll(databaseMode).map { products ->
                 products.maxOf { it.id }
             }.first()
-        } catch (exception: Exception) {
+        } catch (NoSuchElementException: Exception) {
             -1
         }
     }

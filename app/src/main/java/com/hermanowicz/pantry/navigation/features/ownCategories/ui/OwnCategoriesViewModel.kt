@@ -69,7 +69,9 @@ class OwnCategoriesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             saveCategoryUseCase(category)
         }
-        _categoriesState.update { it.copy(showDialogAddNewCategory = false) }
+        onShowDialogAddNewCategory(false)
+        clearTextfields()
+
     }
 
     fun onAddCategoryNameChange(name: String) {
@@ -130,11 +132,21 @@ class OwnCategoriesViewModel @Inject constructor(
             updateCategoryUseCase(categoriesState.value.editedCategory)
         }
         onHideDialogEditCategory()
+        clearTextfields()
     }
 
     fun onDeleteCategory(category: Category) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteCategoryUseCase(category)
+        }
+    }
+
+    private fun clearTextfields() {
+        _categoriesState.update {
+            it.copy(
+                name = "",
+                description = ""
+            )
         }
     }
 }

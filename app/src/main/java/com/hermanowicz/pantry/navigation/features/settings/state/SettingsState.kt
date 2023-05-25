@@ -9,6 +9,7 @@ data class SettingsState(
     val databaseMode: String = DatabaseMode.LOCAL.name,
     val showDatabaseModeDropdown: Boolean = false,
     val databaseModeDropdownEnabled: Boolean = false,
+    val exportDatabaseToCloudEnabled: Boolean = false,
     val cameraToScanCodes: String = CameraMode.REAR.name,
     val showCameraModeDropdown: Boolean = false,
     val scannerSound: Boolean = true,

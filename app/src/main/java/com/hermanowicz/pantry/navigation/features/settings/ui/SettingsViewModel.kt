@@ -289,8 +289,19 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    private fun enableExportToCloud(bool: Boolean) {
+        _settingsState.update {
+            it.copy(
+                exportDatabaseToCloudEnabled = bool
+            )
+        }
+    }
+
     fun onConfirmDeleteAccount() {
-        deleteUserAccountUseCase()
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteUserAccountUseCase()
+        }
+        showDeleteAccountDialog(false)
     }
 
     private fun disableOnlineFeaturesIfUnlogged() {
@@ -299,5 +310,6 @@ class SettingsViewModel @Inject constructor(
             onChangeDatabaseMode(DatabaseMode.LOCAL.name)
         }
         enableDatabaseModeDropdown(isUserLogged)
+        enableExportToCloud(isUserLogged)
     }
 }

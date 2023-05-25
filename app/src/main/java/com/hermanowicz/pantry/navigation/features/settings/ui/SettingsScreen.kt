@@ -161,8 +161,11 @@ fun SettingsScreen(
                         enabled = state.databaseModeDropdownEnabled
                     )
                     DividerCardInside()
-                    TextSettingsButton(label = stringResource(id = R.string.export_local_database_to_cloud),
-                        onClick = { viewModel.showExportDatabaseToCloudDialog(true) })
+                    TextSettingsButton(
+                        label = stringResource(id = R.string.export_local_database_to_cloud),
+                        onClick = { viewModel.showExportDatabaseToCloudDialog(true) },
+                        enabled = state.exportDatabaseToCloudEnabled
+                    )
                     DividerCardInside()
                     DropdownSettings(label = stringResource(id = R.string.camera_to_scan_codes),
                         mapKey = state.cameraToScanCodes,

@@ -59,9 +59,13 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLastId(databaseMode: DatabaseMode): Int {
-        return observeAll(databaseMode).map { categories ->
-            categories.maxOf { it.id }
-        }.first()
+        return try {
+            observeAll(databaseMode).map { categories ->
+                categories.maxOf { it.id }
+            }.first()
+        } catch (e: NoSuchElementException) {
+            -1
+        }
     }
 
     override suspend fun insert(category: Category) {

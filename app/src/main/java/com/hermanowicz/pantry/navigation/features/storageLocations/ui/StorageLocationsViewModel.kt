@@ -96,7 +96,8 @@ class StorageLocationsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             saveStorageLocationsUseCase(storageLocation)
         }
-        _storageLocationsState.update { it.copy(showDialogAddNewStorageLocation = false) }
+        onShowDialogAddNewStorageLocation(false)
+        clearTextfields()
     }
 
     fun onShowDialogAddNewStorageLocation(isActive: Boolean) {
@@ -131,5 +132,15 @@ class StorageLocationsViewModel @Inject constructor(
             updateStorageLocationUseCase(storageLocationState.value.editedStorageLocation)
         }
         onHideDialogEditStorageLocation()
+        clearTextfields()
+    }
+
+    private fun clearTextfields() {
+        _storageLocationsState.update {
+            it.copy(
+                name = "",
+                description = ""
+            )
+        }
     }
 }

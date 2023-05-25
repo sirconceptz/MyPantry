@@ -105,7 +105,7 @@
     <string name="author">Autor</string>
     <string name="confirm">Potwierdź</string>
     <string name="statement_clear_database_warning">Czy chcesz wyczyścić bazę danych? Wszystkie wpisy zostaną usunięte, a operacja jest nieodwracalna.</string>
-    <string name="statement_import_local_db_to_cloud_warning">Zaimportuj bazę produktów z urządzenia do chmury (online). DANE OBECNIE ZAPISANE W CHMURZE ZOSTANĄ USUNIĘTE I ZASTĘPOWANE PRZEZ PRODUKTY TELEFONICZNE.</string>
+    <string name="statement_import_local_db_to_cloud_warning">Zaimportuj bazę produktów z urządzenia do chmury (online). DANE OBECNIE ZAPISANE W CHMURZE ZOSTANĄ USUNIĘTE I ZASTĘPOWANE PRZEZ PRODUKTY ZAPISANE LOKALNIE.</string>
     <string name="email">Email</string>
     <string name="unlogged">Wylogowany</string>
     <string name="sign_in">Zaloguj się</string>
