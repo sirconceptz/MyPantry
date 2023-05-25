@@ -43,8 +43,10 @@ class ScanProductViewModel @Inject constructor(
         }
     }
 
-    fun onNavigateToNewProduct(barcodeData: String?) {
-        _uiState.update { it.copy(onNavigateToNewProduct = barcodeData) }
+    fun onNavigateToNewProduct(barcodeData: String) {
+        if (barcodeData.isNotEmpty()) {
+            _uiState.update { it.copy(onNavigateToNewProduct = barcodeData) }
+        }
     }
 
     fun onNavigateToProductDetails(productData: Pair<Int, String>?) {

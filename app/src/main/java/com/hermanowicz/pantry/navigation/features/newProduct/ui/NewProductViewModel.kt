@@ -45,7 +45,7 @@ class NewProductViewModel @Inject constructor(
     private val checkQuantityIsValidUseCase: CheckQuantityIsValidUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(NewProductUiState.Empty)
+    private val _uiState = MutableStateFlow(NewProductUiState.Loading)
     var uiState: StateFlow<NewProductUiState> = _uiState.asStateFlow()
 
     private val _productDataState = MutableStateFlow(NewProductState())

@@ -68,8 +68,11 @@ fun ScanProductScreen(
     }
 
     if (uiState.onNavigateToNewProduct != null) {
-        onNavigationToNewProduct(uiState.onNavigateToNewProduct!!)
-        viewModel.onNavigateToNewProduct(null)
+        if (uiState.onNavigateToNewProduct!!.isNotEmpty()) {
+            onNavigationToNewProduct(uiState.onNavigateToNewProduct!!)
+
+        }
+        viewModel.onNavigateToNewProduct("")
     }
 
     if (uiState.goToPermissionSettings) {

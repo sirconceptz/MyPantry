@@ -48,7 +48,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProductDetailsState())
     val state: StateFlow<ProductDetailsState> = _state
 
-    private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Empty)
+    private val _uiState = MutableStateFlow<ProductDetailsUiState>(ProductDetailsUiState.Loading)
     val uiState: StateFlow<ProductDetailsUiState> = _uiState
 
     private val idAndHashcode: String = savedStateHandle["idAndHashcode"] ?: ";"
@@ -98,7 +98,7 @@ class ProductDetailsViewModel @Inject constructor(
                                     _uiState.value =
                                         ProductDetailsUiState.Error("No correct product")
                                 } else
-                                    _uiState.value = ProductDetailsUiState.Empty
+                                    _uiState.value = ProductDetailsUiState.Loading
                             }
                         }
                     }
@@ -194,6 +194,7 @@ class ProductDetailsViewModel @Inject constructor(
         onNavigateToMyPantry(true)
         viewModelScope.launch(Dispatchers.IO) {
             deleteProductsUseCase(groupProduct.idList)
+            deleteNotificationForProductsUseCase(groupProduct.idList)
         }
     }
 
