@@ -32,9 +32,9 @@ fun CircleCheckbox(
         modifier = modifier,
         enabled = enabled
     ) {
-
         Icon(
-            imageVector = imageVector, tint = tint,
+            imageVector = imageVector,
+            tint = tint,
             modifier = Modifier.background(White, shape = CircleShape),
             contentDescription = null
         )

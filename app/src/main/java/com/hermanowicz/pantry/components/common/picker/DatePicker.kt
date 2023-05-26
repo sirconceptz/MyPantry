@@ -22,13 +22,18 @@ fun DatePickerPrimary(
         LocalContext.current,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             onChangeDate(DatePickerData(mDayOfMonth, mMonth, mYear))
-        }, datePickerData.year, datePickerData.month, datePickerData.day
+        },
+        datePickerData.year,
+        datePickerData.month,
+        datePickerData.day
     )
     val now = System.currentTimeMillis()
-    if (pickerType == PickerType.FROM)
+    if (pickerType == PickerType.FROM) {
         datePickerDialog.datePicker.maxDate = now
-    if (pickerType == PickerType.TO)
+    }
+    if (pickerType == PickerType.TO) {
         datePickerDialog.datePicker.minDate = now
+    }
 
     TextFieldAndLabelDate(
         textfieldText = DateAndTimeConverter.dateToVisibleWithYear(dateToDisplay),
@@ -45,19 +50,25 @@ fun DatePickerDouble(
     dateLeftToDisplay: String,
     dateRightToDisplay: String,
     onChangeLeftDate: (DatePickerData) -> Unit,
-    onChangeRightDate: (DatePickerData) -> Unit,
+    onChangeRightDate: (DatePickerData) -> Unit
 ) {
     val datePickerLeftDialog = DatePickerDialog(
         LocalContext.current,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             onChangeLeftDate(DatePickerData(mDayOfMonth, mMonth, mYear))
-        }, datePickerLeftData.year, datePickerLeftData.month, datePickerLeftData.day
+        },
+        datePickerLeftData.year,
+        datePickerLeftData.month,
+        datePickerLeftData.day
     )
     val datePickerRightDialog = DatePickerDialog(
         LocalContext.current,
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             onChangeRightDate(DatePickerData(mDayOfMonth, mMonth, mYear))
-        }, datePickerRightData.year, datePickerRightData.month, datePickerRightData.day
+        },
+        datePickerRightData.year,
+        datePickerRightData.month,
+        datePickerRightData.day
     )
 
     TextFieldDoubleAndLabelDate(

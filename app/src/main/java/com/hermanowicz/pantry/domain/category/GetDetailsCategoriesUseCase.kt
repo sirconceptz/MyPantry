@@ -23,11 +23,11 @@ class GetDetailsCategoriesUseCase @Inject constructor(
 ) : (List<Category>, String) -> Map<String, String> {
     override fun invoke(ownCategories: List<Category>, mainCategory: String): Map<String, String> {
         val map: MutableMap<String, String> = mutableMapOf()
-        if (mainCategory.isEmpty())
+        if (mainCategory.isEmpty()) {
             enumValues<ChooseCategoryTypes>().forEach { category ->
                 map[category.name] = context.getString(category.nameResId)
             }
-        else {
+        } else {
             when (enumValueOf<MainCategories>(mainCategory)) {
                 MainCategories.CHOOSE -> {
                     enumValues<ChooseCategoryTypes>().forEach { category ->

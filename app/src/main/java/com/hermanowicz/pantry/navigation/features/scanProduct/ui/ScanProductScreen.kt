@@ -38,8 +38,9 @@ fun ScanProductScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onScanQRCode()
@@ -52,8 +53,9 @@ fun ScanProductScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onScanBarcode()
@@ -70,7 +72,6 @@ fun ScanProductScreen(
     if (uiState.onNavigateToNewProduct != null) {
         if (uiState.onNavigateToNewProduct!!.isNotEmpty()) {
             onNavigationToNewProduct(uiState.onNavigateToNewProduct!!)
-
         }
         viewModel.onNavigateToNewProduct("")
     }
@@ -89,7 +90,8 @@ fun ScanProductScreen(
                 label = stringResource(id = R.string.put_barcode_manually),
                 value = uiState.barcodeManually,
                 onPositiveRequest = { viewModel.onNavigateToNewProduct(it) },
-                onDismissRequest = { viewModel.onPutBarcodeManually(false) })
+                onDismissRequest = { viewModel.onPutBarcodeManually(false) }
+            )
         }
 
         LazyColumn(

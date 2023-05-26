@@ -9,4 +9,5 @@ object Constants {
     const val PHOTO_EXTENSION = ".jpg"
     const val PHOTO_DIRECTORY = "MyPantry"
     const val PDF_PATH = "Download/MyPantry"
+    const val DATA_STORE_FILE = "user_prefs"
 }

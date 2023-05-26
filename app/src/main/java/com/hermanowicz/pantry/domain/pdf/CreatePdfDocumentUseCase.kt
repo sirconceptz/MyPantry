@@ -3,8 +3,8 @@ package com.hermanowicz.pantry.domain.pdf
 import android.content.Context
 import android.graphics.pdf.PdfDocument
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.photo.GetFileNameUseCase
+import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.utils.PdfData
 import com.hermanowicz.pantry.utils.PdfFile
 import com.hermanowicz.pantry.utils.PrintQRData
@@ -26,11 +26,15 @@ class CreatePdfDocumentUseCase @Inject constructor(
             PrintQRData.getProductLabelList(products, qrCodeSize)
         val pdfDocument: PdfDocument
         val pdfData = PdfData()
-        pdfDocument = if (qrCodeSize == QrCodeSize.BIG) pdfData.createPdfDocumentBigQrCodes(
-            productLabelList
-        ) else pdfData.createPdfDocumentSmallQrCodes(
-            productLabelList
-        )
+        pdfDocument = if (qrCodeSize == QrCodeSize.BIG) {
+            pdfData.createPdfDocumentBigQrCodes(
+                productLabelList
+            )
+        } else {
+            pdfData.createPdfDocumentSmallQrCodes(
+                productLabelList
+            )
+        }
         PdfFile.savePdf(context, pdfDocument, pdfFileName)
         pdfDocument.close()
         return pdfFileName

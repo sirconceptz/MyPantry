@@ -5,7 +5,7 @@ import com.hermanowicz.pantry.navigation.features.addPhoto.ui.AddPhotoScreen
 
 @Composable
 fun AddPhotoRoute(
-    openDrawer: () -> Unit,
+    openDrawer: () -> Unit
 ) {
     AddPhotoScreen(openDrawer = openDrawer)
 }

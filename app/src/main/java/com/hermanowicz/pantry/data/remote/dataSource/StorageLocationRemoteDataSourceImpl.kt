@@ -15,8 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StorageLocationRemoteDataSourceImpl @Inject constructor(
-) : StorageLocationRemoteDataSource {
+class StorageLocationRemoteDataSourceImpl @Inject constructor() : StorageLocationRemoteDataSource {
 
     private val databaseReference =
         FirebaseDatabase.getInstance().reference.child("storage_locations")

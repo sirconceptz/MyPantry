@@ -21,12 +21,13 @@ class GetDetailCategoryUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) : (List<Category>, Product) -> String {
     override fun invoke(ownCategories: List<Category>, product: Product): String {
-        if (product.mainCategory.isEmpty() && product.detailCategory.isEmpty())
+        if (product.mainCategory.isEmpty() && product.detailCategory.isEmpty()) {
             return product.detailCategory
-        else {
+        } else {
             ownCategories.forEach { category ->
-                if (category.name == product.detailCategory)
+                if (category.name == product.detailCategory) {
                     return category.name
+                }
             }
 
             enumValues<StoreProductsCategoryTypes>().forEach { category ->

@@ -29,7 +29,6 @@ import com.hermanowicz.pantry.components.common.dropdown.DropdownPrimary
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 
-
 @Composable
 fun DialogItem(
     label: String,
@@ -71,10 +70,12 @@ fun DialogItem(
                     placeholder = stringResource(id = R.string.description)
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.save), onClick = onSaveClick
+                    text = stringResource(id = R.string.save),
+                    onClick = onSaveClick
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.cancel), onClick = onDismissRequest
+                    text = stringResource(id = R.string.cancel),
+                    onClick = onDismissRequest
                 )
             }
         }
@@ -140,13 +141,13 @@ fun DialogAuthorInfo(
                     textAlign = TextAlign.Center
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                    text = stringResource(id = R.string.close),
+                    onClick = onDismissRequest
                 )
             }
         }
     }
 }
-
 
 @Composable
 fun DialogChooseNewProduct(
@@ -195,10 +196,12 @@ fun DialogChooseNewProduct(
                     onDismiss = { showDropdown(false) }
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.confirm), onClick = onPositiveRequest
+                    text = stringResource(id = R.string.confirm),
+                    onClick = onPositiveRequest
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                    text = stringResource(id = R.string.close),
+                    onClick = onDismissRequest
                 )
             }
         }
@@ -239,16 +242,17 @@ fun DialogWarning(
                     textAlign = TextAlign.Justify
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.confirm), onClick = onPositiveRequest
+                    text = stringResource(id = R.string.confirm),
+                    onClick = onPositiveRequest
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                    text = stringResource(id = R.string.close),
+                    onClick = onDismissRequest
                 )
             }
         }
     }
 }
-
 
 @Composable
 fun DialogTextfield(
@@ -292,7 +296,8 @@ fun DialogTextfield(
                     onClick = { onPositiveRequest(text.text) }
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.close), onClick = onDismissRequest
+                    text = stringResource(id = R.string.close),
+                    onClick = onDismissRequest
                 )
             }
         }

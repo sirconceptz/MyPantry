@@ -5,18 +5,18 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.GroupProduct
-import com.hermanowicz.pantry.domain.product.CheckIsProductsHashcodeCorrectUseCase
-import com.hermanowicz.pantry.domain.product.DeleteProductsUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
+import com.hermanowicz.pantry.domain.product.CheckIsProductsHashcodeCorrectUseCase
 import com.hermanowicz.pantry.domain.product.DeleteNotificationForProductsUseCase
+import com.hermanowicz.pantry.domain.product.DeleteProductsUseCase
+import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.ParseDeprecatedDatabaseProductsUseCase
-import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
+import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
@@ -97,8 +97,9 @@ class ProductDetailsViewModel @Inject constructor(
                                 if (!state.value.onNavigateToMyPantry) {
                                     _uiState.value =
                                         ProductDetailsUiState.Error("No correct product")
-                                } else
+                                } else {
                                     _uiState.value = ProductDetailsUiState.Loading
+                                }
                             }
                         }
                     }

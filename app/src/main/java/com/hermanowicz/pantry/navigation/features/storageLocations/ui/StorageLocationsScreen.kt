@@ -33,8 +33,9 @@ fun StorageLocationsScreen(
     val storageLocationState by viewModel.storageLocationState.collectAsState()
     val storageLocationModel = updateStorageLocationsModel(viewModel)
 
-    if (storageLocationModel.storageLocations.isEmpty() && storageLocationState.isEditMode)
+    if (storageLocationModel.storageLocations.isEmpty() && storageLocationState.isEditMode) {
         viewModel.onEditMode(false)
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.storage_locations),
@@ -96,7 +97,7 @@ fun StorageLocationsScreen(
                     onClickDeleteStorageLocation = {
                         viewModel.onDeleteStorageLocation(it)
                     },
-                    isEditMode = storageLocationState.isEditMode,
+                    isEditMode = storageLocationState.isEditMode
                 )
             }
         }

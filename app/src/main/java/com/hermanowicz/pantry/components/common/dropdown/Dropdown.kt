@@ -39,16 +39,18 @@ fun DropdownCard(
 
     Column {
         Text(text = textLeft)
-        Card(modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .border(BorderStroke(1.dp, Color.Black), Shapes.medium)) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .border(BorderStroke(1.dp, Color.Black), Shapes.medium)
+        ) {
             Column(
                 modifier = Modifier.padding(LocalSpacing.current.medium)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = textRight,
@@ -88,12 +90,12 @@ fun DropdownPrimary(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = textLeft)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = textRight,
+                    text = textRight
                 )
                 DropdownMenu(expanded = visibleDropdown, onDismissRequest = { onDismiss() }) {
                     itemMap.forEach { item ->
@@ -125,7 +127,7 @@ fun DropdownPrimary(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = value, color = MaterialTheme.colors.onSurface)
                 Spacer(modifier = Modifier.weight(1f))
@@ -161,16 +163,19 @@ fun DropdownSettings(
 ) {
     val value = itemMap.getValue(mapKey)
 
-    Row(modifier = Modifier.clickable {
-        if (enabled) onClick()
-    }) {
+    Row(
+        modifier = Modifier.clickable {
+            if (enabled) onClick()
+        }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(LocalSpacing.current.medium)
         ) {
             Text(
-                text = label, style = TextStyle(
+                text = label,
+                style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onSurface
@@ -196,7 +201,9 @@ fun DropdownSettings(
 
 @Composable
 fun DropdownProductDetailsOptions(
-    expanded: Boolean, onShow: (Boolean) -> Unit, onSelect: (String) -> Unit
+    expanded: Boolean,
+    onShow: (Boolean) -> Unit,
+    onSelect: (String) -> Unit
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = { onShow(!expanded) }) {
         val itemList: List<Pair<String, String>> = ProductDetailsOption.toPairList()
@@ -207,7 +214,5 @@ fun DropdownProductDetailsOptions(
                 Text(text = option.second, color = MaterialTheme.colors.onSurface)
             }
         }
-
     }
-
 }

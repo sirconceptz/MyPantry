@@ -4,7 +4,6 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.hermanowicz.pantry.data.local.model.CategoryEntity
 import com.hermanowicz.pantry.data.local.model.ErrorEntity
-import com.hermanowicz.pantry.data.local.model.PhotoEntity
 import com.hermanowicz.pantry.data.local.model.ProductEntity
 import com.hermanowicz.pantry.data.local.model.StorageLocationEntity
 

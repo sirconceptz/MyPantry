@@ -5,8 +5,6 @@ import javax.inject.Inject
 
 class GetProductIdListUseCase @Inject constructor() : (List<Product>) -> (List<Int>) {
     override fun invoke(products: List<Product>): List<Int> {
-        val idList = mutableListOf<Int>()
-        products.forEach { idList.add(it.id) }
-        return idList.toList()
+        return products.map { it.id }
     }
 }

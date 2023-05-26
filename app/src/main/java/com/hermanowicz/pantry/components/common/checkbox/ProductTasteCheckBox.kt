@@ -48,7 +48,8 @@ fun ProductTasteCheckboxes(
                     Text(text = stringResource(id = Taste.SWEET.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.sweet,
-                        onChecked = { onSelect(Taste.SWEET.name, !filterProductDataState.sweet) })
+                        onChecked = { onSelect(Taste.SWEET.name, !filterProductDataState.sweet) }
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -58,7 +59,8 @@ fun ProductTasteCheckboxes(
                     Text(text = stringResource(id = Taste.SOUR.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.sour,
-                        onChecked = { onSelect(Taste.SOUR.name, !filterProductDataState.sour) })
+                        onChecked = { onSelect(Taste.SOUR.name, !filterProductDataState.sour) }
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -73,7 +75,8 @@ fun ProductTasteCheckboxes(
                                 Taste.SWEET_AND_SOUR.name,
                                 !filterProductDataState.sweetAndSour
                             )
-                        })
+                        }
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -83,7 +86,8 @@ fun ProductTasteCheckboxes(
                     Text(text = stringResource(id = Taste.BITTER.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.bitter,
-                        onChecked = { onSelect(Taste.BITTER.name, !filterProductDataState.bitter) })
+                        onChecked = { onSelect(Taste.BITTER.name, !filterProductDataState.bitter) }
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -93,7 +97,8 @@ fun ProductTasteCheckboxes(
                     Text(text = stringResource(id = Taste.SALTY.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.salty,
-                        onChecked = { onSelect(Taste.SALTY.name, !filterProductDataState.salty) })
+                        onChecked = { onSelect(Taste.SALTY.name, !filterProductDataState.salty) }
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -103,7 +108,8 @@ fun ProductTasteCheckboxes(
                     Text(text = stringResource(id = Taste.SPICY.nameResId))
                     CircleCheckbox(
                         selected = filterProductDataState.spicy,
-                        onChecked = { onSelect(Taste.SPICY.name, !filterProductDataState.spicy) })
+                        onChecked = { onSelect(Taste.SPICY.name, !filterProductDataState.spicy) }
+                    )
                 }
             }
         }

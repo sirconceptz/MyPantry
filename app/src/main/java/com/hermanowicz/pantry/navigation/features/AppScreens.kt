@@ -6,7 +6,7 @@ sealed class AppScreens(
     object AddPhoto : AppScreens("add_photo")
     object EditProduct : AppScreens("edit_product")
     object FilterProduct : AppScreens("filter_product")
-    object MyPantry : AppScreens("my_pantry")               // home screen
+    object MyPantry : AppScreens("my_pantry") // home screen
     object NewProduct : AppScreens("new_product")
     object OwnCategories : AppScreens("own_categories")
     object PrintQRCodes : AppScreens("print_qr_codes")

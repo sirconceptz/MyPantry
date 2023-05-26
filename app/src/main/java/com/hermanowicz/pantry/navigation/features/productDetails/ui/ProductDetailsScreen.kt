@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.navigation.features.productDetails.ui
 
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -11,17 +10,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
@@ -60,8 +56,9 @@ fun ProductDetailsScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onScanBarcode()
@@ -220,30 +217,46 @@ fun ProductDetailsView(groupProduct: GroupProduct, state: ProductDetailsState) {
         DividerCardInside()
         ProductDetailItem(
             label = stringResource(id = R.string.vege),
-            value = if (groupProduct.product.isVege) stringResource(id = R.string.yes) else stringResource(
-                id = R.string.no
-            )
+            value = if (groupProduct.product.isVege) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(
+                    id = R.string.no
+                )
+            }
         )
         DividerCardInside()
         ProductDetailItem(
             label = stringResource(id = R.string.bio),
-            value = if (groupProduct.product.isBio) stringResource(id = R.string.yes) else stringResource(
-                id = R.string.no
-            )
+            value = if (groupProduct.product.isBio) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(
+                    id = R.string.no
+                )
+            }
         )
         DividerCardInside()
         ProductDetailItem(
             label = stringResource(id = R.string.sugar),
-            value = if (groupProduct.product.hasSugar) stringResource(id = R.string.yes) else stringResource(
-                id = R.string.no
-            )
+            value = if (groupProduct.product.hasSugar) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(
+                    id = R.string.no
+                )
+            }
         )
         DividerCardInside()
         ProductDetailItem(
             label = stringResource(id = R.string.salt),
-            value = if (groupProduct.product.hasSalt) stringResource(id = R.string.yes) else stringResource(
-                id = R.string.no
-            )
+            value = if (groupProduct.product.hasSalt) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(
+                    id = R.string.no
+                )
+            }
         )
     }
 }
@@ -253,11 +266,6 @@ private fun updateUi(
     viewModel: ProductDetailsViewModel
 ): ProductDetailsModel {
     when (val state = viewModel.uiState.collectAsState().value) {
-        is ProductDetailsUiState.Empty -> {
-            Timber.d("Product Details UI State - Empty")
-            return ProductDetailsModel()
-        }
-
         is ProductDetailsUiState.Loading -> {
             Timber.d("Product Details UI State - Loading")
             LoadingDialog()

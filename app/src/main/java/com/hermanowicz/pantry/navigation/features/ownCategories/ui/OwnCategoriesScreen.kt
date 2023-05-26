@@ -33,8 +33,9 @@ fun OwnCategoriesScreen(
     val categoriesState by viewModel.categoriesState.collectAsState()
     val categoriesModel = updateCategoriesModel(viewModel)
 
-    if (categoriesModel.categories.isEmpty() && categoriesState.isEditMode)
+    if (categoriesModel.categories.isEmpty() && categoriesState.isEditMode) {
         viewModel.onEditMode(false)
+    }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.own_categories),

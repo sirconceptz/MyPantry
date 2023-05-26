@@ -37,8 +37,9 @@ fun AddPhotoScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onClickAddPhoto(true)
@@ -75,7 +76,8 @@ fun AddPhotoScreen(
     TopBarScaffold(
         topBarText = stringResource(id = R.string.add_photo),
         openDrawer = openDrawer,
-        actions = {}) {
+        actions = {}
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()

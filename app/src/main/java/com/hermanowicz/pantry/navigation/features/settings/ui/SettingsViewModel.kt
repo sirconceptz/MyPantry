@@ -82,10 +82,11 @@ class SettingsViewModel @Inject constructor(
     private fun recreateNotifications(databaseMode: String) {
         val mode = enumValueOf<DatabaseMode>(databaseMode)
         viewModelScope.launch(Dispatchers.IO) {
-            if (mode == DatabaseMode.LOCAL)
+            if (mode == DatabaseMode.LOCAL) {
                 reCreateNotificationsForAllProductsUseCase(DatabaseMode.ONLINE, DatabaseMode.LOCAL)
-            else
+            } else {
                 reCreateNotificationsForAllProductsUseCase(DatabaseMode.LOCAL, DatabaseMode.ONLINE)
+            }
         }
     }
 

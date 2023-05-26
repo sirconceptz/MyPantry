@@ -5,5 +5,5 @@ import com.hermanowicz.pantry.utils.category.CategoryType
 
 enum class StoreProductsCategoryTypes(override val nameResId: Int) : CategoryType {
     CHOOSE(R.string.choose),
-    STORE_PRODUCTS(R.string.store_products),
+    STORE_PRODUCTS(R.string.store_products)
 }

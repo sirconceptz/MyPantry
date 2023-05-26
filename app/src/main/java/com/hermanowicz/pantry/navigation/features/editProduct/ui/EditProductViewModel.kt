@@ -4,13 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
-import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
@@ -88,9 +88,9 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onSaveClick() {
-        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
+        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40) {
             _productDataState.update { it.copy(showErrorWrongName = true) }
-        else {
+        } else {
             updateProducts()
             cleanErrors()
             onNavigateToMyPantry(true)
@@ -104,10 +104,12 @@ class EditProductViewModel @Inject constructor(
     fun updateProducts() {
         var mainCategory = ""
         var detailCategory = ""
-        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name)
+        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name) {
             mainCategory = productDataState.value.mainCategory
-        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name)
+        }
+        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name) {
             detailCategory = productDataState.value.detailCategory
+        }
         val product = Product(
             id = productId,
             name = productDataState.value.name,
@@ -169,10 +171,12 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (quantity.matches(RegexFormats.NUMBER.regex) || quantity.isEmpty()) _productDataState.update {
-            it.copy(
-                newQuantity = quantity
-            )
+        if (quantity.matches(RegexFormats.NUMBER.regex) || quantity.isEmpty()) {
+            _productDataState.update {
+                it.copy(
+                    newQuantity = quantity
+                )
+            }
         }
     }
 
@@ -189,18 +193,22 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun onWeightChange(weight: String) {
-        if (weight.matches(RegexFormats.NUMBER.regex) || productDataState.value.weight.isEmpty()) _productDataState.update {
-            it.copy(
-                weight = weight
-            )
+        if (weight.matches(RegexFormats.NUMBER.regex) || productDataState.value.weight.isEmpty()) {
+            _productDataState.update {
+                it.copy(
+                    weight = weight
+                )
+            }
         }
     }
 
     fun onVolumeChange(volume: String) {
-        if (volume.matches(RegexFormats.NUMBER.regex) || productDataState.value.volume.isEmpty()) _productDataState.update {
-            it.copy(
-                volume = volume
-            )
+        if (volume.matches(RegexFormats.NUMBER.regex) || productDataState.value.volume.isEmpty()) {
+            _productDataState.update {
+                it.copy(
+                    volume = volume
+                )
+            }
         }
     }
 
@@ -231,7 +239,8 @@ class EditProductViewModel @Inject constructor(
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
-                mainCategory = mainCategory, showMainCategoryDropdown = false
+                mainCategory = mainCategory,
+                showMainCategoryDropdown = false
             )
         }
     }
@@ -239,7 +248,8 @@ class EditProductViewModel @Inject constructor(
     fun onDetailCategoryChange(detailCategory: String) {
         _productDataState.update {
             it.copy(
-                detailCategory = detailCategory, showDetailCategoryDropdown = false
+                detailCategory = detailCategory,
+                showDetailCategoryDropdown = false
             )
         }
     }
@@ -250,7 +260,8 @@ class EditProductViewModel @Inject constructor(
 
     fun getDetailCategories(): Map<String, String> {
         return getDetailsCategoriesUseCase(
-            productDataState.value.ownCategories, productDataState.value.mainCategory
+            productDataState.value.ownCategories,
+            productDataState.value.mainCategory
         )
     }
 

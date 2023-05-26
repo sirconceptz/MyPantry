@@ -12,5 +12,4 @@ class FetchAppSettingsUseCase @Inject constructor(
     override fun invoke(): Flow<AppSettings> {
         return settingsRepository.appSettings
     }
-
 }

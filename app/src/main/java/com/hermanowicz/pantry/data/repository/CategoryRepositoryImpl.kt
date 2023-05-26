@@ -69,9 +69,9 @@ class CategoryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(category: Category) {
-        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
+        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL) {
             localDataSource.insert(category.toEntityModel())
-        else {
+        } else {
             val id = getLastId(DatabaseMode.ONLINE) + 1
             remoteDataSource.insert(category.copy(id = id).toEntityModel())
         }
@@ -83,26 +83,29 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override suspend fun update(category: Category) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.update(category.toEntityModel())
-        else
+        } else {
             remoteDataSource.update(category.toEntityModel())
+        }
     }
 
     override suspend fun delete(category: Category) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.delete(category.toEntityModel())
-        else
+        } else {
             remoteDataSource.delete(category.toEntityModel())
+        }
     }
 
     override suspend fun deleteAllCurrentDatabase() {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.deleteAll()
-        else
+        } else {
             remoteDataSource.deleteAll()
+        }
     }
 
     override suspend fun deleteAllRemote() {

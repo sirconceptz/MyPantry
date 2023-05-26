@@ -346,7 +346,7 @@ fun FilterProductForm(
             datePickerLeftData = filterProductDataState.expirationDateMinPickerData,
             datePickerRightData = filterProductDataState.expirationDateMaxPickerData,
             onChangeLeftDate = onExpirationDateMinChange,
-            onChangeRightDate = onExpirationDateMaxChange,
+            onChangeRightDate = onExpirationDateMaxChange
         )
         DatePickerDouble(
             labelText = stringResource(id = R.string.production_date),
@@ -355,7 +355,7 @@ fun FilterProductForm(
             datePickerLeftData = filterProductDataState.productionDateMinPickerData,
             datePickerRightData = filterProductDataState.productionDateMaxPickerData,
             onChangeLeftDate = onProductionDateMinChange,
-            onChangeRightDate = onProductionDateMaxChange,
+            onChangeRightDate = onProductionDateMaxChange
         )
         TextFieldAndLabel(
             textfieldText = filterProductDataState.composition,
@@ -409,7 +409,7 @@ fun FilterProductForm(
             isVegeDropdownVisible = filterProductDataState.showIsVegeDropdown,
             isBioDropdownVisible = filterProductDataState.showIsBioDropdown,
             hasSugarDropdownVisible = filterProductDataState.showHasSugarDropdown,
-            hasSaltDropdownVisible = filterProductDataState.showHasSaltDropdown,
+            hasSaltDropdownVisible = filterProductDataState.showHasSaltDropdown
         )
         ProductTasteCheckboxes(
             filterProductDataState = filterProductDataState,

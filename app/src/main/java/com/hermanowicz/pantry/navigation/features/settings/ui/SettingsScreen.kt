@@ -96,7 +96,8 @@ fun SettingsScreen(
     }
 
     TopBarScaffold(
-        topBarText = stringResource(id = R.string.settings), openDrawer = openDrawer
+        topBarText = stringResource(id = R.string.settings),
+        openDrawer = openDrawer
     ) {
         ShowSettingsDialogs(
             state = state,
@@ -113,7 +114,8 @@ fun SettingsScreen(
         SignInForm(
             state = state,
             hideSignInForm = { viewModel.showSignInOrSignOut(false) },
-            showUserEmail = { viewModel.showUserEmail() })
+            showUserEmail = { viewModel.showUserEmail() }
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -122,7 +124,7 @@ fun SettingsScreen(
         ) {
             item {
                 Row(
-                    modifier = Modifier.padding(vertical = LocalSpacing.current.large),
+                    modifier = Modifier.padding(vertical = LocalSpacing.current.large)
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -134,9 +136,13 @@ fun SettingsScreen(
             }
             item {
                 ButtonPrimary(
-                    text = if (!state.isUserLogged) stringResource(id = R.string.sign_in) else stringResource(
-                        id = R.string.sign_out
-                    ),
+                    text = if (!state.isUserLogged) {
+                        stringResource(id = R.string.sign_in)
+                    } else {
+                        stringResource(
+                            id = R.string.sign_out
+                        )
+                    },
                     onClick = { viewModel.showSignInOrSignOut(true) }
                 )
                 if (state.isUserLogged) {
@@ -167,21 +173,25 @@ fun SettingsScreen(
                         enabled = state.exportDatabaseToCloudEnabled
                     )
                     DividerCardInside()
-                    DropdownSettings(label = stringResource(id = R.string.camera_to_scan_codes),
+                    DropdownSettings(
+                        label = stringResource(id = R.string.camera_to_scan_codes),
                         mapKey = state.cameraToScanCodes,
                         itemMap = CameraMode.toMap(),
                         onClick = { viewModel.showCameraMode(true) },
                         onChange = { viewModel.onChangeCameraMode(it) },
                         visibleDropdown = state.showCameraModeDropdown,
-                        onDismiss = { viewModel.showCameraMode(false) })
+                        onDismiss = { viewModel.showCameraMode(false) }
+                    )
                     DividerCardInside()
-                    DropdownSettings(label = stringResource(id = R.string.qr_code_size),
+                    DropdownSettings(
+                        label = stringResource(id = R.string.qr_code_size),
                         mapKey = state.sizeQrCodes,
                         itemMap = QrCodeSize.toMap(),
                         onClick = { viewModel.showQrCodeSizeMode(true) },
                         onChange = { viewModel.onChangeQrCodeSizeMode(it) },
                         visibleDropdown = state.showSizeQrCodesDropdown,
-                        onDismiss = { viewModel.showQrCodeSizeMode(false) })
+                        onDismiss = { viewModel.showQrCodeSizeMode(false) }
+                    )
                 }
             }
             item {
@@ -222,14 +232,18 @@ fun SettingsScreen(
                 SpacerMedium()
                 TextLabel(text = stringResource(id = R.string.advanced))
                 CardWhiteBgWithBorder {
-                    TextSettingsButton(label = stringResource(id = R.string.clear_database),
-                        onClick = { viewModel.showClearDatabaseDialog(true) })
+                    TextSettingsButton(
+                        label = stringResource(id = R.string.clear_database),
+                        onClick = { viewModel.showClearDatabaseDialog(true) }
+                    )
                 }
             }
             item {
                 SpacerLarge()
-                ButtonPrimary(text = stringResource(id = R.string.contact_with_author),
-                    onClick = { viewModel.showAuthorDialog(true) })
+                ButtonPrimary(
+                    text = stringResource(id = R.string.contact_with_author),
+                    onClick = { viewModel.showAuthorDialog(true) }
+                )
                 SpacerMedium()
                 AppVersion()
             }
@@ -245,7 +259,8 @@ fun openInBrowser(context: Context, url: String) {
 @Composable
 private fun AppVersion() {
     Row(
-        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
     ) {
         Text(
             text = stringResource(id = R.string.app_version) + ": ",
@@ -254,7 +269,7 @@ private fun AppVersion() {
         )
         Text(
             text = BuildConfig.VERSION_NAME,
-            style = TextStyle(fontSize = 15.sp),
+            style = TextStyle(fontSize = 15.sp)
         )
     }
 }
@@ -272,8 +287,9 @@ fun SignInForm(state: SettingsState, hideSignInForm: () -> Unit, showUserEmail: 
 
     result.let {
         val response = it.value?.resultCode
-        if (response == RESULT_OK)
+        if (response == RESULT_OK) {
             showUserEmail()
+        }
     }
 
     if (state.showSignInForm) {

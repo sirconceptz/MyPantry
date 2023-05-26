@@ -7,6 +7,5 @@ class CheckIsUserLoggedUseCase @Inject constructor() : () -> Boolean {
     override fun invoke(): Boolean {
         val firebaseAuth = FirebaseAuth.getInstance()
         return firebaseAuth.currentUser?.email?.isNotEmpty() ?: false
-
     }
 }

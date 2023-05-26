@@ -15,6 +15,7 @@ import com.hermanowicz.pantry.data.local.db.LocalDb
 import com.hermanowicz.pantry.data.local.db.ProductDao
 import com.hermanowicz.pantry.data.local.db.StorageLocationDao
 import com.hermanowicz.pantry.data.remote.ErrorApiInterface
+import com.hermanowicz.pantry.utils.Constants.DATA_STORE_FILE
 import com.hermanowicz.pantry.utils.Constants.URL_ERROR_ALERT_SYSTEM_API
 import dagger.Module
 import dagger.Provides
@@ -28,8 +29,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val DATA_STORE_FILE = "user_prefs"
-
 @InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
@@ -39,7 +38,8 @@ class AppModule {
     fun provideLocalDb(@ApplicationContext context: Context): LocalDb {
         return Room.databaseBuilder(
             context,
-            LocalDb::class.java, LOCAL_DB_NAME
+            LocalDb::class.java,
+            LOCAL_DB_NAME
         )
             .fallbackToDestructiveMigration()
             .build()

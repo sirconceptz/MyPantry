@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.domain.pdf.CreatePdfDocumentUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
+import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.printQRCodes.state.PrintQRCodesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -109,5 +109,4 @@ class PrintQRCodesViewModel @Inject constructor(
             it.copy(goToPermissionSettings = bool)
         }
     }
-
 }

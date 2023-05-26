@@ -5,16 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.scanner.CheckBarcodeIsEmptyUseCase
-import com.hermanowicz.pantry.domain.utils.CheckFormatIsNumberUseCase
-import com.hermanowicz.pantry.domain.product.CheckQuantityIsValidUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
-import com.hermanowicz.pantry.domain.product.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
+import com.hermanowicz.pantry.domain.product.CheckQuantityIsValidUseCase
+import com.hermanowicz.pantry.domain.product.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.SaveProductsUseCase
+import com.hermanowicz.pantry.domain.scanner.CheckBarcodeIsEmptyUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.utils.CheckFormatIsNumberUseCase
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
@@ -55,8 +55,9 @@ class NewProductViewModel @Inject constructor(
 
     init {
         fetchOwnCategories()
-        if (checkBarcodeIsEmptyUseCase(barcode))
+        if (checkBarcodeIsEmptyUseCase(barcode)) {
             fetchProductData(barcode)
+        }
     }
 
     private fun fetchOwnCategories() {
@@ -142,12 +143,13 @@ class NewProductViewModel @Inject constructor(
                 groupProductsWithBarcode = groupProducts
             )
         }
-        if (groupProducts.size > 1)
+        if (groupProducts.size > 1) {
             _productDataState.update {
                 it.copy(
                     selectedProductName = groupProducts[0].product.name
                 )
             }
+        }
     }
 
     fun onSelectGroupProduct(productName: String) {
@@ -160,11 +162,11 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onSaveClick() {
-        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40)
+        if (productDataState.value.name.length < 3 || productDataState.value.name.length > 40) {
             _productDataState.update { it.copy(showErrorWrongName = true) }
-        else if (!checkQuantityIsValidUseCase(productDataState.value.quantity.toIntOrNull()))
+        } else if (!checkQuantityIsValidUseCase(productDataState.value.quantity.toIntOrNull())) {
             _productDataState.update { it.copy(showErrorWrongQuantity = true) }
-        else {
+        } else {
             viewModelScope.launch(Dispatchers.IO) {
                 val productIdList = saveProducts()
                 _productDataState.update {
@@ -203,10 +205,12 @@ class NewProductViewModel @Inject constructor(
     private suspend fun saveProducts(): List<Long> {
         var mainCategory = ""
         var detailCategory = ""
-        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name)
+        if (productDataState.value.mainCategory != MainCategories.CHOOSE.name) {
             mainCategory = productDataState.value.mainCategory
-        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name)
+        }
+        if (productDataState.value.detailCategory != MainCategories.CHOOSE.name) {
             detailCategory = productDataState.value.detailCategory
+        }
         var product = Product(
             name = productDataState.value.name,
             mainCategory = mainCategory,
@@ -227,8 +231,11 @@ class NewProductViewModel @Inject constructor(
         product = product.copy(hashCode = product.hashCode().toString())
         val products: MutableList<Product> = mutableListOf()
         val quantity =
-            if (productDataState.value.quantity.isEmpty()) 1
-            else productDataState.value.quantity.toIntOrNull() ?: 1
+            if (productDataState.value.quantity.isEmpty()) {
+                1
+            } else {
+                productDataState.value.quantity.toIntOrNull() ?: 1
+            }
         for (i in 1..quantity) {
             products.add(product)
         }
@@ -273,8 +280,9 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onQuantityChange(quantity: String) {
-        if (checkFormatIsNumberUseCase(quantity))
+        if (checkFormatIsNumberUseCase(quantity)) {
             _productDataState.update { it.copy(quantity = quantity) }
+        }
     }
 
     fun onCompositionChange(composition: String) {
@@ -290,13 +298,15 @@ class NewProductViewModel @Inject constructor(
     }
 
     fun onWeightChange(weight: String) {
-        if (checkFormatIsNumberUseCase(weight))
+        if (checkFormatIsNumberUseCase(weight)) {
             _productDataState.update { it.copy(weight = weight) }
+        }
     }
 
     fun onVolumeChange(volume: String) {
-        if (checkFormatIsNumberUseCase(volume))
+        if (checkFormatIsNumberUseCase(volume)) {
             _productDataState.update { it.copy(volume = volume) }
+        }
     }
 
     fun onIsVegeChange(isVege: Boolean) {

@@ -63,7 +63,8 @@ fun NewProductScreen(
     }
 
     if (state.showNavigateToPrintQRCodesDialog) {
-        DialogWarning(label = stringResource(id = R.string.print_qr_codes),
+        DialogWarning(
+            label = stringResource(id = R.string.print_qr_codes),
             warning = stringResource(
                 id = R.string.statement_would_you_like_to_print_qr_codes
             ),
@@ -71,11 +72,13 @@ fun NewProductScreen(
             onDismissRequest = {
                 viewModel.onNavigateToMyPantry(true)
                 viewModel.showNavigateToPrintQRCodesDialog(false)
-            })
+            }
+        )
     }
 
     TopBarScaffold(
-        topBarText = stringResource(id = R.string.new_product), openDrawer = openDrawer
+        topBarText = stringResource(id = R.string.new_product),
+        openDrawer = openDrawer
     ) {
         LazyColumn(
             modifier = Modifier
@@ -110,8 +113,10 @@ fun NewProductScreen(
             }
             item {
                 Spacer(modifier = Modifier.height(LocalSpacing.current.medium))
-                ButtonPrimary(text = stringResource(id = R.string.save),
-                    onClick = { viewModel.onSaveClick() })
+                ButtonPrimary(
+                    text = stringResource(id = R.string.save),
+                    onClick = { viewModel.onSaveClick() }
+                )
             }
         }
     }

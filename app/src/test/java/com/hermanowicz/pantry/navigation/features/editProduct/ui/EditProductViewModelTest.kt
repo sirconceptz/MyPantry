@@ -15,10 +15,8 @@ import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,10 +47,10 @@ class EditProductViewModelTest {
     private lateinit var observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
-
     private val databaseMode = DatabaseMode.LOCAL
     private val ownCategories = listOf(
-        Category(1, "Category1"), Category(2, "Category2")
+        Category(1, "Category1"),
+        Category(2, "Category2")
     )
     private val products =
         listOf(Product(id = 1, name = "Product1"), Product(id = 2, name = "Product2"))

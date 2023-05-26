@@ -38,6 +38,6 @@ fun TopBarScaffold(
             elevation = 10.dp
         )
     }, content = {
-        content()
-    })
+            content()
+        })
 }

@@ -81,9 +81,8 @@ class MyPantryViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = MyPantryProductsUiState.Loading,
+            initialValue = MyPantryProductsUiState.Loading
         )
-
 
     init {
         enableErrorAlertSystem()
@@ -202,41 +201,50 @@ class MyPantryViewModel @Inject constructor(
     }
 
     fun onFilterWeightMinChange(weight: String) {
-        if (weight.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.weightMin.isEmpty()) _filterProductDataState.update {
-            it.copy(
-                weightMin = weight
-            )
+        if (weight.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.weightMin.isEmpty()) {
+            _filterProductDataState.update {
+                it.copy(
+                    weightMin = weight
+                )
+            }
         }
     }
 
     fun onFilterWeightMaxChange(weight: String) {
-        if (weight.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.weightMax.isEmpty()) _filterProductDataState.update {
-            it.copy(
-                weightMax = weight
-            )
+        if (weight.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.weightMax.isEmpty()) {
+            _filterProductDataState.update {
+                it.copy(
+                    weightMax = weight
+                )
+            }
         }
     }
 
     fun onFilterVolumeMinChange(volume: String) {
-        if (volume.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.volumeMin.isEmpty()) _filterProductDataState.update {
-            it.copy(
-                volumeMin = volume
-            )
+        if (volume.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.volumeMin.isEmpty()) {
+            _filterProductDataState.update {
+                it.copy(
+                    volumeMin = volume
+                )
+            }
         }
     }
 
     fun onFilterVolumeMaxChange(volume: String) {
-        if (volume.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.volumeMax.isEmpty()) _filterProductDataState.update {
-            it.copy(
-                volumeMax = volume
-            )
+        if (volume.matches(RegexFormats.NUMBER.regex) || filterProductDataState.value.volumeMax.isEmpty()) {
+            _filterProductDataState.update {
+                it.copy(
+                    volumeMax = volume
+                )
+            }
         }
     }
 
     fun onFilterIsVegeChange(isVege: String) {
         _filterProductDataState.update {
             it.copy(
-                isVege = isVege, showIsVegeDropdown = false
+                isVege = isVege,
+                showIsVegeDropdown = false
             )
         }
     }
@@ -248,7 +256,8 @@ class MyPantryViewModel @Inject constructor(
     fun onFilterIsBioChange(isBio: String) {
         _filterProductDataState.update {
             it.copy(
-                isBio = isBio, showIsBioDropdown = false
+                isBio = isBio,
+                showIsBioDropdown = false
             )
         }
     }
@@ -260,7 +269,8 @@ class MyPantryViewModel @Inject constructor(
     fun onFilterHasSugarChange(hasSugar: String) {
         _filterProductDataState.update {
             it.copy(
-                hasSugar = hasSugar, showHasSugarDropdown = false
+                hasSugar = hasSugar,
+                showHasSugarDropdown = false
             )
         }
     }
@@ -272,7 +282,8 @@ class MyPantryViewModel @Inject constructor(
     fun onFilterHasSaltChange(hasSalt: String) {
         _filterProductDataState.update {
             it.copy(
-                hasSalt = hasSalt, showHasSaltDropdown = false
+                hasSalt = hasSalt,
+                showHasSaltDropdown = false
             )
         }
     }
@@ -292,7 +303,8 @@ class MyPantryViewModel @Inject constructor(
     fun onFilterMainCategoryChange(mainCategory: String) {
         _filterProductDataState.update {
             it.copy(
-                mainCategory = mainCategory, showMainCategoryDropdown = false
+                mainCategory = mainCategory,
+                showMainCategoryDropdown = false
             )
         }
     }
@@ -300,7 +312,8 @@ class MyPantryViewModel @Inject constructor(
     fun onFilterDetailCategoryChange(detailCategory: String) {
         _filterProductDataState.update {
             it.copy(
-                detailCategory = detailCategory, showDetailCategoryDropdown = false
+                detailCategory = detailCategory,
+                showDetailCategoryDropdown = false
             )
         }
     }
@@ -311,7 +324,8 @@ class MyPantryViewModel @Inject constructor(
 
     fun getFilterDetailCategories(): Map<String, String> {
         return getDetailsCategoriesUseCase(
-            filterProductDataState.value.ownCategories, filterProductDataState.value.mainCategory
+            filterProductDataState.value.ownCategories,
+            filterProductDataState.value.mainCategory
         )
     }
 

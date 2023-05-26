@@ -38,13 +38,18 @@ class PrintQRData {
             productList.forEach { product ->
                 var qrCodeContent = ""
                 var productName: String = product.name
-                if (productName.length > 29)
+                if (productName.length > 29) {
                     productName = productName.substring(0, 28) + "."
+                }
                 try {
-                    if (product.id >= 0) jsonObject.put(
-                        "product_id",
-                        product.id
-                    ) else jsonObject.put("product_id", product.id)
+                    if (product.id >= 0) {
+                        jsonObject.put(
+                            "product_id",
+                            product.id
+                        )
+                    } else {
+                        jsonObject.put("product_id", product.id)
+                    }
                     jsonObject.put("hash_code", product.hashCode)
                     qrCodeContent = (jsonObject.toString())
                 } catch (e: JSONException) {
@@ -68,17 +73,21 @@ class PrintQRData {
             val qrCodeWriter = QRCodeWriter()
             var bitMatrix: BitMatrix? = null
             try {
-                bitMatrix = if (qrCodeSize == QrCodeSize.BIG) qrCodeWriter.encode(
-                    textToQrCode,
-                    BarcodeFormat.QR_CODE,
-                    BIG_QR_CODE_WIDTH,
-                    BIG_QR_CODE_HEIGHT
-                ) else qrCodeWriter.encode(
-                    textToQrCode,
-                    BarcodeFormat.QR_CODE,
-                    SMALL_QR_CODE_WIDTH,
-                    SMALL_QR_CODE_HEIGHT
-                )
+                bitMatrix = if (qrCodeSize == QrCodeSize.BIG) {
+                    qrCodeWriter.encode(
+                        textToQrCode,
+                        BarcodeFormat.QR_CODE,
+                        BIG_QR_CODE_WIDTH,
+                        BIG_QR_CODE_HEIGHT
+                    )
+                } else {
+                    qrCodeWriter.encode(
+                        textToQrCode,
+                        BarcodeFormat.QR_CODE,
+                        SMALL_QR_CODE_WIDTH,
+                        SMALL_QR_CODE_HEIGHT
+                    )
+                }
             } catch (e: WriterException) {
                 Timber.e("QRCodeWriter", e.toString())
             }

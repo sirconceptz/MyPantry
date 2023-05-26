@@ -37,7 +37,7 @@ fun TextFieldAndLabel(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = true,
-    maxLines: Int = 1,
+    maxLines: Int = 1
 ) {
     Column {
         Text(text = labelText)
@@ -49,13 +49,13 @@ fun TextFieldAndLabel(
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colors.surface,
-                    shape = Shapes.medium,
+                    shape = Shapes.medium
                 )
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
                     color = Color.Black,
-                    shape = Shapes.medium,
+                    shape = Shapes.medium
                 ),
             placeholder = { Text(text = placeholder) },
             shape = Shapes.medium,
@@ -101,13 +101,13 @@ fun TextFieldAndLabelError(
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colors.surface,
-                    shape = Shapes.medium,
+                    shape = Shapes.medium
                 )
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
                     color = Color.Black,
-                    shape = Shapes.medium,
+                    shape = Shapes.medium
                 ),
             placeholder = { Text(text = placeholder) },
             shape = Shapes.medium,
@@ -126,8 +126,9 @@ fun TextFieldAndLabelError(
             keyboardActions = keyboardActions,
             visualTransformation = visualTransformation
         )
-        if (showError)
+        if (showError) {
             Text(text = errorText, color = Color.Red)
+        }
     }
 }
 
@@ -140,7 +141,7 @@ fun TextFieldAndLabelDate(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = true,
-    maxLines: Int = 1,
+    maxLines: Int = 1
 ) {
     Column {
         Text(text = labelText)
@@ -153,13 +154,13 @@ fun TextFieldAndLabelDate(
                 modifier = Modifier
                     .background(
                         color = MaterialTheme.colors.surface,
-                        shape = Shapes.medium,
+                        shape = Shapes.medium
                     )
                     .fillMaxWidth()
                     .border(
                         width = 1.dp,
                         color = Color.Black,
-                        shape = Shapes.medium,
+                        shape = Shapes.medium
                     ),
                 shape = Shapes.medium,
                 maxLines = maxLines,
@@ -192,7 +193,7 @@ fun TextFieldDoubleAndLabelDate(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = true,
-    maxLines: Int = 1,
+    maxLines: Int = 1
 ) {
     Column {
         Text(text = labelText)
@@ -212,12 +213,12 @@ fun TextFieldDoubleAndLabelDate(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colors.surface,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         )
                         .border(
                             width = 1.dp,
                             color = Color.Black,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         ),
                     shape = Shapes.medium,
                     maxLines = maxLines,
@@ -252,12 +253,12 @@ fun TextFieldDoubleAndLabelDate(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colors.surface,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         )
                         .border(
                             width = 1.dp,
                             color = Color.Black,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         ),
                     shape = Shapes.medium,
                     maxLines = maxLines,
@@ -292,7 +293,7 @@ fun TextFieldDoubleAndLabel(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     singleLine: Boolean = true,
-    maxLines: Int = 1,
+    maxLines: Int = 1
 ) {
     Column {
         Text(text = labelText)
@@ -309,12 +310,12 @@ fun TextFieldDoubleAndLabel(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colors.surface,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         )
                         .border(
                             width = 1.dp,
                             color = Color.Black,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         ),
                     placeholder = { Text(text = placeholder) },
                     shape = Shapes.medium,
@@ -347,12 +348,12 @@ fun TextFieldDoubleAndLabel(
                     modifier = Modifier
                         .background(
                             color = MaterialTheme.colors.surface,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         )
                         .border(
                             width = 1.dp,
                             color = Color.Black,
-                            shape = Shapes.medium,
+                            shape = Shapes.medium
                         ),
                     placeholder = { Text(text = placeholder) },
                     shape = Shapes.medium,

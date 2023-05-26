@@ -15,8 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProductRemoteDataSourceImpl @Inject constructor(
-) : ProductRemoteDataSource {
+class ProductRemoteDataSourceImpl @Inject constructor() : ProductRemoteDataSource {
 
     private val databaseReference = FirebaseDatabase.getInstance().reference.child("products")
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""

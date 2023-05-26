@@ -59,13 +59,15 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun insert(products: List<Product>): List<Long> {
         val databaseMode = observeDatabaseModeUseCase().first()
         var id = getLastId(DatabaseMode.ONLINE)
-        return if (databaseMode == DatabaseMode.LOCAL)
+        return if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.insert(products.map { product -> product.toEntityModel() })
-        else {
-            remoteDataSource.insert(products.map { product ->
-                id++
-                product.copy(id = id).toEntityModel()
-            })
+        } else {
+            remoteDataSource.insert(
+                products.map { product ->
+                    id++
+                    product.copy(id = id).toEntityModel()
+                }
+            )
         }
     }
 
@@ -75,26 +77,29 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun update(products: List<Product>) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.update(products.map { product -> product.toEntityModel() })
-        else
+        } else {
             remoteDataSource.update(products.map { product -> product.toEntityModel() })
+        }
     }
 
     override suspend fun delete(productIds: List<Int>) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.delete(productIds)
-        else
+        } else {
             remoteDataSource.delete(productIds)
+        }
     }
 
     override suspend fun deleteAllCurrentDatabase() {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.deleteAll()
-        else
+        } else {
             remoteDataSource.deleteAll()
+        }
     }
 
     override suspend fun deleteAllRemote() {

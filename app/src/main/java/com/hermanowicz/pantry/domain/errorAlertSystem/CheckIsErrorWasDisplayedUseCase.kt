@@ -13,12 +13,12 @@ class CheckIsErrorWasDisplayedUseCase @Inject constructor(
         val code = getErrorCodeUseCase(errorStatementTitle)
         if (code != null) {
             allErrorCodes.forEach { checkedCode ->
-                if (checkedCode == code)
+                if (checkedCode == code) {
                     return true
+                }
             }
             return false
         }
         return false
     }
-
 }

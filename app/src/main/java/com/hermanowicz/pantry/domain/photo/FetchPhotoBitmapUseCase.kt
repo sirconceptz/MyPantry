@@ -9,9 +9,9 @@ class FetchPhotoBitmapUseCase @Inject constructor(
     private val photoRepository: PhotoRepository
 ) : (String, DatabaseMode) -> Bitmap? {
     override fun invoke(fileName: String, databaseMode: DatabaseMode): Bitmap? {
-        return if (databaseMode == DatabaseMode.LOCAL)
+        return if (databaseMode == DatabaseMode.LOCAL) {
             photoRepository.decodePhotoFromGallery(fileName = fileName)
-        else {
+        } else {
             photoRepository.decodeStringToBitmap(fileName)
         }
     }

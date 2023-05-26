@@ -62,7 +62,6 @@ fun LoadingDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 ProgressIndicatorLoading(
                     progressIndicatorSize = progressIndicatorSize,
                     progressIndicatorColor = progressIndicatorColor
@@ -86,7 +85,6 @@ fun LoadingDialog(
 
 @Composable
 fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: Color) {
-
     val infiniteTransition = rememberInfiniteTransition()
 
     val angle by infiniteTransition.animateFloat(

@@ -7,9 +7,8 @@ import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.NotificationRepository
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.domain.settings.FetchDaysBeforeNotificationUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
+import com.hermanowicz.pantry.domain.settings.FetchDaysBeforeNotificationUseCase
 import com.hermanowicz.pantry.receivers.NotificationBroadcastReceiver
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -38,12 +37,13 @@ class NotificationRepositoryImpl @Inject constructor(
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (product.expirationDate.isNotEmpty() || product.expirationDate == "-") {
                 val calendar: Calendar? = createCalendar(product.expirationDate)
-                if (calendar != null)
+                if (calendar != null) {
                     alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
                         calendar.timeInMillis,
                         pendingIntent
                     )
+                }
             }
         }
     }
@@ -69,10 +69,11 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override suspend fun createNotificationForAllProducts(databaseMode: DatabaseMode) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        val products = if (databaseMode == DatabaseMode.ONLINE && userId.isNotEmpty())
+        val products = if (databaseMode == DatabaseMode.ONLINE && userId.isNotEmpty()) {
             observeAllProductsUseCase(databaseMode).first()
-        else
+        } else {
             observeAllProductsUseCase(DatabaseMode.LOCAL).first()
+        }
         createNotification(products)
     }
 
@@ -99,6 +100,8 @@ class NotificationRepositoryImpl @Inject constructor(
             calendar[Calendar.SECOND] = 0
             calendar.add(Calendar.DAY_OF_YEAR, -daysBeforeNotification)
             calendar
-        } else null
+        } else {
+            null
+        }
     }
 }

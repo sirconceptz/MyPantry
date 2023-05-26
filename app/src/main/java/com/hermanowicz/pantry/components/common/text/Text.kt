@@ -34,8 +34,9 @@ fun TextSettingsButtonWithValue(
 ) {
     Row(
         modifier = Modifier.clickable {
-            if (enabled)
+            if (enabled) {
                 onClick()
+            }
         }
     ) {
         Row(
@@ -71,8 +72,9 @@ fun TextSettingsButton(
 ) {
     Row(
         modifier = Modifier.clickable {
-            if (enabled)
+            if (enabled) {
                 onClick()
+            }
         }
     ) {
         Row(

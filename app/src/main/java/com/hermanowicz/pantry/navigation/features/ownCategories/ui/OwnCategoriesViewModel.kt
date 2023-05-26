@@ -4,12 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.domain.category.DeleteCategoryUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.category.UpdateCategoryUseCase
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
-import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryProductsUiState
+import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesModel
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesState
 import com.hermanowicz.pantry.navigation.features.ownCategories.state.CategoriesUiState
@@ -21,9 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -54,7 +50,7 @@ class OwnCategoriesViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = CategoriesUiState.Loading,
+            initialValue = CategoriesUiState.Loading
         )
 
     private val _categoriesState = MutableStateFlow(CategoriesState())
@@ -71,7 +67,6 @@ class OwnCategoriesViewModel @Inject constructor(
         }
         onShowDialogAddNewCategory(false)
         clearTextfields()
-
     }
 
     fun onAddCategoryNameChange(name: String) {

@@ -106,9 +106,11 @@ private fun createEmailNotification(
     params["message"] = createStatement(context, productName, daysToNotification)
     val url = Constants.URL_MAIL_API + Constants.API_MAIL_FILE
     val requestJson = JsonObjectRequest(
-        Request.Method.POST, url,
+        Request.Method.POST,
+        url,
         JSONObject((params as Map<*, *>)),
-        { }) { error ->
+        { }
+    ) { error ->
         Timber.e(
             "Error - Json parsing notification " + error.message
         )
@@ -152,10 +154,15 @@ private fun createPushNotification(
     builder.setLights(ContextCompat.getColor(context, R.color.color_primary), 500, 1000)
     builder.setAutoCancel(true)
     val notifyIntent = Intent(context, MainActivity::class.java)
-    notifyIntent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-            or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    notifyIntent.flags = (
+        Intent.FLAG_ACTIVITY_NEW_TASK
+            or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        )
     val pendingIntent = PendingIntent.getActivity(
-        context, 0, notifyIntent, PendingIntent.FLAG_IMMUTABLE
+        context,
+        0,
+        notifyIntent,
+        PendingIntent.FLAG_IMMUTABLE
     )
     builder.setContentIntent(pendingIntent)
     val notificationCompat = builder.build()

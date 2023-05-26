@@ -50,7 +50,7 @@ class StorageLocationsViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = StorageLocationsUiState.Loading,
+            initialValue = StorageLocationsUiState.Loading
         )
     private val _storageLocationsState = MutableStateFlow(StorageLocationsState())
     var storageLocationState: StateFlow<StorageLocationsState> =

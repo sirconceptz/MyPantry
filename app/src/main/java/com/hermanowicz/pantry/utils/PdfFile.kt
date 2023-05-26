@@ -48,9 +48,10 @@ class PdfFile {
         fun getPdfFile(fileName: String): File {
             val pdfFile: File = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 File(
-                    (Environment.getExternalStorageDirectory().toString() + File.separator +
+                    (
+                        Environment.getExternalStorageDirectory().toString() + File.separator +
                             PDF_PATH
-                            ),
+                        ),
                     fileName
                 )
             } else {

@@ -47,8 +47,9 @@ fun PrintQRCodesScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onPrintCodesPermissionGranted()
@@ -61,8 +62,9 @@ fun PrintQRCodesScreen(
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
-                if (!permission.value)
+                if (!permission.value) {
                     isGranted = false
+                }
             }
             if (isGranted) {
                 viewModel.onSharePdfDocumentPermissionGranted()
@@ -123,9 +125,10 @@ fun PrintQRCodesScreen(
                         contentDescription = null,
                         tint = Color.White
                     )
-                })
-        })
-    {
+                }
+            )
+        }
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()

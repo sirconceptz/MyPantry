@@ -62,28 +62,29 @@ fun AppNavHost() {
                     navController.navigate(AppScreens.MyPantry.route)
                     closeDrawer()
                 }, onNewProduct = {
-                    navController.navigate("${AppScreens.NewProduct.route}/0")
-                    closeDrawer()
-                }, onOwnCategories = {
-                    navController.navigate(AppScreens.OwnCategories.route)
-                    closeDrawer()
-                }, onStorageLocations = {
-                    navController.navigate(AppScreens.StorageLocations.route)
-                    closeDrawer()
-                }, onSettings = {
-                    navController.navigate(AppScreens.Settings.route)
-                    closeDrawer()
-                }, onScanProduct = {
-                    navController.navigate(AppScreens.ScanProduct.route)
-                    closeDrawer()
-                })
+                        navController.navigate("${AppScreens.NewProduct.route}/0")
+                        closeDrawer()
+                    }, onOwnCategories = {
+                        navController.navigate(AppScreens.OwnCategories.route)
+                        closeDrawer()
+                    }, onStorageLocations = {
+                        navController.navigate(AppScreens.StorageLocations.route)
+                        closeDrawer()
+                    }, onSettings = {
+                        navController.navigate(AppScreens.Settings.route)
+                        closeDrawer()
+                    }, onScanProduct = {
+                        navController.navigate(AppScreens.ScanProduct.route)
+                        closeDrawer()
+                    })
             }
         ) {
             val myPantryViewModel: MyPantryViewModel = hiltViewModel()
             val ownCategoriesViewModel: OwnCategoriesViewModel = hiltViewModel()
             val storageLocationsViewModel: StorageLocationsViewModel = hiltViewModel()
             NavHost(
-                navController = navController, startDestination = AppScreens.SplashScreen.route
+                navController = navController,
+                startDestination = AppScreens.SplashScreen.route
             ) {
                 composable(route = AppScreens.MyPantry.route) {
                     MyPantryRoute(
@@ -111,18 +112,18 @@ fun AppNavHost() {
                         onNavigateToPrintQrCodes = {
                             navController.navigate(
                                 "${AppScreens.PrintQRCodes.route}/${
-                                    it.joinToString(
-                                        ";"
-                                    )
+                                it.joinToString(
+                                    ";"
+                                )
                                 }"
                             )
                         },
                         onNavigateToAddPhoto = {
                             navController.navigate(
                                 "${AppScreens.AddPhoto.route}/${
-                                    it.joinToString(
-                                        ";"
-                                    )
+                                it.joinToString(
+                                    ";"
+                                )
                                 }"
                             )
                         },
@@ -147,9 +148,9 @@ fun AppNavHost() {
                         onNavigationPrintQRCodes = {
                             navController.navigate(
                                 "${AppScreens.PrintQRCodes.route}/${
-                                    it.joinToString(
-                                        ";"
-                                    )
+                                it.joinToString(
+                                    ";"
+                                )
                                 }"
                             )
                         }
@@ -157,11 +158,13 @@ fun AppNavHost() {
                 }
                 composable(route = "${AppScreens.PrintQRCodes.route}/{productIdList}") {
                     PrintQRCodesRoute(
-                        openDrawer = { openDrawer() })
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = "${AppScreens.AddPhoto.route}/{productIdList}") {
                     AddPhotoRoute(
-                        openDrawer = { openDrawer() })
+                        openDrawer = { openDrawer() }
+                    )
                 }
                 composable(route = AppScreens.OwnCategories.route) {
                     OwnCategoriesRoute(
@@ -176,7 +179,7 @@ fun AppNavHost() {
                             navController.navigate("${AppScreens.ProductDetails.route}/${it.first};${it.second}")
                         },
                         onNavigationToNewProduct = {
-                            navController.navigate("${AppScreens.NewProduct.route}/${it}")
+                            navController.navigate("${AppScreens.NewProduct.route}/$it")
                         }
                     )
                 }

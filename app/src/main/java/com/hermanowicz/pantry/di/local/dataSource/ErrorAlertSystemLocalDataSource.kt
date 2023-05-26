@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 interface ErrorAlertSystemLocalDataSource {
     fun observeAll(): Flow<List<ErrorEntity>>
     suspend fun insert(error: ErrorEntity)
-
 }
 
 @Module

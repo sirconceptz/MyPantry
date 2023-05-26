@@ -18,7 +18,6 @@ import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class PhotoRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context

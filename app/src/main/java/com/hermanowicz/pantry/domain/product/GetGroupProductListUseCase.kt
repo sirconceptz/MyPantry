@@ -36,8 +36,9 @@ class GetGroupProductListUseCase @Inject constructor() : (List<Product>) -> List
     ): GroupProduct? {
         var groupProductReturned: GroupProduct? = null
         for (groupProduct in groupProductList) {
-            if (product == groupProduct.product.copy(id = product.id))
+            if (product == groupProduct.product.copy(id = product.id)) {
                 groupProductReturned = groupProduct
+            }
         }
         return groupProductReturned
     }

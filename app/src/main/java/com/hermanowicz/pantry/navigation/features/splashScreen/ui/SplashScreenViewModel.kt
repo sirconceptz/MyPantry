@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashScreenViewModel @Inject constructor(
-
-) : ViewModel() {
+class SplashScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(SplashScreenState())
     val uiState: StateFlow<SplashScreenState> = _uiState
 

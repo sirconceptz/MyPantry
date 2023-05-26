@@ -15,10 +15,11 @@ class UpdateProductsUseCase @Inject constructor(
     ) {
         val mutableProducts = mutableListOf<Product>()
         productIdList.forEach { id ->
-            if (productIdList.contains(id))
+            if (productIdList.contains(id)) {
                 mutableProducts.add(
                     updatedProduct.copy(id = id)
                 )
+            }
         }
         val idListReversed = productIdList.asReversed()
         val listToDelete: MutableList<Product> = mutableListOf()

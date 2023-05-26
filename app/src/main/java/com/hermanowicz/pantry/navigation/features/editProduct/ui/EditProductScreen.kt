@@ -65,7 +65,7 @@ fun EditProductScreen(
                     mainCategoryItemList = viewModel.getMainCategories(),
                     detailCategoryItemList = viewModel.getDetailCategories(),
                     onTasteSelect = { viewModel.onTasteSelect(it) },
-                    onCleanTasteRadioGroup = { viewModel.onTasteSelect("") },
+                    onCleanTasteRadioGroup = { viewModel.onTasteSelect("") }
                 )
             }
             item {

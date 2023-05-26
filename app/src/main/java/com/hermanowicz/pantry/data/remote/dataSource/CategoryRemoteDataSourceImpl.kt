@@ -15,8 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CategoryRemoteDataSourceImpl @Inject constructor(
-) : CategoryRemoteDataSource {
+class CategoryRemoteDataSourceImpl @Inject constructor() : CategoryRemoteDataSource {
 
     private val databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
     private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""

@@ -51,9 +51,9 @@ class StorageLocationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insert(storageLocation: StorageLocation) {
-        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL)
+        if (observeDatabaseModeUseCase().first() == DatabaseMode.LOCAL) {
             localDataSource.insert(storageLocation.toEntityModel())
-        else {
+        } else {
             val id = getLastId(DatabaseMode.ONLINE) + 1
             remoteDataSource.insert(storageLocation.copy(id = id).toEntityModel())
         }
@@ -65,26 +65,29 @@ class StorageLocationRepositoryImpl @Inject constructor(
 
     override suspend fun update(storageLocation: StorageLocation) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.update(storageLocation.toEntityModel())
-        else
+        } else {
             remoteDataSource.update(storageLocation.toEntityModel())
+        }
     }
 
     override suspend fun delete(storageLocation: StorageLocation) {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.delete(storageLocation.toEntityModel())
-        else
+        } else {
             remoteDataSource.delete(storageLocation.toEntityModel())
+        }
     }
 
     override suspend fun deleteAllCurrentDatabase() {
         val databaseMode = observeDatabaseModeUseCase().first()
-        if (databaseMode == DatabaseMode.LOCAL)
+        if (databaseMode == DatabaseMode.LOCAL) {
             localDataSource.deleteAll()
-        else
+        } else {
             remoteDataSource.deleteAll()
+        }
     }
 
     override suspend fun deleteAllRemote() {

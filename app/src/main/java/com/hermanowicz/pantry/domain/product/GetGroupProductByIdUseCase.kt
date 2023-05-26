@@ -4,13 +4,13 @@ import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import javax.inject.Inject
 
-class GetGroupProductByIdUseCase @Inject constructor(
-) : (Int, List<Product>) -> GroupProduct {
+class GetGroupProductByIdUseCase @Inject constructor() : (Int, List<Product>) -> GroupProduct {
     override fun invoke(productId: Int, products: List<Product>): GroupProduct {
         var product = Product()
         products.forEach {
-            if (it.id == productId)
+            if (it.id == productId) {
                 product = it
+            }
         }
         var groupProductReturned = GroupProduct(product, 0)
         products.forEach {

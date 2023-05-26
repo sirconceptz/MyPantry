@@ -51,7 +51,8 @@ fun ProductTasteRadioGroup(
                         Text(text = item.second)
                         RadioButton(
                             selected = selectedItem == item.first,
-                            onClick = { onSelect(item.first) })
+                            onClick = { onSelect(item.first) }
+                        )
                     }
                 }
                 Row(

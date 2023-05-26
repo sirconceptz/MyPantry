@@ -39,7 +39,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    onNavigateToMyPantry: () -> Unit, viewModel: SplashScreenViewModel = hiltViewModel()
+    onNavigateToMyPantry: () -> Unit,
+    viewModel: SplashScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -47,7 +48,8 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         scale.animateTo(
-            targetValue = 0.7f, animationSpec = tween(1000, easing = {
+            targetValue = 0.7f,
+            animationSpec = tween(1000, easing = {
                 OvershootInterpolator(4f).getInterpolation(it)
             })
         )
@@ -88,8 +90,11 @@ fun SplashView(animValue: Float) {
             )
         }
         Text(
-            text = stringResource(id = R.string.app_name), style = TextStyle(
-                fontSize = 48.sp, fontWeight = FontWeight.Bold, color = PrimaryColor
+            text = stringResource(id = R.string.app_name),
+            style = TextStyle(
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryColor
             )
         )
         Spacer(modifier = Modifier.weight(1f))

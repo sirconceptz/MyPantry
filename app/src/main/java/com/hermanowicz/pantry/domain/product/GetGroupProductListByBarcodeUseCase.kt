@@ -13,9 +13,10 @@ class GetGroupProductListByBarcodeUseCase @Inject constructor(
         productName: String?
     ): List<GroupProduct> {
         val allProductsGroupList = getGroupProductListUseCase(products)
-        return if (productName == null)
+        return if (productName == null) {
             allProductsGroupList.filter { it.product.barcode == barcode }
-        else
+        } else {
             allProductsGroupList.filter { it.product.barcode == barcode && it.product.name == productName }
+        }
     }
 }

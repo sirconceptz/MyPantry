@@ -12,7 +12,7 @@ interface ErrorDao {
 
     @Query("SELECT * FROM error")
     fun observeAll(): Flow<List<ErrorEntity>>
-    
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(vararg error: ErrorEntity)
 }

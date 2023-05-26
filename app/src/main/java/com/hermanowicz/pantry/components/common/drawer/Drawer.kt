@@ -143,7 +143,7 @@ private fun DrawerHeader() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(LocalSpacing.current.medium),
-            verticalArrangement = Arrangement.Bottom,
+            verticalArrangement = Arrangement.Bottom
         ) {
             Text(
                 text = stringResource(id = R.string.app_name),
@@ -175,11 +175,11 @@ private fun DrawerMenuItem(
             .fillMaxWidth()
             .clickable { onItemClick() }
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = painterResource(iconDrawableId),
-            contentDescription = null,
+            contentDescription = null
         )
         Spacer(modifier = Modifier.width(LocalSpacing.current.medium))
         Text(text = text)

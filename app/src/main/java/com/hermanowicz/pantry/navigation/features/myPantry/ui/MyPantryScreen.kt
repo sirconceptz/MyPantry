@@ -31,9 +31,9 @@ fun MyPantryScreen(
     openDrawer: () -> Unit,
     onClickGroupProduct: (Pair<Int, String>) -> Unit,
     onClickFilterProduct: () -> Unit,
-    viewModel: MyPantryViewModel,
+    viewModel: MyPantryViewModel
 
-    ) {
+) {
     val uiModel = updateUi(viewModel)
     val errorSystemAlertSystemState by viewModel.errorAlertSystemState.collectAsState()
 

@@ -18,7 +18,7 @@ class ExportDatabaseToCloudUseCase @Inject constructor(
         val storageLocations = storageLocationRepository.observeAll(DatabaseMode.LOCAL).first()
 
         cleanDatabases()
-        
+
         productRepository.insertRemote(products)
         categories.forEach {
             categoryRepository.insertRemote(it)
