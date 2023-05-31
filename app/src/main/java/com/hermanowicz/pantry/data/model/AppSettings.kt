@@ -1,4 +1,4 @@
-package com.hermanowicz.pantry.data.settings
+package com.hermanowicz.pantry.data.model
 
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode

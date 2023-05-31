@@ -10,7 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.hermanowicz.pantry.data.settings.AppSettings
+import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode

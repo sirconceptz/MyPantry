@@ -1,6 +1,6 @@
 package com.hermanowicz.pantry.domain.settings
 
-import com.hermanowicz.pantry.data.settings.AppSettings
+import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import javax.inject.Inject
 

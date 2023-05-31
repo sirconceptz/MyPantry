@@ -10,4 +10,5 @@ object Constants {
     const val PHOTO_DIRECTORY = "MyPantry"
     const val PDF_PATH = "Download/MyPantry"
     const val DATA_STORE_FILE = "user_prefs"
+    const val LOCAL_DB_NAME = "MyPantry.db"
 }

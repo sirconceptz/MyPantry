@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hermanowicz.pantry.data.settings.AppSettings
+import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
 import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase

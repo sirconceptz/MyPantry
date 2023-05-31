@@ -1,7 +1,7 @@
 package com.hermanowicz.pantry.di.repository
 
+import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.data.repository.SettingsRepositoryImpl
-import com.hermanowicz.pantry.data.settings.AppSettings
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

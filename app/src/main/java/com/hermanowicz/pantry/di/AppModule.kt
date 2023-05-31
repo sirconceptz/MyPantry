@@ -10,12 +10,12 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.hermanowicz.pantry.data.local.db.CategoryDao
 import com.hermanowicz.pantry.data.local.db.ErrorDao
-import com.hermanowicz.pantry.data.local.db.LOCAL_DB_NAME
 import com.hermanowicz.pantry.data.local.db.LocalDb
 import com.hermanowicz.pantry.data.local.db.ProductDao
 import com.hermanowicz.pantry.data.local.db.StorageLocationDao
 import com.hermanowicz.pantry.data.remote.ErrorApiInterface
 import com.hermanowicz.pantry.utils.Constants.DATA_STORE_FILE
+import com.hermanowicz.pantry.utils.Constants.LOCAL_DB_NAME
 import com.hermanowicz.pantry.utils.Constants.URL_ERROR_ALERT_SYSTEM_API
 import dagger.Module
 import dagger.Provides
