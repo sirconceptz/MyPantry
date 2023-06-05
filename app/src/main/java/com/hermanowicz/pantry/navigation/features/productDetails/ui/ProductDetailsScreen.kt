@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
@@ -45,7 +46,7 @@ fun ProductDetailsScreen(
     onClickEditProducts: (Int) -> Unit,
     onClickAddPhoto: (List<Int>) -> Unit,
     onNavigateToMyPantry: () -> Unit,
-    viewModel: ProductDetailsViewModel = hiltViewModel()
+    viewModel: ProductDetailsViewModel
 ) {
     val uiModel = updateUi(viewModel)
     val state by viewModel.state.collectAsState()
@@ -294,10 +295,17 @@ fun ProductDetailItem(label: String, value: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier
+                .weight(0.5f)
+                .fillMaxWidth(),
             text = label
         )
         Text(
-            text = value
+            modifier = Modifier
+                .weight(0.5f)
+                .fillMaxWidth(),
+            text = value,
+            textAlign = TextAlign.End
         )
     }
 }

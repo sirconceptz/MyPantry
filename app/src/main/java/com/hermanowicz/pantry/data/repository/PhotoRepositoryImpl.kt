@@ -27,7 +27,7 @@ class PhotoRepositoryImpl @Inject constructor(
 
     @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
-    override fun createAndGetPhotoFile(): File? {
+    override fun createAndGetPhotoFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmm").format(Date())
         val photoFileName = "${PHOTO_DIRECTORY}_${timeStamp}_"
         val storageDir: File? = getPhotoDirectory()
@@ -52,9 +52,13 @@ class PhotoRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun decodeStringToBitmap(string: String): Bitmap {
-        val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+    override fun decodeStringToBitmap(string: String): Bitmap? {
+        return try {
+            val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+        } catch (e: NullPointerException) {
+            null
+        }
     }
 
     override fun encodeImageToString(bm: Bitmap): String {
