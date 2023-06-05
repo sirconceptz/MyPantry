@@ -7,19 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -27,6 +22,7 @@ import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
 import com.hermanowicz.pantry.components.common.dropdown.DropdownPrimary
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
+import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabelError
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 
 @Composable
@@ -36,7 +32,9 @@ fun DialogItem(
     description: String,
     onNameChange: (String) -> Unit,
     onDescriptionChange: (String) -> Unit,
+    onClearRequest: (() -> Unit)? = null,
     onSaveClick: () -> Unit,
+    showError: Boolean = false,
     onDismissRequest: () -> Unit
 ) {
     Dialog(
@@ -47,7 +45,7 @@ fun DialogItem(
                 .fillMaxWidth()
                 .padding(LocalSpacing.current.small)
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -56,27 +54,37 @@ fun DialogItem(
                     ),
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
-                Text(text = label, fontWeight = FontWeight.Bold)
-                TextFieldAndLabel(
-                    textfieldText = name,
-                    labelText = stringResource(id = R.string.name),
-                    textEvent = onNameChange,
-                    placeholder = stringResource(id = R.string.name)
-                )
-                TextFieldAndLabel(
-                    textfieldText = description,
-                    labelText = stringResource(id = R.string.description),
-                    textEvent = onDescriptionChange,
-                    placeholder = stringResource(id = R.string.description)
-                )
-                ButtonPrimary(
-                    text = stringResource(id = R.string.save),
-                    onClick = onSaveClick
-                )
-                ButtonPrimary(
-                    text = stringResource(id = R.string.cancel),
-                    onClick = onDismissRequest
-                )
+                item {
+                    Text(text = label, fontWeight = FontWeight.Bold)
+                    TextFieldAndLabelError(
+                        textfieldText = name,
+                        labelText = stringResource(id = R.string.name),
+                        textEvent = onNameChange,
+                        errorText = stringResource(id = R.string.error_wrong_name),
+                        placeholder = stringResource(id = R.string.name),
+                        showError = showError
+                    )
+                    TextFieldAndLabel(
+                        textfieldText = description,
+                        labelText = stringResource(id = R.string.description),
+                        textEvent = onDescriptionChange,
+                        placeholder = stringResource(id = R.string.description)
+                    )
+                    if (onClearRequest != null) {
+                        ButtonPrimary(
+                            text = stringResource(id = R.string.clear),
+                            onClick = onClearRequest
+                        )
+                    }
+                    ButtonPrimary(
+                        text = stringResource(id = R.string.save),
+                        onClick = onSaveClick
+                    )
+                    ButtonPrimary(
+                        text = stringResource(id = R.string.cancel),
+                        onClick = onDismissRequest
+                    )
+                }
             }
         }
     }
@@ -258,10 +266,13 @@ fun DialogWarning(
 fun DialogTextfield(
     label: String,
     value: String,
+    isError: Boolean = false,
+    errorStatement: String = "",
     onPositiveRequest: (String) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onClearRequest: (() -> Unit)? = null
 ) {
-    var text by remember { mutableStateOf(TextFieldValue(value)) }
+    var text = value
 
     Dialog(
         onDismissRequest = onDismissRequest
@@ -280,20 +291,24 @@ fun DialogTextfield(
                     ),
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
-                Text(
-                    text = label,
-                    fontWeight = FontWeight.Bold
-                )
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = text,
-                    onValueChange = { newText ->
+                TextFieldAndLabelError(
+                    textfieldText = text,
+                    labelText = label,
+                    textEvent = { newText ->
                         text = newText
-                    }
+                    },
+                    errorText = errorStatement,
+                    showError = isError
                 )
+                if (onClearRequest != null) {
+                    ButtonPrimary(
+                        text = stringResource(id = R.string.clear),
+                        onClick = onClearRequest
+                    )
+                }
                 ButtonPrimary(
                     text = stringResource(id = R.string.confirm),
-                    onClick = { onPositiveRequest(text.text) }
+                    onClick = { onPositiveRequest(text) }
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.close),

@@ -62,7 +62,7 @@ fun NewProductForm(
             textEvent = onNameChange,
             placeholder = stringResource(id = R.string.name),
             showError = productDataState.showErrorWrongName,
-            errorText = stringResource(id = R.string.error_wrong_product_name)
+            errorText = stringResource(id = R.string.error_wrong_name)
         )
         DropdownCard(
             textLeft = stringResource(id = R.string.main_category),

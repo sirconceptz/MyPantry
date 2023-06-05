@@ -77,7 +77,7 @@
     <string name="edit_category">Kategorie bearbeiten</string>
     <string name="edit_storage_location">Speicherort bearbeiten</string>
     <string name="search">Suchen</string>
-    <string name="clean">Sauber</string>
+    <string name="clear">Sauber</string>
     <string name="user_account">Benutzerkonto</string>
     <string name="main_settings">Haupteinstellungen</string>
     <string name="notification_settings">Benachrichtigungseinstellungen</string>
@@ -112,7 +112,7 @@
     <string name="sign_out">Austragen</string>
     <string name="delete_account">Konto löschen</string>
     <string name="statement_delete_account_warning">Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Dieser Vorgang ist irreversibel. Alle Ihre Produkte, Kategorien, Speicherorte und alle Informationen über Sie werden gelöscht.</string>
-    <string name="error_wrong_product_name">Falsche Namenslänge. Die maximale Länge beträgt 40.</string>
+    <string name="error_wrong_name">Falsche Namenslänge. Die maximale Länge beträgt 40.</string>
     <string name="error_wrong_quantity">Die maximale Menge beträgt 10000.</string>
     <string name="print_qr_codes">Drucken Sie QR-Codes</string>
     <string name="statement_would_you_like_to_print_qr_codes">Möchten Sie QR-Codes für neu hinzugefügte Produkte drucken?</string>

@@ -69,7 +69,9 @@ fun OwnCategoriesScreen(
                 description = categoriesState.description,
                 onNameChange = { viewModel.onAddCategoryNameChange(it) },
                 onDescriptionChange = { viewModel.onAddCategoryDescriptionChange(it) },
-                onSaveClick = { viewModel.onClickSaveCategory() }
+                onSaveClick = { viewModel.onClickSaveCategory() },
+                showError = categoriesState.showErrorWrongName,
+                onClearRequest = { viewModel.onCleanForm() }
             )
         }
         if (categoriesState.showDialogEditCategory) {
@@ -80,7 +82,8 @@ fun OwnCategoriesScreen(
                 description = categoriesState.editedCategory.description,
                 onNameChange = { viewModel.onEditCategoryNameChange(it) },
                 onDescriptionChange = { viewModel.onEditCategoryDescriptionChange(it) },
-                onSaveClick = { viewModel.onSaveEditedCategory() }
+                onSaveClick = { viewModel.onSaveEditedCategory() },
+                showError = categoriesState.showErrorWrongName
             )
         }
         LazyColumn(

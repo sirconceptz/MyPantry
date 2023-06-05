@@ -60,7 +60,7 @@ fun ProductTasteRadioGroup(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ButtonTransparent(
-                        text = stringResource(id = R.string.clean),
+                        text = stringResource(id = R.string.clear),
                         onClick = onCleanAll
                     )
                 }

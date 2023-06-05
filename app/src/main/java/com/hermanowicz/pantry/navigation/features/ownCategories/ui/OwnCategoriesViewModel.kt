@@ -58,15 +58,24 @@ class OwnCategoriesViewModel @Inject constructor(
         _categoriesState.asStateFlow()
 
     fun onClickSaveCategory() {
-        val category = Category(
-            name = categoriesState.value.name,
-            description = categoriesState.value.description
-        )
-        viewModelScope.launch(Dispatchers.IO) {
-            saveCategoryUseCase(category)
+        if (categoriesState.value.name.length in 3..40) {
+            val category = Category(
+                name = categoriesState.value.name,
+                description = categoriesState.value.description
+            )
+            viewModelScope.launch(Dispatchers.IO) {
+                saveCategoryUseCase(category)
+            }
+            onShowDialogAddNewCategory(false)
+            showErrorWrongName(false)
+            clearTextfields()
+        } else {
+            showErrorWrongName(true)
         }
-        onShowDialogAddNewCategory(false)
-        clearTextfields()
+    }
+
+    private fun showErrorWrongName(bool: Boolean) {
+        _categoriesState.update { it.copy(showErrorWrongName = bool) }
     }
 
     fun onAddCategoryNameChange(name: String) {
@@ -123,11 +132,16 @@ class OwnCategoriesViewModel @Inject constructor(
     }
 
     fun onSaveEditedCategory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateCategoryUseCase(categoriesState.value.editedCategory)
+        if (categoriesState.value.name.length in 3..40) {
+            viewModelScope.launch(Dispatchers.IO) {
+                updateCategoryUseCase(categoriesState.value.editedCategory)
+            }
+            onHideDialogEditCategory()
+            showErrorWrongName(false)
+            clearTextfields()
+        } else {
+            showErrorWrongName(true)
         }
-        onHideDialogEditCategory()
-        clearTextfields()
     }
 
     fun onDeleteCategory(category: Category) {
@@ -137,6 +151,15 @@ class OwnCategoriesViewModel @Inject constructor(
     }
 
     private fun clearTextfields() {
+        _categoriesState.update {
+            it.copy(
+                name = "",
+                description = ""
+            )
+        }
+    }
+
+    fun onCleanForm() {
         _categoriesState.update {
             it.copy(
                 name = "",

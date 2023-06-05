@@ -7,6 +7,7 @@ data class StorageLocationsState(
     var description: String = "",
     var showDialogAddNewStorageLocation: Boolean = false,
     var showDialogEditStorageLocation: Boolean = false,
+    var showErrorWrongName: Boolean = false,
     var editedStorageLocation: StorageLocation = StorageLocation(),
     var isEditMode: Boolean = false
 )

@@ -82,7 +82,7 @@ fun TextFieldAndLabelError(
     textfieldText: String,
     labelText: String,
     textEvent: (String) -> Unit,
-    placeholder: String,
+    placeholder: String = "",
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),

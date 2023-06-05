@@ -81,7 +81,7 @@ fun FilterProductScreen(
                     onClick = { viewModel.onSearchClick() }
                 )
                 ButtonPrimary(
-                    text = stringResource(id = R.string.clean),
+                    text = stringResource(id = R.string.clear),
                     onClick = { viewModel.onCleanClick() }
                 )
             }

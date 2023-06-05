@@ -7,6 +7,7 @@ data class CategoriesState(
     var description: String = "",
     var showDialogAddNewCategory: Boolean = false,
     var showDialogEditCategory: Boolean = false,
+    var showErrorWrongName: Boolean = false,
     var editedCategory: Category = Category(),
     var isEditMode: Boolean = false
 )

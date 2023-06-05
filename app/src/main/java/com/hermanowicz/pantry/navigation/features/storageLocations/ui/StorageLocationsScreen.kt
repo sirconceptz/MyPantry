@@ -69,7 +69,9 @@ fun StorageLocationsScreen(
                 description = storageLocationState.description,
                 onNameChange = { viewModel.onNameChange(it) },
                 onDescriptionChange = { viewModel.onDescriptionChange(it) },
-                onSaveClick = { viewModel.onClickSaveStorageLocation() }
+                onSaveClick = { viewModel.onClickSaveStorageLocation() },
+                showError = storageLocationState.showErrorWrongName,
+                onClearRequest = { viewModel.onCleanForm() }
             )
         }
         if (storageLocationState.showDialogEditStorageLocation) {
@@ -80,7 +82,8 @@ fun StorageLocationsScreen(
                 description = storageLocationState.editedStorageLocation.description,
                 onNameChange = { viewModel.onEditStorageLocationNameChange(it) },
                 onDescriptionChange = { viewModel.onEditStorageLocationDescriptionChange(it) },
-                onSaveClick = { viewModel.onSaveEditedStorageLocation() }
+                onSaveClick = { viewModel.onSaveEditedStorageLocation() },
+                showError = storageLocationState.showErrorWrongName
             )
         }
         LazyColumn(

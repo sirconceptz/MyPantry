@@ -52,6 +52,7 @@ class StorageLocationsViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = StorageLocationsUiState.Loading
         )
+
     private val _storageLocationsState = MutableStateFlow(StorageLocationsState())
     var storageLocationState: StateFlow<StorageLocationsState> =
         _storageLocationsState.asStateFlow()
@@ -89,15 +90,24 @@ class StorageLocationsViewModel @Inject constructor(
     }
 
     fun onClickSaveStorageLocation() {
-        val storageLocation = StorageLocation(
-            name = storageLocationState.value.name,
-            description = storageLocationState.value.description
-        )
-        viewModelScope.launch(Dispatchers.IO) {
-            saveStorageLocationsUseCase(storageLocation)
+        if (storageLocationState.value.name.length in 3..40) {
+            val storageLocation = StorageLocation(
+                name = storageLocationState.value.name,
+                description = storageLocationState.value.description
+            )
+            viewModelScope.launch(Dispatchers.IO) {
+                saveStorageLocationsUseCase(storageLocation)
+            }
+            onShowDialogAddNewStorageLocation(false)
+            showErrorWrongName(false)
+            clearTextfields()
+        } else {
+            showErrorWrongName(true)
         }
-        onShowDialogAddNewStorageLocation(false)
-        clearTextfields()
+    }
+
+    private fun showErrorWrongName(bool: Boolean) {
+        _storageLocationsState.update { it.copy(showErrorWrongName = bool) }
     }
 
     fun onShowDialogAddNewStorageLocation(isActive: Boolean) {
@@ -128,14 +138,28 @@ class StorageLocationsViewModel @Inject constructor(
     }
 
     fun onSaveEditedStorageLocation() {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateStorageLocationUseCase(storageLocationState.value.editedStorageLocation)
+        if (storageLocationState.value.editedStorageLocation.name.length in 3..40) {
+            viewModelScope.launch(Dispatchers.IO) {
+                updateStorageLocationUseCase(storageLocationState.value.editedStorageLocation)
+            }
+            onHideDialogEditStorageLocation()
+            showErrorWrongName(false)
+            clearTextfields()
+        } else {
+            showErrorWrongName(true)
         }
-        onHideDialogEditStorageLocation()
-        clearTextfields()
     }
 
     private fun clearTextfields() {
+        _storageLocationsState.update {
+            it.copy(
+                name = "",
+                description = ""
+            )
+        }
+    }
+
+    fun onCleanForm() {
         _storageLocationsState.update {
             it.copy(
                 name = "",

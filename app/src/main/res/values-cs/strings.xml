@@ -77,7 +77,7 @@
     <string name="edit_category">Upravit kategorii</string>
     <string name="edit_storage_location">Upravit umístění úložiště</string>
     <string name="search">Vyhledávání</string>
-    <string name="clean">Vyčistit</string>
+    <string name="clear">Vyčistit</string>
     <string name="user_account">Uživatelský účet</string>
     <string name="main_settings">Hlavní nastavení</string>
     <string name="notification_settings">Nastavení upozornění</string>
@@ -112,7 +112,7 @@
     <string name="sign_out">Odhlaste se</string>
     <string name="delete_account">Smazat účet</string>
     <string name="statement_delete_account_warning">Opravdu chcete smazat svůj účet? Tato operace je nevratná. Všechny vaše produkty, kategorie, úložiště a všechny informace o vás budou smazány.</string>
-    <string name="error_wrong_product_name">Nesprávná délka názvu. Maximální délka je 40.</string>
+    <string name="error_wrong_name">Nesprávná délka názvu. Maximální délka je 40.</string>
     <string name="error_wrong_quantity">Maximální množství je 10 000.</string>
     <string name="print_qr_codes">Vytiskněte si QR kódy</string>
     <string name="statement_would_you_like_to_print_qr_codes">Přejete si vytisknout QR kódy pro nově přidané produkty?</string>
