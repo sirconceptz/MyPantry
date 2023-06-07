@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,6 +38,7 @@ fun ScanProductScreen(
     viewModel: ScanProductViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     val activityResultLauncher: ActivityResultLauncher<ScanOptions> =
         rememberLauncherForActivityResult(
@@ -60,21 +62,27 @@ fun ScanProductScreen(
             }
         }
 
-    if (uiState.onNavigateToProductDetails != null) {
-        onNavigationToProductDetails(uiState.onNavigateToProductDetails!!)
-        viewModel.onNavigateToProductDetails(null)
-    }
-
-    if (uiState.onNavigateToNewProduct != null) {
-        if (uiState.onNavigateToNewProduct!!.isNotEmpty()) {
-            onNavigationToNewProduct(uiState.onNavigateToNewProduct!!)
+    LaunchedEffect(key1 = uiState.onNavigateToProductDetails) {
+        if (uiState.onNavigateToProductDetails != null) {
+            onNavigationToProductDetails(uiState.onNavigateToProductDetails!!)
+            viewModel.onNavigateToProductDetails(null)
         }
-        viewModel.onNavigateToNewProduct("")
     }
 
-    if (uiState.goToPermissionSettings) {
-        GoToPermissionSettingsUseCase.invoke(LocalContext.current)
-        viewModel.onGoToPermissionSettings(false)
+    LaunchedEffect(key1 = uiState.onNavigateToNewProduct) {
+        if (uiState.onNavigateToNewProduct != null) {
+            if (uiState.onNavigateToNewProduct!!.isNotEmpty()) {
+                onNavigationToNewProduct(uiState.onNavigateToNewProduct!!)
+            }
+            viewModel.onNavigateToNewProduct("")
+        }
+    }
+
+    LaunchedEffect(key1 = uiState.goToPermissionSettings) {
+        if (uiState.goToPermissionSettings) {
+            GoToPermissionSettingsUseCase.invoke(context)
+            viewModel.onGoToPermissionSettings(false)
+        }
     }
 
     TopBarScaffold(

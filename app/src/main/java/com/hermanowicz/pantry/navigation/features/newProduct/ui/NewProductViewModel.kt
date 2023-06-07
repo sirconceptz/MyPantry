@@ -79,22 +79,24 @@ class NewProductViewModel @Inject constructor(
                         onShowDialogMoreThanOneProductWithBarcode(true, groupProducts)
                     } else if (groupProducts.size == 1) {
                         val groupProduct = groupProducts[0]
-                        _productDataState.value = NewProductState(
-                            name = groupProduct.product.name,
-                            expirationDate = groupProduct.product.expirationDate,
-                            productionDate = groupProduct.product.productionDate,
-                            composition = groupProduct.product.composition,
-                            quantity = groupProduct.quantity.toString(),
-                            healingProperties = groupProduct.product.healingProperties,
-                            dosage = groupProduct.product.dosage,
-                            hasSugar = groupProduct.product.hasSugar,
-                            hasSalt = groupProduct.product.hasSalt,
-                            isVege = groupProduct.product.isVege,
-                            isBio = groupProduct.product.isBio,
-                            taste = groupProduct.product.taste,
-                            weight = groupProduct.product.weight.toString(),
-                            volume = groupProduct.product.volume.toString()
-                        )
+                        _productDataState.update {
+                            it.copy(
+                                name = groupProduct.product.name,
+                                expirationDate = groupProduct.product.expirationDate,
+                                productionDate = groupProduct.product.productionDate,
+                                composition = groupProduct.product.composition,
+                                quantity = groupProduct.quantity.toString(),
+                                healingProperties = groupProduct.product.healingProperties,
+                                dosage = groupProduct.product.dosage,
+                                hasSugar = groupProduct.product.hasSugar,
+                                hasSalt = groupProduct.product.hasSalt,
+                                isVege = groupProduct.product.isVege,
+                                isBio = groupProduct.product.isBio,
+                                taste = groupProduct.product.taste,
+                                weight = groupProduct.product.weight.toString(),
+                                volume = groupProduct.product.volume.toString()
+                            )
+                        }
                     }
                 }
             }
@@ -111,22 +113,24 @@ class NewProductViewModel @Inject constructor(
                         onShowDialogMoreThanOneProductWithBarcode(true, groupProducts)
                     } else if (groupProducts.size == 1) {
                         val groupProduct = groupProducts[0]
-                        _productDataState.value = NewProductState(
-                            name = groupProduct.product.name,
-                            expirationDate = groupProduct.product.expirationDate,
-                            productionDate = groupProduct.product.productionDate,
-                            composition = groupProduct.product.composition,
-                            quantity = groupProduct.quantity.toString(),
-                            healingProperties = groupProduct.product.healingProperties,
-                            dosage = groupProduct.product.dosage,
-                            hasSugar = groupProduct.product.hasSugar,
-                            hasSalt = groupProduct.product.hasSalt,
-                            isVege = groupProduct.product.isVege,
-                            isBio = groupProduct.product.isBio,
-                            taste = groupProduct.product.taste,
-                            weight = groupProduct.product.weight.toString(),
-                            volume = groupProduct.product.volume.toString()
-                        )
+                        _productDataState.update {
+                            it.copy(
+                                name = groupProduct.product.name,
+                                expirationDate = groupProduct.product.expirationDate,
+                                productionDate = groupProduct.product.productionDate,
+                                composition = groupProduct.product.composition,
+                                quantity = groupProduct.quantity.toString(),
+                                healingProperties = groupProduct.product.healingProperties,
+                                dosage = groupProduct.product.dosage,
+                                hasSugar = groupProduct.product.hasSugar,
+                                hasSalt = groupProduct.product.hasSalt,
+                                isVege = groupProduct.product.isVege,
+                                isBio = groupProduct.product.isBio,
+                                taste = groupProduct.product.taste,
+                                weight = groupProduct.product.weight.toString(),
+                                volume = groupProduct.product.volume.toString()
+                            )
+                        }
                     }
                 }
             }

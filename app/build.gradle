@@ -15,6 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.hermanowicz.pantry"
+        multiDexEnabled true
         minSdk 26
         targetSdk 33
         versionCode 74
@@ -44,6 +45,8 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -131,6 +134,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.5.1'
     implementation 'com.google.zxing:javase:3.5.1'
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     //Tests
     testImplementation "junit:junit:4.13.2"

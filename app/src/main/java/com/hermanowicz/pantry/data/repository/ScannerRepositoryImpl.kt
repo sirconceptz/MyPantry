@@ -36,6 +36,7 @@ class ScannerRepositoryImpl @Inject constructor(
         options.setPrompt(prompt)
         options.setCameraId(selectedCameraId)
         options.setOrientationLocked(true)
+        options.setBeepEnabled(false)
         options.setBarcodeImageEnabled(true)
         return options
     }
