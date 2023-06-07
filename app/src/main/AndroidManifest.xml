@@ -46,6 +46,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+                android:name="com.journeyapps.barcodescanner.CaptureActivity"
+                android:parentActivityName=".MainActivity"
+                android:screenOrientation="portrait"
+                android:stateNotNeeded="true"
+                tools:replace="android:screenOrientation"
+                tools:ignore="LockedOrientationActivity" />
+        
         <service
                 android:name="com.google.firebase.messaging.FirebaseMessagingService"
                 android:exported="false">

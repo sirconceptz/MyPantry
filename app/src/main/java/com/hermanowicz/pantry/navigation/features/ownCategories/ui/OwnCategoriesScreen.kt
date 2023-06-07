@@ -31,7 +31,7 @@ fun OwnCategoriesScreen(
     viewModel: OwnCategoriesViewModel
 ) {
     val categoriesState by viewModel.categoriesState.collectAsState()
-    val categoriesModel = updateCategoriesModel(viewModel)
+    val categoriesModel = updateUi(viewModel)
 
     if (categoriesModel.categories.isEmpty() && categoriesState.isEditMode) {
         viewModel.onEditMode(false)
@@ -125,7 +125,7 @@ private fun ShowCategories(
 }
 
 @Composable
-private fun updateCategoriesModel(
+private fun updateUi(
     viewModel: OwnCategoriesViewModel
 ): CategoriesModel {
     when (val state = viewModel.uiState.collectAsState().value) {

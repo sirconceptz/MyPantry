@@ -1,6 +1,7 @@
 package com.hermanowicz.pantry.navigation.features.productDetails.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,8 @@ import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDe
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.Permissions
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import timber.log.Timber
 
 @Composable
@@ -53,6 +56,13 @@ fun ProductDetailsScreen(
 
     val cameraPermissions = Permissions.cameraPermissions
 
+    val activityResultLauncher: ActivityResultLauncher<ScanOptions> =
+        rememberLauncherForActivityResult(
+            contract = ScanContract()
+        ) { result ->
+            viewModel.onScanBarcode(result)
+        }
+
     val launcherAddBarcode =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
@@ -62,7 +72,7 @@ fun ProductDetailsScreen(
                 }
             }
             if (isGranted) {
-                viewModel.onScanBarcode()
+                activityResultLauncher.launch(viewModel.getScanOptions())
             } else {
                 viewModel.onGoToPermissionSettings(true)
             }

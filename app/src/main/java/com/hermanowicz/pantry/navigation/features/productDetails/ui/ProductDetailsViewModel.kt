@@ -15,18 +15,21 @@ import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.ParseDeprecatedDatabaseProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
-import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
+import com.hermanowicz.pantry.domain.scanner.BuildScanOptionsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
 import com.hermanowicz.pantry.utils.enums.ProductDetailsOption
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,12 +41,12 @@ class ProductDetailsViewModel @Inject constructor(
     private val checkIsProductsHashcodeCorrectUseCase: CheckIsProductsHashcodeCorrectUseCase,
     private val parseDeprecatedDatabaseProductsUseCase: ParseDeprecatedDatabaseProductsUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
-    private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val setPhotoFileUseCase: SetPhotoFileUseCase,
     private val fetchPhotoBitmapUseCase: FetchPhotoBitmapUseCase,
     private val deleteProductsUseCase: DeleteProductsUseCase,
-    private val deleteNotificationForProductsUseCase: DeleteNotificationForProductsUseCase
+    private val deleteNotificationForProductsUseCase: DeleteNotificationForProductsUseCase,
+    private val buildScanOptionsUseCase: BuildScanOptionsUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProductDetailsState())
     val state: StateFlow<ProductDetailsState> = _state
@@ -135,12 +138,8 @@ class ProductDetailsViewModel @Inject constructor(
         onShowMenu(false)
     }
 
-    fun onScanBarcode() {
-        viewModelScope.launch(Dispatchers.IO) {
-            startBarcodeScannerUseCase().collect { data ->
-                updateProducts(data)
-            }
-        }
+    fun onScanBarcode(result: ScanIntentResult) {
+        updateProducts(result.contents)
     }
 
     private fun updateProducts(barcode: String) {
@@ -216,4 +215,6 @@ class ProductDetailsViewModel @Inject constructor(
             it.copy(photoPreview = bitmap)
         }
     }
+
+    fun getScanOptions(): ScanOptions = runBlocking { buildScanOptionsUseCase() }
 }

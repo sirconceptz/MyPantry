@@ -1,6 +1,7 @@
 package com.hermanowicz.pantry.navigation.features.scanProduct.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,9 @@ import com.hermanowicz.pantry.components.common.spacer.SpacerMedium
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.domain.settings.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
+import com.hermanowicz.pantry.utils.enums.ScannerMethod
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun ScanProductScreen(
@@ -34,22 +38,14 @@ fun ScanProductScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val launcherScanQrCode =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
-            var isGranted = true
-            for (permission in requestedPermissions) {
-                if (!permission.value) {
-                    isGranted = false
-                }
-            }
-            if (isGranted) {
-                viewModel.onScanQRCode()
-            } else {
-                viewModel.onGoToPermissionSettings(true)
-            }
+    val activityResultLauncher: ActivityResultLauncher<ScanOptions> =
+        rememberLauncherForActivityResult(
+            contract = ScanContract()
+        ) { result ->
+            viewModel.setScanResult(result)
         }
 
-    val launcherBarcodeCode =
+    val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestedPermissions ->
             var isGranted = true
             for (permission in requestedPermissions) {
@@ -58,7 +54,7 @@ fun ScanProductScreen(
                 }
             }
             if (isGranted) {
-                viewModel.onScanBarcode()
+                activityResultLauncher.launch(viewModel.getScanOptions())
             } else {
                 viewModel.onGoToPermissionSettings(true)
             }
@@ -109,7 +105,8 @@ fun ScanProductScreen(
                     Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
                         Text(text = stringResource(id = R.string.scan_qr_code_statement))
                         ButtonPrimary(text = stringResource(id = R.string.scan_qr_code)) {
-                            launcherScanQrCode.launch(cameraPermissions.toTypedArray())
+                            viewModel.setScanType(ScannerMethod.SCAN_QR_CODE)
+                            permissionLauncher.launch(cameraPermissions.toTypedArray())
                         }
                     }
                 }
@@ -124,7 +121,8 @@ fun ScanProductScreen(
                     Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
                         Text(stringResource(id = R.string.scan_barcode_statement))
                         ButtonPrimary(text = stringResource(id = R.string.scan_barcode)) {
-                            launcherBarcodeCode.launch(cameraPermissions.toTypedArray())
+                            viewModel.setScanType(ScannerMethod.SCAN_BARCODE)
+                            permissionLauncher.launch(cameraPermissions.toTypedArray())
                         }
                     }
                 }
@@ -143,7 +141,6 @@ fun ScanProductScreen(
                         }
                     }
                 }
-                SpacerMedium()
             }
         }
     }

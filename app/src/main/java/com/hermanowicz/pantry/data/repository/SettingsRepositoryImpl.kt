@@ -127,6 +127,12 @@ class SettingsRepositoryImpl @Inject constructor(
                 preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] ?: ""
             }.distinctUntilChanged()
 
+    override val scanCameraMode: Flow<String>
+        get() =
+            context.dataStore.data.map { preferences ->
+                preferences[CAMERA_MODE_KEY] ?: CameraMode.REAR.name
+            }.distinctUntilChanged()
+
     private fun isNotificationsEnabled(): Boolean {
         return notificationManagerCompat.areNotificationsEnabled()
     }

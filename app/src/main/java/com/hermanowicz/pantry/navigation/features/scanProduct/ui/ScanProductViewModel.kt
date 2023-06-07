@@ -1,41 +1,27 @@
 package com.hermanowicz.pantry.navigation.features.scanProduct.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hermanowicz.pantry.domain.scanner.StartBarcodeScannerUseCase
-import com.hermanowicz.pantry.domain.scanner.StartQrCodeCodeScannerUseCase
+import com.hermanowicz.pantry.domain.scanner.BuildScanOptionsUseCase
+import com.hermanowicz.pantry.domain.scanner.DecodeQrCodeUseCase
 import com.hermanowicz.pantry.navigation.features.scanProduct.state.ScanProductUiState
+import com.hermanowicz.pantry.utils.enums.ScannerMethod
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class ScanProductViewModel @Inject constructor(
-    private val startQrCodeCodeScannerUseCase: StartQrCodeCodeScannerUseCase,
-    private val startBarcodeScannerUseCase: StartBarcodeScannerUseCase
+    private val buildScanOptionsUseCase: BuildScanOptionsUseCase,
+    private val decodeQrCodeUseCase: DecodeQrCodeUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScanProductUiState())
     val uiState: StateFlow<ScanProductUiState> = _uiState
-
-    fun onScanQRCode() {
-        viewModelScope.launch {
-            startQrCodeCodeScannerUseCase().collect { data ->
-                onNavigateToProductDetails(data)
-            }
-        }
-    }
-
-    fun onScanBarcode() {
-        viewModelScope.launch {
-            startBarcodeScannerUseCase().collect { data ->
-                onNavigateToNewProduct(data)
-            }
-        }
-    }
 
     fun onPutBarcodeManually(bool: Boolean) {
         _uiState.update {
@@ -58,4 +44,19 @@ class ScanProductViewModel @Inject constructor(
             it.copy(goToPermissionSettings = bool)
         }
     }
+
+    fun setScanResult(result: ScanIntentResult) {
+        if (result.contents != null) {
+            if (uiState.value.scanType == ScannerMethod.SCAN_BARCODE)
+                onNavigateToNewProduct(result.contents)
+            else if (uiState.value.scanType == ScannerMethod.SCAN_QR_CODE)
+                onNavigateToProductDetails(decodeQrCodeUseCase(result.contents))
+        }
+    }
+
+    fun setScanType(scanType: ScannerMethod) {
+        _uiState.update { it.copy(scanType = scanType) }
+    }
+
+    fun getScanOptions(): ScanOptions = runBlocking { buildScanOptionsUseCase() }
 }

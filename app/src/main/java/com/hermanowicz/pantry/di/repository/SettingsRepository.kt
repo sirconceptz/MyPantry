@@ -2,6 +2,7 @@ package com.hermanowicz.pantry.di.repository
 
 import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.data.repository.SettingsRepositoryImpl
+import com.hermanowicz.pantry.utils.enums.CameraMode
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface SettingsRepository {
     val appSettings: Flow<AppSettings>
     val databaseMode: Flow<String>
+    val scanCameraMode: Flow<String>
     val qrCodeSize: Flow<String>
     val daysBeforeNotification: Flow<Int>
     val isPushNotificationsEnabled: StateFlow<Boolean>

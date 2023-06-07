@@ -1,6 +1,8 @@
 package com.hermanowicz.pantry.di.repository
 
 import com.hermanowicz.pantry.data.repository.ScannerRepositoryImpl
+import com.hermanowicz.pantry.utils.enums.ScannerMethod
+import com.journeyapps.barcodescanner.ScanOptions
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -8,8 +10,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
 
 interface ScannerRepository {
-    fun startQRCodeScanning(): Flow<Pair<Int, String>>
-    fun startBarcodeScanning(): Flow<String>
+    suspend fun buildScanOptions(): ScanOptions
+    fun decodeScanQRCodeResult(scanResult: String): Pair<Int, String>
 }
 
 @Module
