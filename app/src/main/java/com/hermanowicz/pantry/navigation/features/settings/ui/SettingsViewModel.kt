@@ -214,7 +214,8 @@ class SettingsViewModel @Inject constructor(
     fun showEmailAddressDialog(bool: Boolean) {
         _settingsState.update {
             it.copy(
-                showChangeNotificationsEmailDialog = bool
+                showChangeNotificationsEmailDialog = bool,
+                tempEmailAddressForNotifications = settingsState.value.emailAddressForNotifications
             )
         }
     }
@@ -235,7 +236,8 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onChangeEmailAddressForNotifications(emailAddress: String) {
+    fun onChangeEmailAddressForNotifications() {
+        val emailAddress = settingsState.value.tempEmailAddressForNotifications
         val parsedAddress = emailAddress.replace("\\s".toRegex(), "")
 
         _settingsState.update {
@@ -312,5 +314,13 @@ class SettingsViewModel @Inject constructor(
         }
         enableDatabaseModeDropdown(isUserLogged)
         enableExportToCloud(isUserLogged)
+    }
+
+    fun onTempEmailAddressForNotificationsChange(emailAddress: String) {
+        _settingsState.update {
+            it.copy(
+                tempEmailAddressForNotifications = emailAddress
+            )
+        }
     }
 }

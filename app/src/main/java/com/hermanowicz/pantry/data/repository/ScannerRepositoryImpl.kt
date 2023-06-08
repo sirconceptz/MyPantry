@@ -1,21 +1,10 @@
 package com.hermanowicz.pantry.data.repository
 
-import android.content.Context
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.di.repository.ScannerRepository
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import com.hermanowicz.pantry.utils.enums.CameraMode
-import com.hermanowicz.pantry.utils.enums.ScannerMethod
 import com.journeyapps.barcodescanner.ScanOptions
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import timber.log.Timber

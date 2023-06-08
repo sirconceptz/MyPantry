@@ -29,5 +29,6 @@ data class SettingsState(
     val showExportDatabaseToCloudDialog: Boolean = false,
     val showSignInForm: Boolean = false,
     val isUserLogged: Boolean = false,
-    val showDeleteAccountDialog: Boolean = false
+    val showDeleteAccountDialog: Boolean = false,
+    val tempEmailAddressForNotifications: String = ""
 )

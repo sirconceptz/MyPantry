@@ -17,10 +17,11 @@ fun ShowSettingsDialogs(
     onConfirmClearDatabase: () -> Unit,
     onExportDatabaseToCloudDialogDismiss: () -> Unit,
     onConfirmExportDatabaseToCloud: () -> Unit,
-    onChangeEmailForNotifications: (String) -> Unit,
+    onChangeEmailForNotifications: () -> Unit,
     onChangeEmailDialogDismiss: () -> Unit,
     onConfirmDeleteAccount: () -> Unit,
-    onConfirmDialogDismiss: () -> Unit
+    onConfirmDialogDismiss: () -> Unit,
+    onTempEmailAddressForNotificationsChange: (String) -> Unit
 ) {
     if (state.showAuthorDialog) {
         DialogAuthorInfo(
@@ -67,8 +68,9 @@ fun ShowSettingsDialogs(
     if (state.showChangeNotificationsEmailDialog) {
         DialogTextfield(
             label = stringResource(id = R.string.email_address_for_notifications),
-            value = state.emailAddressForNotifications,
+            value = state.tempEmailAddressForNotifications,
             onPositiveRequest = onChangeEmailForNotifications,
+            onTempChangeValue = onTempEmailAddressForNotificationsChange,
             onDismissRequest = onChangeEmailDialogDismiss
         )
     }

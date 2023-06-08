@@ -105,10 +105,15 @@ fun SettingsScreen(
             onConfirmClearDatabase = { viewModel.onConfirmClearDatabase() },
             onExportDatabaseToCloudDialogDismiss = { viewModel.showExportDatabaseToCloudDialog(false) },
             onConfirmExportDatabaseToCloud = { viewModel.onConfirmExportDatabaseToCloud() },
-            onChangeEmailForNotifications = { viewModel.onChangeEmailAddressForNotifications(it) },
+            onChangeEmailForNotifications = { viewModel.onChangeEmailAddressForNotifications() },
             onChangeEmailDialogDismiss = { viewModel.showEmailAddressDialog(false) },
             onConfirmDeleteAccount = { viewModel.onConfirmDeleteAccount() },
-            onConfirmDialogDismiss = { viewModel.showDeleteAccountDialog(false) }
+            onConfirmDialogDismiss = { viewModel.showDeleteAccountDialog(false) },
+            onTempEmailAddressForNotificationsChange = {
+                viewModel.onTempEmailAddressForNotificationsChange(
+                    it
+                )
+            }
         )
         SignInForm(
             state = state,

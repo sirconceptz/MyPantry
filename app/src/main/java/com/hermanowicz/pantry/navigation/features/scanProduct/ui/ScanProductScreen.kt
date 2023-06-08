@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
@@ -93,8 +95,10 @@ fun ScanProductScreen(
             DialogTextfield(
                 label = stringResource(id = R.string.put_barcode_manually),
                 value = uiState.barcodeManually,
-                onPositiveRequest = { viewModel.onNavigateToNewProduct(it) },
-                onDismissRequest = { viewModel.onPutBarcodeManually(false) }
+                onPositiveRequest = { viewModel.onPutBarcodeManually() },
+                onDismissRequest = { viewModel.onPutBarcodeManually(false) },
+                onTempChangeValue = { viewModel.onTempChangeBarcodeManuallyValue(it) },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal)
             )
         }
 

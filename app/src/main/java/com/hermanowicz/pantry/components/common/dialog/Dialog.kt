@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -266,14 +267,14 @@ fun DialogWarning(
 fun DialogTextfield(
     label: String,
     value: String,
+    onTempChangeValue: (String) -> Unit,
     isError: Boolean = false,
     errorStatement: String = "",
-    onPositiveRequest: (String) -> Unit,
+    onPositiveRequest: () -> Unit,
     onDismissRequest: () -> Unit,
-    onClearRequest: (() -> Unit)? = null
+    onClearRequest: (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
-    var text = value
-
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
@@ -292,13 +293,13 @@ fun DialogTextfield(
                 verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.small)
             ) {
                 TextFieldAndLabelError(
-                    textfieldText = text,
+                    textfieldText = value,
                     labelText = label,
-                    textEvent = { newText ->
-                        text = newText
-                    },
+                    textEvent = onTempChangeValue,
                     errorText = errorStatement,
-                    showError = isError
+                    showError = isError,
+                    keyboardOptions = keyboardOptions
+
                 )
                 if (onClearRequest != null) {
                     ButtonPrimary(
@@ -308,7 +309,7 @@ fun DialogTextfield(
                 }
                 ButtonPrimary(
                     text = stringResource(id = R.string.confirm),
-                    onClick = { onPositiveRequest(text) }
+                    onClick = { onPositiveRequest() }
                 )
                 ButtonPrimary(
                     text = stringResource(id = R.string.close),

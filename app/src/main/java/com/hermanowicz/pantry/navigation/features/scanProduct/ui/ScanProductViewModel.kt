@@ -29,6 +29,11 @@ class ScanProductViewModel @Inject constructor(
         }
     }
 
+    fun onPutBarcodeManually() {
+        val barcode = uiState.value.barcodeManually
+        onNavigateToNewProduct(barcode)
+    }
+
     fun onNavigateToNewProduct(barcodeData: String) {
         if (barcodeData.isNotEmpty()) {
             _uiState.update { it.copy(onNavigateToNewProduct = barcodeData) }
@@ -47,10 +52,11 @@ class ScanProductViewModel @Inject constructor(
 
     fun setScanResult(result: ScanIntentResult) {
         if (result.contents != null) {
-            if (uiState.value.scanType == ScannerMethod.SCAN_BARCODE)
+            if (uiState.value.scanType == ScannerMethod.SCAN_BARCODE) {
                 onNavigateToNewProduct(result.contents)
-            else if (uiState.value.scanType == ScannerMethod.SCAN_QR_CODE)
+            } else if (uiState.value.scanType == ScannerMethod.SCAN_QR_CODE) {
                 onNavigateToProductDetails(decodeQrCodeUseCase(result.contents))
+            }
         }
     }
 
@@ -59,4 +65,10 @@ class ScanProductViewModel @Inject constructor(
     }
 
     fun getScanOptions(): ScanOptions = runBlocking { buildScanOptionsUseCase() }
+
+    fun onTempChangeBarcodeManuallyValue(tempBarcodeManually: String) {
+        _uiState.update {
+            it.copy(barcodeManually = tempBarcodeManually)
+        }
+    }
 }

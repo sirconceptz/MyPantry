@@ -20,7 +20,6 @@ import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class PhotoRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
@@ -79,7 +78,9 @@ class PhotoRepositoryImpl @Inject constructor(
     private fun fixOrientation(bitmap: Bitmap): Float {
         return if (bitmap.width > bitmap.height) {
             90f
-        } else 0f
+        } else {
+            0f
+        }
     }
 
     private fun changeOrientationIfNeeded(bitmap: Bitmap): Bitmap {
