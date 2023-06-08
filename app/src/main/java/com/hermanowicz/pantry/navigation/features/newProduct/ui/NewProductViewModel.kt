@@ -51,7 +51,7 @@ class NewProductViewModel @Inject constructor(
     private val _productDataState = MutableStateFlow(NewProductState())
     var productDataState: StateFlow<NewProductState> = _productDataState.asStateFlow()
 
-    private val barcode: String = savedStateHandle["barcode"] ?: "0"
+    private val barcode: String = savedStateHandle["barcode"] ?: "-1"
 
     init {
         fetchOwnCategories()

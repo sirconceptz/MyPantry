@@ -1,9 +1,11 @@
 package com.hermanowicz.pantry.data.repository
 
+import android.R.attr.bitmap
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Environment
 import android.util.Base64
 import com.hermanowicz.pantry.di.repository.PhotoRepository
@@ -17,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 @Singleton
 class PhotoRepositoryImpl @Inject constructor(
@@ -40,7 +43,9 @@ class PhotoRepositoryImpl @Inject constructor(
 
     override fun decodePhotoFromGallery(fileName: String): Bitmap? {
         return try {
-            BitmapFactory.decodeFile(getPhotoDirectory()?.absolutePath + File.separator + fileName + PHOTO_EXTENSION)
+            val bitmap =
+                BitmapFactory.decodeFile(getPhotoDirectory()?.absolutePath + File.separator + fileName + PHOTO_EXTENSION)
+            changeOrientationIfNeeded(bitmap)
         } catch (e: Exception) {
             null
         }
@@ -55,7 +60,8 @@ class PhotoRepositoryImpl @Inject constructor(
     override fun decodeStringToBitmap(string: String): Bitmap? {
         return try {
             val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            val bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            changeOrientationIfNeeded(bitmap)
         } catch (e: NullPointerException) {
             null
         }
@@ -68,5 +74,26 @@ class PhotoRepositoryImpl @Inject constructor(
         val encoded = Base64.encodeToString(b, Base64.DEFAULT)
         fileName = encoded
         return encoded
+    }
+
+    private fun fixOrientation(bitmap: Bitmap): Float {
+        return if (bitmap.width > bitmap.height) {
+            90f
+        } else 0f
+    }
+
+    private fun changeOrientationIfNeeded(bitmap: Bitmap): Bitmap {
+        val matrix = Matrix()
+        val rotation = fixOrientation(bitmap)
+        matrix.postRotate(rotation)
+        return Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.width,
+            bitmap.height,
+            matrix,
+            true
+        )
     }
 }

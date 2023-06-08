@@ -62,7 +62,7 @@ fun AppNavHost() {
                     navController.navigate(AppScreens.MyPantry.route)
                     closeDrawer()
                 }, onNewProduct = {
-                    navController.navigate("${AppScreens.NewProduct.route}/0")
+                    navController.navigate("${AppScreens.NewProduct.route}/-1")
                     closeDrawer()
                 }, onOwnCategories = {
                     navController.navigate(AppScreens.OwnCategories.route)

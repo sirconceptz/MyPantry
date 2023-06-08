@@ -48,10 +48,9 @@
 
         <activity
                 android:name="com.journeyapps.barcodescanner.CaptureActivity"
-                android:screenOrientation="portrait"
+                android:screenOrientation="fullSensor"
                 android:stateNotNeeded="true"
-                tools:replace="android:screenOrientation"
-                tools:ignore="LockedOrientationActivity" />
+                tools:replace="android:screenOrientation" />
 
         <service
                 android:name="com.google.firebase.messaging.FirebaseMessagingService"

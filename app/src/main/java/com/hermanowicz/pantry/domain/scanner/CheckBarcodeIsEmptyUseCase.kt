@@ -4,6 +4,6 @@ import javax.inject.Inject
 
 class CheckBarcodeIsEmptyUseCase @Inject constructor() : (String) -> Boolean {
     override fun invoke(barcode: String): Boolean {
-        return barcode != "0"
+        return barcode != "-1"
     }
 }

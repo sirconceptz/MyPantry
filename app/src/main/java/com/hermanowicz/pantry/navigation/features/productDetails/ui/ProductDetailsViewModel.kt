@@ -89,8 +89,8 @@ class ProductDetailsViewModel @Inject constructor(
                                         loadingVisible = false
                                     )
                                 )
-                                if (products.isNotEmpty()) {
-                                    val fileName = products[0].photoName
+                                if (groupProduct.product.id >= 0) {
+                                    val fileName = groupProduct.product.photoName
                                     setPhotoFileUseCase(fileName)
                                     val photoBitmap =
                                         fetchPhotoBitmapUseCase(fileName, databaseMode)
