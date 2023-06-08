@@ -141,5 +141,6 @@
     <string name="which_product_you_want_to_add">Který produkt chcete přidat?</string>
     <string name="add_photo">Přidat fotku</string>
     <string name="take_photo">Vyfotit</string>
+    <string name="delete_photo">Smazat fotku</string>
     <string name="notifications">Oznámení</string>
 </resources>

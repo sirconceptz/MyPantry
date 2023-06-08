@@ -114,10 +114,8 @@ class AddPhotoViewModel @Inject constructor(
     }
 
     fun savePhotoToDatabase() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val photoFileName = getPhotoFileNameUseCase() ?: ""
-            updatePhotoInProductListUseCase(photoFileName, uiState.value.productList, databaseMode)
-        }
+        val photoFileName = getPhotoFileNameUseCase() ?: ""
+        updatePhotoInDatabase(photoFileName)
     }
 
     fun onPhotoSavedCorrectlyInGallery(photoFileName: String?) {
@@ -129,5 +127,15 @@ class AddPhotoViewModel @Inject constructor(
 
     fun getPhotoFileName(): String? {
         return getPhotoFileNameUseCase()
+    }
+
+    fun deletePhoto() {
+        updatePhotoInDatabase("")
+    }
+
+    private fun updatePhotoInDatabase(photoFileName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updatePhotoInProductListUseCase(photoFileName, uiState.value.productList, databaseMode)
+        }
     }
 }

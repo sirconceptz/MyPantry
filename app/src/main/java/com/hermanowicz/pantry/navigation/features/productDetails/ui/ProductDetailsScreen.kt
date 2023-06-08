@@ -29,6 +29,7 @@ import com.hermanowicz.pantry.components.common.divider.DividerCardInside
 import com.hermanowicz.pantry.components.common.dropdown.DropdownProductDetailsOptions
 import com.hermanowicz.pantry.components.common.icons.EditIcon
 import com.hermanowicz.pantry.components.common.icons.MenuIcon
+import com.hermanowicz.pantry.components.common.image.PhotoBox
 import com.hermanowicz.pantry.components.common.loading.LoadingDialog
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.data.model.GroupProduct
@@ -140,23 +141,7 @@ fun ProductDetailsScreen(
 @Composable
 fun ProductDetailsView(groupProduct: GroupProduct, state: ProductDetailsState) {
     if (state.photoPreview != null) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = LocalSpacing.current.medium,
-                    bottom = LocalSpacing.current.small
-                )
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxHeight(0.3f)
-                    .align(Alignment.Center),
-                bitmap = state.photoPreview.asImageBitmap(),
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
-        }
+        PhotoBox(state.photoPreview)
     }
     CardWhiteBgWithBorder(
         modifier = Modifier.padding(vertical = LocalSpacing.current.medium)

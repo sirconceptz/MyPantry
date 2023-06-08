@@ -20,6 +20,7 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
+import com.hermanowicz.pantry.components.common.image.PhotoBox
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.domain.settings.GoToPermissionSettingsUseCase
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
@@ -85,29 +86,19 @@ fun AddPhotoScreen(
         ) {
             if (uiState.photoPreview != null) {
                 item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = LocalSpacing.current.medium,
-                                bottom = LocalSpacing.current.small
-                            )
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Center),
-                            bitmap = uiState.photoPreview!!.asImageBitmap(),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null
-                        )
-                    }
+                    PhotoBox(uiState.photoPreview!!)
                     ButtonPrimary(
                         modifier = Modifier.padding(vertical = LocalSpacing.current.medium),
                         text = stringResource(R.string.save),
                         onClick = { viewModel.savePhotoToDatabase() }
                     )
+                    ButtonPrimary(
+                        modifier = Modifier.padding(vertical = LocalSpacing.current.medium),
+                        text = stringResource(R.string.delete_photo),
+                        onClick = { viewModel.deletePhoto() }
+                    )
                 }
+
             }
             item {
                 ButtonPrimary(

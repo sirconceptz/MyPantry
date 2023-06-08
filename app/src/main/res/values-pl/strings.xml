@@ -141,5 +141,6 @@
     <string name="which_product_you_want_to_add">Który produkt chcesz dodać?</string>
     <string name="add_photo">Dodaj zdjęcie</string>
     <string name="take_photo">Zrób zdjęcie</string>
+    <string name="delete_photo">Usuń zdjęcie</string>
     <string name="notifications">Powiadomienia</string>
 </resources>
