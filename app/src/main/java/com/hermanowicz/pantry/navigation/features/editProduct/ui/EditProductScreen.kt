@@ -5,11 +5,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
@@ -35,7 +39,16 @@ fun EditProductScreen(
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.edit_product),
-        openDrawer = { openDrawer() }
+        openDrawer = { openDrawer() },
+        actions = {
+            IconButton(onClick = { viewModel.onSaveClick() }, content = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_save),
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            })
+        }
     ) {
         LazyColumn(
             modifier = Modifier

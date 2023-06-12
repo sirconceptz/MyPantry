@@ -32,6 +32,7 @@ import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.ui.theme.Shapes
+import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 
 @Composable
@@ -58,6 +59,12 @@ fun GroupProductItemCard(
                 }
         ) {
             Text(text = groupProduct.product.name, fontSize = 20.sp)
+            Text(
+                text = stringResource(id = R.string.expiration_date) + ": " + DateAndTimeConverter.dateToVisibleWithYear(
+                    groupProduct.product.expirationDate
+                ),
+                fontSize = 15.sp
+            )
             Text(
                 text = stringResource(id = R.string.quantity) + ": " + groupProduct.quantity.toString(),
                 fontSize = 15.sp

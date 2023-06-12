@@ -18,7 +18,7 @@ android {
         multiDexEnabled true
         minSdk 26
         targetSdk 33
-        versionCode 76
+        versionCode 78
         versionName "4.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -88,9 +88,6 @@ dependencies {
 
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1"
-
-    //Barcode
-    implementation 'com.google.android.gms:play-services-code-scanner:16.0.0'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

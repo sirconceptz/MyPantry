@@ -6,6 +6,6 @@ class CheckFormatIsNumberUseCase @Inject constructor() : (String) -> Boolean {
     private val numberPattern = Regex("^\\d+\$")
 
     override fun invoke(text: String): Boolean {
-        return text.matches(numberPattern)
+        return text.matches(numberPattern) || text.isEmpty()
     }
 }
