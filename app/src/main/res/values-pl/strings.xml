@@ -114,6 +114,7 @@
     <string name="statement_delete_account_warning">Czy na pewno chcesz usunąć swoje konto? Ta operacja jest nieodwracalna. Wszystkie Twoje produkty, kategorie, miejsca przechowywania i wszystkie informacje o Tobie zostaną usunięte.</string>
     <string name="error_wrong_name">Zła długość nazwy. Maksymalnie długość to 40 znaków.</string>
     <string name="error_wrong_quantity">Maksymalna ilość to 10000.</string>
+    <string name="error_product_not_found">Produkt nie został znaleziony</string>
     <string name="print_qr_codes">Drukuj kody QR</string>
     <string name="statement_would_you_like_to_print_qr_codes">Chcesz wydrukować kody QR dla nowo dodanych produktów?</string>
     <string name="qr_codes_quantity">Ilość kodów QR</string>

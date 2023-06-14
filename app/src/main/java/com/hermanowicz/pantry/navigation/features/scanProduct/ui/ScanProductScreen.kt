@@ -117,7 +117,7 @@ fun ScanProductScreen(
                     Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
                         Text(text = stringResource(id = R.string.scan_qr_code_statement))
                         ButtonPrimary(text = stringResource(id = R.string.scan_qr_code)) {
-                            viewModel.setScanType(ScannerMethod.SCAN_QR_CODE)
+                            viewModel.setScanMethod(ScannerMethod.SCAN_QR_CODE)
                             permissionLauncher.launch(cameraPermissions.toTypedArray())
                         }
                     }
@@ -133,7 +133,7 @@ fun ScanProductScreen(
                     Column(modifier = Modifier.padding(LocalSpacing.current.medium)) {
                         Text(stringResource(id = R.string.scan_barcode_statement))
                         ButtonPrimary(text = stringResource(id = R.string.scan_barcode)) {
-                            viewModel.setScanType(ScannerMethod.SCAN_BARCODE)
+                            viewModel.setScanMethod(ScannerMethod.SCAN_BARCODE)
                             permissionLauncher.launch(cameraPermissions.toTypedArray())
                         }
                     }

@@ -116,6 +116,7 @@
     <string name="statement_delete_account_warning">Are you sure you want to delete your account? This operation is irreversible. All your products, categories, storage locations, and all info about you will be deleted.</string>
     <string name="error_wrong_name">Wrong name length. The maximum length is 40.</string>
     <string name="error_wrong_quantity">The maximum quantity is 10000.</string>
+    <string name="error_product_not_found">The product was not found</string>
     <string name="print_qr_codes">Print QR codes</string>
     <string name="statement_would_you_like_to_print_qr_codes">Would you like to print QR codes for newly added products?</string>
     <string name="qr_codes_quantity">QR codes quantity</string>

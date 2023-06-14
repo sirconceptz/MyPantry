@@ -11,15 +11,15 @@ plugins {
 
 android {
     namespace 'com.hermanowicz.pantry'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.hermanowicz.pantry"
         multiDexEnabled true
         minSdk 26
-        targetSdk 33
-        versionCode 78
-        versionName "4.0.3"
+        targetSdk 34
+        versionCode 79
+        versionName "4.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true

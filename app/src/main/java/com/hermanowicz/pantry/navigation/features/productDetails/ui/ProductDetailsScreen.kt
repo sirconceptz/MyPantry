@@ -1,5 +1,6 @@
 package com.hermanowicz.pantry.navigation.features.productDetails.ui
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -10,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.hermanowicz.pantry.R
@@ -73,29 +76,39 @@ fun ProductDetailsScreen(
             }
         }
 
-    if (state.onAddBarcode) {
-        launcherAddBarcode.launch(cameraPermissions.toTypedArray())
-        viewModel.onAddBarcode(false)
+    LaunchedEffect(key1 = state.onAddBarcode) {
+        if (state.onAddBarcode) {
+            launcherAddBarcode.launch(cameraPermissions.toTypedArray())
+            viewModel.onAddBarcode(false)
+        }
     }
 
-    if (state.onNavigateToAddPhoto) {
-        onClickAddPhoto(uiModel.groupProduct.idList)
-        viewModel.onNavigateToAddPhoto(false)
+    LaunchedEffect(key1 = state.onAddBarcode) {
+        if (state.onNavigateToAddPhoto) {
+            onClickAddPhoto(uiModel.groupProduct.idList)
+            viewModel.onNavigateToAddPhoto(false)
+        }
     }
 
-    if (state.onNavigateToEditProduct) {
-        onClickEditProducts(viewModel.productId)
-        viewModel.onNavigateToEditProduct(false)
+    LaunchedEffect(key1 = state.onNavigateToEditProduct) {
+        if (state.onNavigateToEditProduct) {
+            onClickEditProducts(viewModel.productId)
+            viewModel.onNavigateToEditProduct(false)
+        }
     }
 
-    if (state.onNavigateToPrintQrCodes) {
-        onClickPrintQrCodes(uiModel.groupProduct.idList)
-        viewModel.onNavigateToPrintQrCodes(false)
+    LaunchedEffect(key1 = state.onNavigateToPrintQrCodes) {
+        if (state.onNavigateToPrintQrCodes) {
+            onClickPrintQrCodes(uiModel.groupProduct.idList)
+            viewModel.onNavigateToPrintQrCodes(false)
+        }
     }
 
-    if (state.onNavigateToMyPantry) {
-        onNavigateToMyPantry()
-        viewModel.onNavigateToMyPantry(false)
+    LaunchedEffect(key1 = state.onNavigateToMyPantry) {
+        if (state.onNavigateToMyPantry) {
+            onNavigateToMyPantry()
+            viewModel.onNavigateToMyPantry(false)
+        }
     }
 
     if (state.isDialogWarningDeleteVisible) {
@@ -269,6 +282,11 @@ private fun updateUi(
 
         is ProductDetailsUiState.Error -> {
             Timber.d("Product Details UI State - Error")
+            Toast.makeText(
+                LocalContext.current,
+                stringResource(id = R.string.error_product_not_found),
+                Toast.LENGTH_LONG
+            ).show()
             return ProductDetailsModel()
         }
     }

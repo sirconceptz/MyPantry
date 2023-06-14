@@ -100,6 +100,7 @@ class ProductDetailsViewModel @Inject constructor(
                                 if (!state.value.onNavigateToMyPantry) {
                                     _uiState.value =
                                         ProductDetailsUiState.Error("No correct product")
+                                    onNavigateToMyPantry(true)
                                 } else {
                                     _uiState.value = ProductDetailsUiState.Loading
                                 }
@@ -109,6 +110,7 @@ class ProductDetailsViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.value = ProductDetailsUiState.Error(e.toString())
+                onNavigateToMyPantry(true)
             }
         }
     }

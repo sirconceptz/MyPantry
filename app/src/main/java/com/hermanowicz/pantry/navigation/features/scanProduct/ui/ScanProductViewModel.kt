@@ -3,6 +3,8 @@ package com.hermanowicz.pantry.navigation.features.scanProduct.ui
 import androidx.lifecycle.ViewModel
 import com.hermanowicz.pantry.domain.scanner.BuildScanOptionsUseCase
 import com.hermanowicz.pantry.domain.scanner.DecodeQrCodeUseCase
+import com.hermanowicz.pantry.domain.scanner.GetScannerMethodUseCase
+import com.hermanowicz.pantry.domain.scanner.SetScannerMethodUseCase
 import com.hermanowicz.pantry.navigation.features.scanProduct.state.ScanProductUiState
 import com.hermanowicz.pantry.utils.enums.ScannerMethod
 import com.journeyapps.barcodescanner.ScanIntentResult
@@ -17,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanProductViewModel @Inject constructor(
     private val buildScanOptionsUseCase: BuildScanOptionsUseCase,
-    private val decodeQrCodeUseCase: DecodeQrCodeUseCase
+    private val decodeQrCodeUseCase: DecodeQrCodeUseCase,
+    private val setScannerMethodUseCase: SetScannerMethodUseCase,
+    private val getScannerMethodUseCase: GetScannerMethodUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ScanProductUiState())
@@ -51,17 +55,18 @@ class ScanProductViewModel @Inject constructor(
     }
 
     fun setScanResult(result: ScanIntentResult) {
+        val scannerMethod = getScannerMethodUseCase()
         if (result.contents != null) {
-            if (uiState.value.scanType == ScannerMethod.SCAN_BARCODE) {
+            if (scannerMethod == ScannerMethod.SCAN_BARCODE) {
                 onNavigateToNewProduct(result.contents)
-            } else if (uiState.value.scanType == ScannerMethod.SCAN_QR_CODE) {
+            } else if (scannerMethod == ScannerMethod.SCAN_QR_CODE) {
                 onNavigateToProductDetails(decodeQrCodeUseCase(result.contents))
             }
         }
     }
 
-    fun setScanType(scanType: ScannerMethod) {
-        _uiState.update { it.copy(scanType = scanType) }
+    fun setScanMethod(scannerMethod: ScannerMethod) {
+        setScannerMethodUseCase(scannerMethod)
     }
 
     fun getScanOptions(): ScanOptions = runBlocking { buildScanOptionsUseCase() }

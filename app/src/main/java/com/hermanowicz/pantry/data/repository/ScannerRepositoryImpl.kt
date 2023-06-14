@@ -1,9 +1,13 @@
 package com.hermanowicz.pantry.data.repository
 
+import android.content.Context
+import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.di.repository.ScannerRepository
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import com.hermanowicz.pantry.utils.enums.CameraMode
+import com.hermanowicz.pantry.utils.enums.ScannerMethod
 import com.journeyapps.barcodescanner.ScanOptions
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import org.json.JSONException
 import org.json.JSONObject
@@ -13,15 +17,24 @@ import javax.inject.Singleton
 
 @Singleton
 class ScannerRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val settingsRepository: SettingsRepository
 ) : ScannerRepository {
 
+    private lateinit var scannerMethod: ScannerMethod
+
     override suspend fun buildScanOptions(): ScanOptions {
+        val options = ScanOptions()
         val selectedCameraId: Int =
             if (settingsRepository.scanCameraMode.first() == CameraMode.REAR.name) 0 else 1
-        val prompt = "Scan code"
-        val options = ScanOptions()
-        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+        var prompt = ""
+        if (scannerMethod == ScannerMethod.ADD_BARCODE || scannerMethod == ScannerMethod.SCAN_BARCODE) {
+            prompt = context.getString(R.string.scan_barcode)
+            options.setDesiredBarcodeFormats(ScanOptions.PRODUCT_CODE_TYPES)
+        } else {
+            prompt = context.getString(R.string.scan_qr_code)
+            options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+        }
         options.setPrompt(prompt)
         options.setCameraId(selectedCameraId)
         options.setOrientationLocked(true)
@@ -41,5 +54,13 @@ class ScannerRepositoryImpl @Inject constructor(
             Timber.tag("Decode scan result error").e(e.toString())
         }
         return decodedResult
+    }
+
+    override fun setScannerMethod(scannerMethod: ScannerMethod) {
+        this.scannerMethod = scannerMethod
+    }
+
+    override fun getScannerMethod(): ScannerMethod {
+        return scannerMethod
     }
 }

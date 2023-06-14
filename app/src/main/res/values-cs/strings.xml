@@ -114,6 +114,7 @@
     <string name="statement_delete_account_warning">Opravdu chcete smazat svůj účet? Tato operace je nevratná. Všechny vaše produkty, kategorie, úložiště a všechny informace o vás budou smazány.</string>
     <string name="error_wrong_name">Nesprávná délka názvu. Maximální délka je 40.</string>
     <string name="error_wrong_quantity">Maximální množství je 10 000.</string>
+    <string name="error_product_not_found">Produkt nebyl nalezen</string>
     <string name="print_qr_codes">Vytiskněte si QR kódy</string>
     <string name="statement_would_you_like_to_print_qr_codes">Přejete si vytisknout QR kódy pro nově přidané produkty?</string>
     <string name="qr_codes_quantity">Množství QR kódů</string>

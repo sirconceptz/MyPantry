@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -144,7 +145,9 @@ fun PrintQRCodesScreen(
                             Text(text = stringResource(id = R.string.qr_codes_quantity) + ": ")
                             Text(text = uiState.qrCodesQuantity.toString())
                         }
-                        DividerCardInside()
+                        Box(modifier = Modifier.padding(vertical = LocalSpacing.current.small)) {
+                            DividerCardInside()
+                        }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
