@@ -100,7 +100,7 @@ class StorageLocationsViewModel @Inject constructor(
             }
             onShowDialogAddNewStorageLocation(false)
             showErrorWrongName(false)
-            clearTextfields()
+            clearForm()
         } else {
             showErrorWrongName(true)
         }
@@ -144,22 +144,13 @@ class StorageLocationsViewModel @Inject constructor(
             }
             onHideDialogEditStorageLocation()
             showErrorWrongName(false)
-            clearTextfields()
+            clearForm()
         } else {
             showErrorWrongName(true)
         }
     }
 
-    private fun clearTextfields() {
-        _storageLocationsState.update {
-            it.copy(
-                name = "",
-                description = ""
-            )
-        }
-    }
-
-    fun onCleanForm() {
+    fun clearForm() {
         _storageLocationsState.update {
             it.copy(
                 name = "",

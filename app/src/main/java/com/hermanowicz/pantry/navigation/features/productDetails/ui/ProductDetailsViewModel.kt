@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.GroupProduct
+import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
@@ -20,6 +21,7 @@ import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsModel
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsState
 import com.hermanowicz.pantry.navigation.features.productDetails.state.ProductDetailsUiState
+import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.ProductDetailsOption
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,28 +82,12 @@ class ProductDetailsViewModel @Inject constructor(
                                     products
                                 )
                             ) {
-                                groupProduct = getGroupProductByIdUseCase(
-                                    productId,
-                                    parsedProducts
-                                )
-                                _uiState.value = ProductDetailsUiState.Loaded(
-                                    ProductDetailsModel(
-                                        groupProduct = groupProduct,
-                                        loadingVisible = false
-                                    )
-                                )
-                                if (groupProduct.product.id >= 0) {
-                                    val fileName = groupProduct.product.photoName
-                                    setPhotoFileUseCase(fileName)
-                                    val photoBitmap =
-                                        fetchPhotoBitmapUseCase(fileName, databaseMode)
-                                    setPhotoPreview(photoBitmap)
-                                }
+                                updateProductState(productId, parsedProducts)
+                                setPhotoPreviewIfPhotoExist(products, databaseMode)
                             } else {
                                 if (!state.value.onNavigateToMyPantry) {
                                     _uiState.value =
                                         ProductDetailsUiState.Error("No correct product")
-                                    onNavigateToMyPantry(true)
                                 } else {
                                     _uiState.value = ProductDetailsUiState.Loading
                                 }
@@ -110,8 +97,37 @@ class ProductDetailsViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.value = ProductDetailsUiState.Error(e.toString())
-                onNavigateToMyPantry(true)
+                Timber.e(e.message)
             }
+        }
+    }
+
+    private fun updateProductState(
+        productId: Int,
+        parsedProducts: List<Product>
+    ) {
+        groupProduct = getGroupProductByIdUseCase(
+            productId,
+            parsedProducts
+        )
+        _uiState.value = ProductDetailsUiState.Loaded(
+            ProductDetailsModel(
+                groupProduct = groupProduct,
+                loadingVisible = false
+            )
+        )
+    }
+
+    private fun setPhotoPreviewIfPhotoExist(
+        products: List<Product>,
+        databaseMode: DatabaseMode
+    ) {
+        if (products.isNotEmpty()) {
+            val fileName = products[0].photoName
+            setPhotoFileUseCase(fileName)
+            val photoBitmap =
+                fetchPhotoBitmapUseCase(fileName, databaseMode)
+            setPhotoPreview(photoBitmap)
         }
     }
 

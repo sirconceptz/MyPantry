@@ -68,7 +68,7 @@ class OwnCategoriesViewModel @Inject constructor(
             }
             onShowDialogAddNewCategory(false)
             showErrorWrongName(false)
-            clearTextfields()
+            clearForm()
         } else {
             showErrorWrongName(true)
         }
@@ -138,7 +138,7 @@ class OwnCategoriesViewModel @Inject constructor(
             }
             onHideDialogEditCategory()
             showErrorWrongName(false)
-            clearTextfields()
+            clearForm()
         } else {
             showErrorWrongName(true)
         }
@@ -150,16 +150,7 @@ class OwnCategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun clearTextfields() {
-        _categoriesState.update {
-            it.copy(
-                name = "",
-                description = ""
-            )
-        }
-    }
-
-    fun onCleanForm() {
+    fun clearForm() {
         _categoriesState.update {
             it.copy(
                 name = "",

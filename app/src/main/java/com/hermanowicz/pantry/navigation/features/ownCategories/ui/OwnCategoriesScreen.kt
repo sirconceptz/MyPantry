@@ -71,7 +71,7 @@ fun OwnCategoriesScreen(
                 onDescriptionChange = { viewModel.onAddCategoryDescriptionChange(it) },
                 onSaveClick = { viewModel.onClickSaveCategory() },
                 showError = categoriesState.showErrorWrongName,
-                onClearRequest = { viewModel.onCleanForm() }
+                onClearRequest = { viewModel.clearForm() }
             )
         }
         if (categoriesState.showDialogEditCategory) {

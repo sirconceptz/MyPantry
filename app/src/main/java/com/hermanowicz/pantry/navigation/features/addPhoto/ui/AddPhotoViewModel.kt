@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.photo.CreateAndGetPhotoFileUseCase
 import com.hermanowicz.pantry.domain.photo.DecodePhotoFromGalleryUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
@@ -62,26 +63,30 @@ class AddPhotoViewModel @Inject constructor(
                         productIdList
                     )
                 }.collect { products ->
-                    _uiState.update {
-                        it.copy(
-                            productList = products
-                        )
-                    }
-                    if (products.isNotEmpty()) {
-                        val fileName = products[0].photoName
-                        setPhotoFileUseCase(fileName)
-                        val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
-                        setPhotoPreview(photoBitmap)
-                    }
+                    updateProductList(products)
+                    setPhotoPreviewIfPhotoExist(products)
                 }
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        productList = emptyList(),
-                        onNavigateBack = true
-                    )
-                }
+                updateProductList(emptyList())
+                onNavigateBack(true)
             }
+        }
+    }
+
+    private fun updateProductList(products: List<Product>) {
+        _uiState.update {
+            it.copy(
+                productList = products
+            )
+        }
+    }
+
+    private fun setPhotoPreviewIfPhotoExist(products: List<Product>) {
+        if (products.isNotEmpty()) {
+            val fileName = products[0].photoName
+            setPhotoFileUseCase(fileName)
+            val photoBitmap = fetchPhotoBitmapUseCase(fileName, databaseMode)
+            setPhotoPreview(photoBitmap)
         }
     }
 
@@ -89,7 +94,7 @@ class AddPhotoViewModel @Inject constructor(
         return createAndGetPhotoFileUseCase()
     }
 
-    fun setPhotoPreview(bitmap: Bitmap?) {
+    private fun setPhotoPreview(bitmap: Bitmap?) {
         _uiState.update {
             it.copy(photoPreview = bitmap)
         }

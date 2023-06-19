@@ -164,7 +164,8 @@ fun AppNavHost() {
                 }
                 composable(route = "${AppScreens.AddPhoto.route}/{productIdList}") {
                     AddPhotoRoute(
-                        openDrawer = { openDrawer() }
+                        openDrawer = { openDrawer() },
+                        onNavigateBack = { navController.popBackStack() }
                     )
                 }
                 composable(route = AppScreens.OwnCategories.route) {

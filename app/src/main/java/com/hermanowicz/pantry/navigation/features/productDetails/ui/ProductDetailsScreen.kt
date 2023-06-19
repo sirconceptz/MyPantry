@@ -83,11 +83,9 @@ fun ProductDetailsScreen(
         }
     }
 
-    LaunchedEffect(key1 = state.onAddBarcode) {
-        if (state.onNavigateToAddPhoto) {
-            onClickAddPhoto(uiModel.groupProduct.idList)
-            viewModel.onNavigateToAddPhoto(false)
-        }
+    if (state.onNavigateToAddPhoto) {
+        onClickAddPhoto(uiModel.groupProduct.idList)
+        viewModel.onNavigateToAddPhoto(false)
     }
 
     LaunchedEffect(key1 = state.onNavigateToEditProduct) {

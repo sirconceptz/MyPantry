@@ -62,29 +62,36 @@ class EditProductViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             fetchDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
-                    val groupProduct = getGroupProductByIdUseCase(productId, products)
-                    _productDataState.value = EditProductDataState(
-                        name = groupProduct.product.name,
-                        expirationDate = groupProduct.product.expirationDate,
-                        productionDate = groupProduct.product.productionDate,
-                        composition = groupProduct.product.composition,
-                        oldQuantity = groupProduct.quantity.toString(),
-                        newQuantity = groupProduct.quantity.toString(),
-                        healingProperties = groupProduct.product.healingProperties,
-                        dosage = groupProduct.product.dosage,
-                        hasSugar = groupProduct.product.hasSugar,
-                        hasSalt = groupProduct.product.hasSalt,
-                        isVege = groupProduct.product.isVege,
-                        isBio = groupProduct.product.isBio,
-                        weight = groupProduct.product.weight.toString(),
-                        volume = groupProduct.product.volume.toString(),
-                        taste = groupProduct.product.taste,
-                        hashCode = groupProduct.product.hashCode,
-                        productsIdList = groupProduct.idList
-                    )
+                    updateProductState(productId, products)
                 }
             }
         }
+    }
+
+    private fun updateProductState(
+        productId: Int,
+        products: List<Product>
+    ) {
+        val groupProduct = getGroupProductByIdUseCase(productId, products)
+        _productDataState.value = EditProductDataState(
+            name = groupProduct.product.name,
+            expirationDate = groupProduct.product.expirationDate,
+            productionDate = groupProduct.product.productionDate,
+            composition = groupProduct.product.composition,
+            oldQuantity = groupProduct.quantity.toString(),
+            newQuantity = groupProduct.quantity.toString(),
+            healingProperties = groupProduct.product.healingProperties,
+            dosage = groupProduct.product.dosage,
+            hasSugar = groupProduct.product.hasSugar,
+            hasSalt = groupProduct.product.hasSalt,
+            isVege = groupProduct.product.isVege,
+            isBio = groupProduct.product.isBio,
+            weight = groupProduct.product.weight.toString(),
+            volume = groupProduct.product.volume.toString(),
+            taste = groupProduct.product.taste,
+            hashCode = groupProduct.product.hashCode,
+            productsIdList = groupProduct.idList
+        )
     }
 
     fun onSaveClick() {
@@ -97,7 +104,7 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
-    fun cleanErrors() {
+    private fun cleanErrors() {
         _productDataState.update { it.copy(showErrorWrongName = false) }
     }
 

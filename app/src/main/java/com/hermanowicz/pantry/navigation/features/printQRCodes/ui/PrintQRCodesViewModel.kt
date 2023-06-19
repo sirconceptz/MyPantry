@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,13 +60,7 @@ class PrintQRCodesViewModel @Inject constructor(
                     }
                 }.collect()
             } catch (e: Exception) {
-//                _uiState.update {
-//                    it.copy(
-//                        productList = emptyList(),
-//                        qrCodesQuantity = 0,
-//                        onNavigateBack = true
-//                    )
-//                }
+                Timber.e(e.message)
             }
         }
     }

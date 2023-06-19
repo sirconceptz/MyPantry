@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,8 +25,10 @@ import com.hermanowicz.pantry.utils.Permissions
 @Composable
 fun AddPhotoScreen(
     openDrawer: () -> Unit,
+    onNavigateBack: () -> Unit,
     viewModel: AddPhotoViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val cameraPermission = Permissions.cameraAndWritePermissions
 
@@ -51,28 +54,38 @@ fun AddPhotoScreen(
             }
         }
 
-    if (uiState.onClickAddPhoto) {
-        val imageFile = viewModel.createAndGetPhotoFile()
-        if (imageFile != null) {
-            val uri = FileProvider.getUriForFile(
-                LocalContext.current,
-                "com.hermanowicz.pantry.provider",
-                imageFile
-            )
-            launcherTakePhoto.launch(uri)
+    LaunchedEffect(key1 = uiState.onClickAddPhoto) {
+        if (uiState.onClickAddPhoto) {
+            val imageFile = viewModel.createAndGetPhotoFile()
+            if (imageFile != null) {
+                val uri = FileProvider.getUriForFile(
+                    context,
+                    "com.hermanowicz.pantry.provider",
+                    imageFile
+                )
+                launcherTakePhoto.launch(uri)
+            }
+            viewModel.onClickAddPhoto(false)
         }
-        viewModel.onClickAddPhoto(false)
     }
 
-    if (uiState.goToPermissionSettings) {
-        GoToPermissionSettingsUseCase.invoke(LocalContext.current)
-        viewModel.onGoToPermissionSettings(false)
+    LaunchedEffect(key1 = uiState.goToPermissionSettings) {
+        if (uiState.goToPermissionSettings) {
+            GoToPermissionSettingsUseCase.invoke(context)
+            viewModel.onGoToPermissionSettings(false)
+        }
+    }
+
+    LaunchedEffect(key1 = uiState.onNavigateBack) {
+        if (uiState.onNavigateBack) {
+            onNavigateBack()
+            viewModel.onNavigateBack(false)
+        }
     }
 
     TopBarScaffold(
         topBarText = stringResource(id = R.string.add_photo),
-        openDrawer = openDrawer,
-        actions = {}
+        openDrawer = openDrawer
     ) {
         LazyColumn(
             modifier = Modifier

@@ -71,7 +71,7 @@ fun StorageLocationsScreen(
                 onDescriptionChange = { viewModel.onDescriptionChange(it) },
                 onSaveClick = { viewModel.onClickSaveStorageLocation() },
                 showError = storageLocationState.showErrorWrongName,
-                onClearRequest = { viewModel.onCleanForm() }
+                onClearRequest = { viewModel.clearForm() }
             )
         }
         if (storageLocationState.showDialogEditStorageLocation) {
