@@ -13,16 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,8 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -45,6 +40,7 @@ import com.hermanowicz.pantry.components.common.button.ButtonPrimary
 import com.hermanowicz.pantry.components.common.cards.CardWhiteBgWithBorder
 import com.hermanowicz.pantry.components.common.divider.DividerCardInside
 import com.hermanowicz.pantry.components.common.dropdown.DropdownSettings
+import com.hermanowicz.pantry.components.common.lifecycle.OnLifecycleEvent
 import com.hermanowicz.pantry.components.common.slider.SliderSettings
 import com.hermanowicz.pantry.components.common.spacer.SpacerLarge
 import com.hermanowicz.pantry.components.common.spacer.SpacerMedium
@@ -308,24 +304,6 @@ fun SignInForm(state: SettingsState, hideSignInForm: () -> Unit, showUserEmail: 
             FirebaseAuth.getInstance().signOut()
             showUserEmail()
             hideSignInForm()
-        }
-    }
-}
-
-@Composable
-fun OnLifecycleEvent(onEvent: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit) {
-    val eventHandler = rememberUpdatedState(onEvent)
-    val lifecycleOwner = rememberUpdatedState(LocalLifecycleOwner.current)
-
-    DisposableEffect(lifecycleOwner.value) {
-        val lifecycle = lifecycleOwner.value.lifecycle
-        val observer = LifecycleEventObserver { owner, event ->
-            eventHandler.value(owner, event)
-        }
-
-        lifecycle.addObserver(observer)
-        onDispose {
-            lifecycle.removeObserver(observer)
         }
     }
 }
