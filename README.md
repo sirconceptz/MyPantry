@@ -16,7 +16,7 @@ The application is available only on the Android platform. You can use it on pho
 2. Print labels for added products.
 3. For product details, scan the code through the application.
 4. In the number of days what you set in settings you can receive a notify about expiry the product.
-5. Enjoy the out-of-date products :)
+5. Enjoy not out-of-date products :)
 
 ## Author
 
@@ -32,4 +32,4 @@ Website of application is https://www.mypantry.pl
 
 ## Contact with author
 
-If you have ideas for developing the application, it does not work on your device or you just want to contact the author, write an email to If you have ideas for developing the application, it does not work on your device or you just want to contact the author, write an email via contact form on www.mypantry.pl
+If you have ideas for developing the application, it does not work on your device or you just want to contact the author, write an email via contact form on www.mypantry.pl
