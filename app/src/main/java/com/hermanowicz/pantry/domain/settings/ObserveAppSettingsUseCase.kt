@@ -5,10 +5,9 @@ import com.hermanowicz.pantry.di.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FetchAppSettingsUseCase @Inject constructor(
+class ObserveAppSettingsUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : () -> Flow<AppSettings> {
-
     override fun invoke(): Flow<AppSettings> {
         return settingsRepository.appSettings
     }

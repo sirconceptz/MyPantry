@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
 import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
-import com.hermanowicz.pantry.domain.settings.FetchAppSettingsUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
 import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val fetchAppSettingsUseCase: FetchAppSettingsUseCase,
+    private val observeAppSettingsUseCase: ObserveAppSettingsUseCase,
     private val updateAppSettingsUseCase: UpdateAppSettingsUseCase,
     private val clearDatabaseUseCase: ClearDatabaseUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
@@ -41,8 +41,12 @@ class SettingsViewModel @Inject constructor(
     var settingsState: StateFlow<SettingsState> = _settingsState.asStateFlow()
 
     init {
+        observeAppSettings()
+    }
+
+    private fun observeAppSettings() {
         viewModelScope.launch {
-            fetchAppSettingsUseCase().collect { appSettings ->
+            observeAppSettingsUseCase().collect { appSettings ->
                 _settingsState.update {
                     it.copy(
                         databaseMode = appSettings.databaseMode,
