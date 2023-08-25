@@ -65,9 +65,9 @@ class MyPantryViewModelTest {
                 any()
             )
         } returns testGroupProductList
-        every { observeDatabaseModeUseCase() } returns flowOf(testDatabaseMode)
-        every { runBlocking { fetchActiveErrorAlertsUseCase() } } returns testErrorAlertList
-        every { runBlocking { checkIsErrorWasDisplayedUseCase(any()) } } returns false
+        coEvery { observeDatabaseModeUseCase() } returns flowOf(testDatabaseMode)
+        coEvery { fetchActiveErrorAlertsUseCase() } returns testErrorAlertList
+        coEvery { checkIsErrorWasDisplayedUseCase(any()) } returns false
 
         Dispatchers.setMain(testDispatcher)
 

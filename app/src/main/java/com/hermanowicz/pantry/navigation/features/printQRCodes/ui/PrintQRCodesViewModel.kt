@@ -39,7 +39,7 @@ class PrintQRCodesViewModel @Inject constructor(
         fetchProducts(productIdList)
     }
 
-    private fun fetchProducts(productIdList: List<Int>) {
+    fun fetchProducts(productIdList: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 combine(
@@ -66,7 +66,7 @@ class PrintQRCodesViewModel @Inject constructor(
     }
 
     fun onPrintCodesPermissionGranted() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val fileName = createPdfDocumentUseCase(uiState.value.productList)
             _uiState.update {
                 it.copy(
@@ -78,7 +78,7 @@ class PrintQRCodesViewModel @Inject constructor(
     }
 
     fun onSharePdfDocumentPermissionGranted() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val fileName = createPdfDocumentUseCase(uiState.value.productList)
             _uiState.update {
                 it.copy(

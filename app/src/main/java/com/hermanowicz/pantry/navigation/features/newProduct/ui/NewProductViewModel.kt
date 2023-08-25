@@ -60,7 +60,7 @@ class NewProductViewModel @Inject constructor(
         }
     }
 
-    private fun fetchOwnCategories() {
+    fun fetchOwnCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             observeDatabaseModeUseCase().collect { databaseMode ->
                 observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
