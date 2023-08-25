@@ -6,8 +6,10 @@ import com.hermanowicz.pantry.domain.scanner.DecodeQrCodeUseCase
 import com.hermanowicz.pantry.domain.scanner.GetScannerMethodUseCase
 import com.hermanowicz.pantry.domain.scanner.SetScannerMethodUseCase
 import com.hermanowicz.pantry.utils.enums.ScannerMethod
-import com.nhaarman.mockitokotlin2.*
 import com.journeyapps.barcodescanner.ScanOptions
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

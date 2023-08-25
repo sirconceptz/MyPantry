@@ -8,7 +8,8 @@ import com.hermanowicz.pantry.domain.category.SaveCategoryUseCase
 import com.hermanowicz.pantry.domain.category.UpdateCategoryUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.ownCategories.ui.OwnCategoriesViewModel
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

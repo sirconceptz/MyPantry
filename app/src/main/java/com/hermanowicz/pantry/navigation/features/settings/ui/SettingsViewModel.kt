@@ -6,8 +6,8 @@ import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
 import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
-import com.hermanowicz.pantry.domain.settings.ObserveAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
+import com.hermanowicz.pantry.domain.settings.ObserveAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase

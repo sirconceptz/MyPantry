@@ -15,15 +15,11 @@ import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
 import com.hermanowicz.pantry.utils.enums.QrCodeSize
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -65,6 +61,7 @@ class SettingsViewModelTest {
         emailNotifications = true,
         pushNotificationsChanged = false
     )
+
     @Before
     fun setup() {
         coEvery { mockObserveAppSettingsUseCase() } returns flowOf(appSettings)

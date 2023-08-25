@@ -64,7 +64,7 @@ class NewProductViewModelTest {
 
     @Test
     fun `onShowDialogMoreThanOneProductWithBarcode updates productDataState`() {
-        val groupProducts = listOf(GroupProduct(product = Product(id=3, name = "Test 3"), quantity = 1), GroupProduct(product = Product(id=4, name = "Test 4"), quantity = 1))
+        val groupProducts = listOf(GroupProduct(product = Product(id = 3, name = "Test 3"), quantity = 1), GroupProduct(product = Product(id = 4, name = "Test 4"), quantity = 1))
 
         viewModel.onShowDialogMoreThanOneProductWithBarcode(true, groupProducts)
 
@@ -77,7 +77,6 @@ class NewProductViewModelTest {
         val productName = "Product1"
 
         viewModel.onSelectGroupProduct(productName)
-
 
         assert(!viewModel.productDataState.value.showDropdownChooseNewProduct)
         assert(viewModel.productDataState.value.selectedProductName == productName)

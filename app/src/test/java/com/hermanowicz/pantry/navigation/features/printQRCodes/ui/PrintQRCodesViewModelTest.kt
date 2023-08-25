@@ -17,7 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -130,7 +129,6 @@ class PrintQRCodesViewModelTest {
             assert(!this.navigateToPrintQrCodes)
         }
     }
-
 
     @Test
     fun `onGoToPermissionSettings updates goToPermissionSettings`() {
