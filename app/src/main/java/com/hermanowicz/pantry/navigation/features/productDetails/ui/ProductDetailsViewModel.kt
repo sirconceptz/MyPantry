@@ -67,8 +67,8 @@ class ProductDetailsViewModel @Inject constructor(
         fetchProducts(productId)
     }
 
-    private fun fetchProducts(productId: Int) {
-        _uiState.value = ProductDetailsUiState.Loading
+    fun fetchProducts(productId: Int) {
+        //_uiState.value = ProductDetailsUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 observeDatabaseModeUseCase().collect { databaseMode ->

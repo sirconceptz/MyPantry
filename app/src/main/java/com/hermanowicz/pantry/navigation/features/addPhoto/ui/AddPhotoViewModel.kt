@@ -94,7 +94,7 @@ class AddPhotoViewModel @Inject constructor(
         return createAndGetPhotoFileUseCase()
     }
 
-    private fun setPhotoPreview(bitmap: Bitmap?) {
+    fun setPhotoPreview(bitmap: Bitmap?) {
         _uiState.update {
             it.copy(photoPreview = bitmap)
         }
