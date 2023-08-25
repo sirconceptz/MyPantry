@@ -1,7 +1,6 @@
 package com.hermanowicz.pantry.navigation.features.storageLocations
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.storageLocation.DeleteStorageLocationUseCase
@@ -9,7 +8,8 @@ import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsU
 import com.hermanowicz.pantry.domain.storageLocation.SaveStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.storageLocation.UpdateStorageLocationUseCase
 import com.hermanowicz.pantry.navigation.features.storageLocations.ui.StorageLocationsViewModel
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -68,7 +68,6 @@ class StorageLocationsViewModelTest {
         viewModel.onNameChange("NewStorageLocation")
         assertEquals("NewStorageLocation", viewModel.storageLocationState.value.name)
     }
-
 
     @Test
     fun `onAddCategoryDescriptionChange updates description`() {
