@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
         observeAppSettings()
     }
 
-    private fun observeAppSettings() {
+    fun observeAppSettings() {
         viewModelScope.launch {
             observeAppSettingsUseCase().collect { appSettings ->
                 _settingsState.update {
