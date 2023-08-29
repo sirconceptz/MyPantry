@@ -15,10 +15,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CategoryRemoteDataSourceImpl @Inject constructor() : CategoryRemoteDataSource {
+class CategoryRemoteDataSourceImpl @Inject constructor(
+    private val firebaseDatabase: FirebaseDatabase,
+    private val firebaseAuth: FirebaseAuth
+) : CategoryRemoteDataSource {
 
-    private val databaseReference = FirebaseDatabase.getInstance().reference.child("categories")
-    private val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val databaseReference = firebaseDatabase.reference.child("categories")
+    private val userId = firebaseAuth.currentUser?.uid ?: ""
 
     override fun observeAll(): Flow<List<CategoryEntity>> {
         return callbackFlow {

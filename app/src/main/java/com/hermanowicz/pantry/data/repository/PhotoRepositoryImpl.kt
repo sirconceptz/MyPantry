@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.data.repository
 
-import android.R.attr.bitmap
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
