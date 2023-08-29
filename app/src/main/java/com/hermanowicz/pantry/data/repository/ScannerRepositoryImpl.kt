@@ -27,7 +27,7 @@ class ScannerRepositoryImpl @Inject constructor(
         val options = ScanOptions()
         val selectedCameraId: Int =
             if (settingsRepository.scanCameraMode.first() == CameraMode.REAR.name) 0 else 1
-        var prompt = ""
+        lateinit var prompt: String
         if (scannerMethod == ScannerMethod.ADD_BARCODE || scannerMethod == ScannerMethod.SCAN_BARCODE) {
             prompt = context.getString(R.string.scan_barcode)
             options.setDesiredBarcodeFormats(ScanOptions.PRODUCT_CODE_TYPES)

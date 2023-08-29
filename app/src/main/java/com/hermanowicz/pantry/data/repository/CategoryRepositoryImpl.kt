@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.data.repository
 
-import android.content.Context
 import com.hermanowicz.pantry.data.mapper.toDomainModel
 import com.hermanowicz.pantry.data.mapper.toEntityModel
 import com.hermanowicz.pantry.data.model.Category
@@ -8,9 +7,7 @@ import com.hermanowicz.pantry.di.local.dataSource.CategoryLocalDataSource
 import com.hermanowicz.pantry.di.remote.dataSource.CategoryRemoteDataSource
 import com.hermanowicz.pantry.di.repository.CategoryRepository
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
-import com.hermanowicz.pantry.utils.category.MainCategories
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -23,8 +20,7 @@ import javax.inject.Singleton
 class CategoryRepositoryImpl @Inject constructor(
     private val localDataSource: CategoryLocalDataSource,
     private val remoteDataSource: CategoryRemoteDataSource,
-    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
-    @ApplicationContext private val context: Context
+    private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : CategoryRepository {
     override fun observeById(id: Int, databaseMode: DatabaseMode): Flow<Category> {
         return if (databaseMode == DatabaseMode.LOCAL) {
@@ -48,14 +44,6 @@ class CategoryRepositoryImpl @Inject constructor(
                 categoryEntities.map { categoryEntity -> categoryEntity.toDomainModel() }
             }.distinctUntilChanged()
         }
-    }
-
-    override fun getMainCategories(): Map<String, String> {
-        val map: MutableMap<String, String> = mutableMapOf()
-        enumValues<MainCategories>().forEach { category ->
-            map[category.name] = context.getString(category.nameResId)
-        }
-        return map
     }
 
     override suspend fun getLastId(databaseMode: DatabaseMode): Int {

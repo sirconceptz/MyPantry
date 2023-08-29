@@ -81,90 +81,90 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             }
         }
     }
-}
 
-private fun createStatement(
-    context: Context,
-    productName: String,
-    daysToNotification: Int
-): String {
-    var statement: String = context.getString(R.string.notification_statement)
-    statement = statement.replace(Constants.DAYS_TAG, daysToNotification.toString())
-    statement = statement.replace(Constants.PRODUCT_NAME_TAG, productName)
-    return statement
-}
-
-private fun createEmailNotification(
-    context: Context,
-    emailAddressForNotifications: String,
-    productName: String,
-    daysToNotification: Int
-) {
-    val params = HashMap<String, String>()
-    params["to_email_address"] = emailAddressForNotifications
-    params["subject"] = context.getString(R.string.notification_title)
-    params["message"] = createStatement(context, productName, daysToNotification)
-    val url = Constants.URL_MAIL_API + Constants.API_MAIL_FILE
-    val requestJson = JsonObjectRequest(
-        Request.Method.POST,
-        url,
-        JSONObject((params as Map<*, *>)),
-        { }
-    ) { error ->
-        Timber.e(
-            "Error - Json parsing notification " + error.message
-        )
+    private fun createStatement(
+        context: Context,
+        productName: String,
+        daysToNotification: Int
+    ): String {
+        var statement: String = context.getString(R.string.notification_statement)
+        statement = statement.replace(Constants.DAYS_TAG, daysToNotification.toString())
+        statement = statement.replace(Constants.PRODUCT_NAME_TAG, productName)
+        return statement
     }
-    val queue: RequestQueue = Volley.newRequestQueue(context)
-    queue.add(requestJson)
-}
 
-private fun createPushNotification(
-    context: Context,
-    productID: Int,
-    productName: String,
-    daysToNotification: Int
-) {
-    val channelId = "my_channel_$productID"
-    val notificationManager =
-        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-    val name: CharSequence = context.getString(R.string.expiration_date)
-    val description = "Products expiration dates notification channel"
-    val importance = NotificationManager.IMPORTANCE_DEFAULT
-    val channel = NotificationChannel(channelId, name, importance)
-    channel.description = description
-    channel.enableLights(true)
-    channel.lightColor = Color.RED
-    channel.enableVibration(true)
-    channel.setShowBadge(false)
-    notificationManager.createNotificationChannel(channel)
-    val notificationStatement = createStatement(context, productName, daysToNotification)
-    val builder = NotificationCompat.Builder(context, channelId)
-    builder.setContentTitle(context.getString(R.string.notification_title))
-    builder.setContentText(notificationStatement)
-    builder.setStyle(NotificationCompat.BigTextStyle().bigText(notificationStatement))
-    builder.setSmallIcon(R.mipmap.ic_launcher_round)
-    builder.setLargeIcon(
-        BitmapFactory.decodeResource(
-            context.resources,
-            R.mipmap.ic_launcher_round
+    fun createEmailNotification(
+        context: Context,
+        emailAddressForNotifications: String,
+        productName: String,
+        daysToNotification: Int
+    ) {
+        val params = HashMap<String, String>()
+        params["to_email_address"] = emailAddressForNotifications
+        params["subject"] = context.getString(R.string.notification_title)
+        params["message"] = createStatement(context, productName, daysToNotification)
+        val url = Constants.URL_MAIL_API + Constants.API_MAIL_FILE
+        val requestJson = JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            JSONObject((params as Map<*, *>)),
+            { }
+        ) { error ->
+            Timber.e(
+                "Error - Json parsing notification " + error.message
+            )
+        }
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        queue.add(requestJson)
+    }
+
+    fun createPushNotification(
+        context: Context,
+        productID: Int,
+        productName: String,
+        daysToNotification: Int
+    ) {
+        val channelId = "my_channel_$productID"
+        val notificationManager =
+            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val name: CharSequence = context.getString(R.string.expiration_date)
+        val description = "Products expiration dates notification channel"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, name, importance)
+        channel.description = description
+        channel.enableLights(true)
+        channel.lightColor = Color.RED
+        channel.enableVibration(true)
+        channel.setShowBadge(false)
+        notificationManager.createNotificationChannel(channel)
+        val notificationStatement = createStatement(context, productName, daysToNotification)
+        val builder = NotificationCompat.Builder(context, channelId)
+        builder.setContentTitle(context.getString(R.string.notification_title))
+        builder.setContentText(notificationStatement)
+        builder.setStyle(NotificationCompat.BigTextStyle().bigText(notificationStatement))
+        builder.setSmallIcon(R.mipmap.ic_launcher_round)
+        builder.setLargeIcon(
+            BitmapFactory.decodeResource(
+                context.resources,
+                R.mipmap.ic_launcher_round
+            )
         )
-    )
-    builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-    builder.setLights(ContextCompat.getColor(context, R.color.color_primary), 500, 1000)
-    builder.setAutoCancel(true)
-    val notifyIntent = Intent(context, MainActivity::class.java)
-    notifyIntent.flags = (
-        Intent.FLAG_ACTIVITY_NEW_TASK
-            or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        builder.setLights(ContextCompat.getColor(context, R.color.color_primary), 500, 1000)
+        builder.setAutoCancel(true)
+        val notifyIntent = Intent(context, MainActivity::class.java)
+        notifyIntent.flags = (
+            Intent.FLAG_ACTIVITY_NEW_TASK
+                or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            notifyIntent,
+            PendingIntent.FLAG_IMMUTABLE
         )
-    val pendingIntent = PendingIntent.getActivity(
-        context,
-        0,
-        notifyIntent,
-        PendingIntent.FLAG_IMMUTABLE
-    )
-    builder.setContentIntent(pendingIntent)
-    val notificationCompat = builder.build()
-    notificationManager.notify(productID, notificationCompat)
+        builder.setContentIntent(pendingIntent)
+        val notificationCompat = builder.build()
+        notificationManager.notify(productID, notificationCompat)
+    }
 }
