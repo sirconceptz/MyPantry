@@ -5,7 +5,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
@@ -83,6 +82,12 @@ class AppModule {
     @Singleton
     fun provideFirebaseDatabase(): FirebaseDatabase {
         return FirebaseDatabase.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationManagerCompat(@ApplicationContext context: Context): NotificationManagerCompat {
+        return NotificationManagerCompat.from(context)
     }
 
     @Singleton
