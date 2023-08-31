@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.data.repository
 
-import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -9,13 +8,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.hermanowicz.pantry.data.model.AppSettings
 import com.hermanowicz.pantry.di.repository.SettingsRepository
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.QrCodeSize
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,16 +30,15 @@ import javax.inject.Singleton
 
 @Singleton
 class SettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val notificationManagerCompat: NotificationManagerCompat,
+    private val dataStore: DataStore<Preferences>
 ) : SettingsRepository {
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_prefs")
-    private val notificationManagerCompat = NotificationManagerCompat.from(context)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val appSettings: Flow<AppSettings>
         get() =
             isPushNotificationsEnabled.flatMapLatest {
-                context.dataStore.data
+                dataStore.data
             }
                 .catch { e ->
                     if (e is IOException) {
@@ -77,7 +73,7 @@ class SettingsRepositoryImpl @Inject constructor(
                 }.distinctUntilChanged()
 
     override suspend fun updateAppSettings(appSettings: AppSettings) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[DATABASE_MODE_KEY] = appSettings.databaseMode
             preferences[CAMERA_MODE_KEY] = appSettings.cameraMode
             preferences[SIZE_PRINTED_QR_CODES_KEY] = appSettings.qrCodeSize
@@ -99,37 +95,37 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override val databaseMode: Flow<String>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[DATABASE_MODE_KEY] ?: DatabaseMode.LOCAL.name
             }.distinctUntilChanged()
 
     override val qrCodeSize: Flow<String>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[SIZE_PRINTED_QR_CODES_KEY] ?: QrCodeSize.BIG.name
             }.distinctUntilChanged()
 
     override val daysBeforeNotification: Flow<Int>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[DAYS_TO_NOTIFY_BEFORE_EXPIRATION] ?: 3
             }.distinctUntilChanged()
 
     override val isEmailNotificationsEnabled: Flow<Boolean>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[EMAIL_NOTIFICATIONS_KEY] ?: false
             }.distinctUntilChanged()
 
     override val emailAddressForNotifications: Flow<String>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[EMAIL_ADDRESS_FOR_NOTIFICATIONS_KEY] ?: ""
             }.distinctUntilChanged()
 
     override val scanCameraMode: Flow<String>
         get() =
-            context.dataStore.data.map { preferences ->
+            dataStore.data.map { preferences ->
                 preferences[CAMERA_MODE_KEY] ?: CameraMode.REAR.name
             }.distinctUntilChanged()
 
