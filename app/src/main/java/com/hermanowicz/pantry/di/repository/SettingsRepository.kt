@@ -15,7 +15,7 @@ interface SettingsRepository {
     val scanCameraMode: Flow<String>
     val qrCodeSize: Flow<String>
     val daysBeforeNotification: Flow<Int>
-    val isPushNotificationsEnabled: StateFlow<Boolean>
+    val isPushNotificationsEnabled: Flow<Boolean>
     val isEmailNotificationsEnabled: Flow<Boolean>
     val emailAddressForNotifications: Flow<String>
     suspend fun updateAppSettings(appSettings: AppSettings)
