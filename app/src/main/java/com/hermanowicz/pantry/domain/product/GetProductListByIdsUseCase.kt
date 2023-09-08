@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetProductListByIdsProductsUseCase @Inject constructor(
+class GetProductListByIdsUseCase @Inject constructor(
     private val observeAllProductsUseCase: ObserveAllProductsUseCase
 ) : (DatabaseMode, List<Int>) -> Flow<List<Product>> {
     override fun invoke(databaseMode: DatabaseMode, productIdList: List<Int>): Flow<List<Product>> {

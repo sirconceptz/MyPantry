@@ -14,9 +14,10 @@ class Solution {
     fun lengthOfLastWord(s: String): Int {
         val reversed = s.trim().reversed()
         val index = reversed.indexOfFirst { it == ' ' }
-        return if(index >= 0)
+        return if (index >= 0) {
             index
-        else
+        } else {
             reversed.length
+        }
     }
 }

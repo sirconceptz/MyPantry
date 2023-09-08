@@ -1,13 +1,13 @@
 package com.hermanowicz.pantry.domain.product
 
-import android.annotation.SuppressLint
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
-import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
-import com.hermanowicz.pantry.utils.enums.Taste
-import java.text.SimpleDateFormat
+import com.hermanowicz.pantry.domain.product.utils.IsDetailCategoryValid.Companion.isDetailCategoryValid
+import com.hermanowicz.pantry.domain.product.utils.IsExpirationDateInRange.Companion.isExpirationDateInRange
+import com.hermanowicz.pantry.domain.product.utils.IsMainCategoryValid.Companion.isMainCategoryValid
+import com.hermanowicz.pantry.domain.product.utils.IsProductAttributesValid.Companion.isProductAttributesValid
+import com.hermanowicz.pantry.domain.product.utils.IsProductDateInRange.Companion.isProductionDateInRange
+import com.hermanowicz.pantry.domain.product.utils.IsTasteValid.Companion.isTasteValid
 import javax.inject.Inject
 
 class GetFilteredProductListUseCase @Inject constructor() :
@@ -41,7 +41,7 @@ class GetFilteredProductListUseCase @Inject constructor() :
                         filterProduct.isVege,
                         filterProduct.hasSugar,
                         filterProduct.hasSalt
-                    ) && tasteIsValid(product, filterProduct) &&
+                    ) && isTasteValid(product, filterProduct) &&
                 isExpirationDateInRange(
                         product.expirationDate,
                         filterProduct.expirationDateMin,
@@ -56,96 +56,5 @@ class GetFilteredProductListUseCase @Inject constructor() :
             }
         }
         return mutableProducts.toList()
-    }
-
-    private fun tasteIsValid(product: Product, filterProduct: FilterProduct): Boolean {
-        return (
-            (filterProduct.sweet && product.taste == Taste.SWEET.name) ||
-                (filterProduct.sour && product.taste == Taste.SOUR.name) ||
-                (filterProduct.sweetAndSour && product.taste == Taste.SWEET_AND_SOUR.name) ||
-                (filterProduct.salty && product.taste == Taste.SALTY.name) ||
-                (filterProduct.spicy && product.taste == Taste.SPICY.name) ||
-                (
-                    !filterProduct.sweet && !filterProduct.sour && !filterProduct.sweetAndSour &&
-                        !filterProduct.salty && !filterProduct.spicy
-                    )
-            )
-    }
-
-    private fun isMainCategoryValid(
-        productMainCategory: String,
-        filterProductMainCategory: String
-    ): Boolean {
-        return filterProductMainCategory == MainCategories.CHOOSE.name || filterProductMainCategory.isEmpty() || productMainCategory == filterProductMainCategory || productMainCategory.isEmpty()
-    }
-
-    private fun isDetailCategoryValid(
-        productDetailCategory: String,
-        filterProductDetailCategory: String
-    ): Boolean {
-        return filterProductDetailCategory == ChooseCategoryTypes.CHOOSE.name || filterProductDetailCategory.isEmpty() || productDetailCategory == filterProductDetailCategory || productDetailCategory.isEmpty()
-    }
-
-    private fun isExpirationDateInRange(
-        productExpirationDate: String,
-        filterExpirationDateSince: String,
-        filterExpirationDateFor: String
-    ): Boolean {
-        val isExpirationDateSinceValid =
-            isDateAfter(productExpirationDate, filterExpirationDateSince)
-        val isExpirationDateForValid = isDateAfter(filterExpirationDateFor, productExpirationDate)
-        return isExpirationDateSinceValid && isExpirationDateForValid
-    }
-
-    private fun isProductionDateInRange(
-        productProductionDate: String,
-        filterProductionDateSince: String,
-        filterProductionDateFor: String
-    ): Boolean {
-        val isProductionDateSinceValid =
-            isDateAfter(productProductionDate, filterProductionDateSince)
-        val isProductionDateForValid = isDateAfter(filterProductionDateFor, productProductionDate)
-        return isProductionDateSinceValid && isProductionDateForValid
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun isDateAfter(productDateString: String, filterProductDateString: String): Boolean {
-        var isDateAfter = true
-        val sdf = SimpleDateFormat("yyyy-MM-dd")
-        if (productDateString.isNotEmpty() && filterProductDateString.isNotEmpty()) {
-            val productDate = sdf.parse(productDateString)
-            val filterProductDate = sdf.parse(filterProductDateString)
-            if (productDate != null) {
-                isDateAfter = productDate.after(filterProductDate)
-            }
-        }
-        return isDateAfter
-    }
-
-    private fun isProductAttributesValid(
-        productIsBio: Boolean,
-        productIsVege: Boolean,
-        productHasSugar: Boolean,
-        productHasSalt: Boolean,
-        filterProductIsBio: String,
-        filterProductIsVege: String,
-        filterProductHasSugar: String,
-        filterProductHasSalt: String
-    ): Boolean {
-        val isVege = enumValueOf<ProductAttributesValueType>(filterProductIsVege)
-        val isBio = enumValueOf<ProductAttributesValueType>(filterProductIsBio)
-        val hasSugar = enumValueOf<ProductAttributesValueType>(filterProductHasSugar)
-        val hasSalt = enumValueOf<ProductAttributesValueType>(filterProductHasSalt)
-        return checkAttribute(isVege, productIsVege) && checkAttribute(
-            isBio,
-            productIsBio
-        ) && checkAttribute(hasSugar, productHasSugar) && checkAttribute(hasSalt, productHasSalt)
-    }
-
-    private fun checkAttribute(
-        attributeEnum: ProductAttributesValueType,
-        attribute: Boolean
-    ): Boolean {
-        return attributeEnum == ProductAttributesValueType.ALL || (attributeEnum == ProductAttributesValueType.YES && attribute) || (attributeEnum == ProductAttributesValueType.NO && !attribute)
     }
 }

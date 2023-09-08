@@ -11,7 +11,7 @@ import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.CheckQuantityIsValidUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductListByBarcodeUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
-import com.hermanowicz.pantry.domain.product.SaveProductsUseCase
+import com.hermanowicz.pantry.domain.product.SaveProductsAndCreateNotificationsUseCase
 import com.hermanowicz.pantry.domain.scanner.CheckBarcodeIsEmptyUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.domain.utils.CheckFormatIsNumberUseCase
@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewProductViewModel @Inject constructor(
-    private val saveProductsUseCase: SaveProductsUseCase,
+    private val saveProductsAndCreateNotificationsUseCase: SaveProductsAndCreateNotificationsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
     private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
@@ -243,7 +243,7 @@ class NewProductViewModel @Inject constructor(
         for (i in 1..quantity) {
             products.add(product)
         }
-        return saveProductsUseCase(products)
+        return saveProductsAndCreateNotificationsUseCase(products)
     }
 
     fun getMainCategories(): Map<String, String> {

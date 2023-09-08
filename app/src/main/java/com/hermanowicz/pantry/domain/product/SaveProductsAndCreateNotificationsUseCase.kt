@@ -5,7 +5,7 @@ import com.hermanowicz.pantry.di.repository.NotificationRepository
 import com.hermanowicz.pantry.di.repository.ProductRepository
 import javax.inject.Inject
 
-class SaveProductsUseCase @Inject constructor(
+class SaveProductsAndCreateNotificationsUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val notificationRepository: NotificationRepository
 ) : suspend (List<Product>) -> List<Long> {

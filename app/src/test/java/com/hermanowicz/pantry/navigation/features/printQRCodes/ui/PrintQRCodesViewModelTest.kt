@@ -3,8 +3,8 @@ package com.hermanowicz.pantry.navigation.features.printQRCodes.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.pdf.CreatePdfDocumentUseCase
-import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
+import com.hermanowicz.pantry.domain.pdf.CreateAndSavePdfDocumentUseCase
+import com.hermanowicz.pantry.domain.product.GetProductListByIdsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
@@ -36,11 +36,11 @@ class PrintQRCodesViewModelTest {
 
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase = mockk()
 
-    private val getProductListByIdsProductsUseCase: GetProductListByIdsProductsUseCase = mockk()
+    private val getProductListByIdsUseCase: GetProductListByIdsUseCase = mockk()
 
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase = mockk()
 
-    private val createPdfDocumentUseCase: CreatePdfDocumentUseCase = mockk()
+    private val createAndSavePdfDocumentUseCase: CreateAndSavePdfDocumentUseCase = mockk()
 
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
 
@@ -68,15 +68,15 @@ class PrintQRCodesViewModelTest {
         savedStateHandle["productIdList"] = "123"
         coEvery { (observeDatabaseModeUseCase()) } returns flowOf(databaseMode)
         coEvery { (fetchQrCodeSizeUseCase()) } returns flowOf(qrCodeSize)
-        coEvery { (getProductListByIdsProductsUseCase(databaseMode, idList)) } returns flowOf(
+        coEvery { (getProductListByIdsUseCase(databaseMode, idList)) } returns flowOf(
             productList
         )
-        coEvery { (createPdfDocumentUseCase(any())) } returns fileName
+        coEvery { (createAndSavePdfDocumentUseCase(any())) } returns fileName
         viewModel = PrintQRCodesViewModel(
             observeDatabaseModeUseCase,
-            getProductListByIdsProductsUseCase,
+            getProductListByIdsUseCase,
             fetchQrCodeSizeUseCase,
-            createPdfDocumentUseCase,
+            createAndSavePdfDocumentUseCase,
             savedStateHandle
         )
         Dispatchers.setMain(testDispatcher)

@@ -8,8 +8,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 class FetchEmailAddressForNotificationsUseCaseTest {
     private lateinit var settingsRepository: SettingsRepository

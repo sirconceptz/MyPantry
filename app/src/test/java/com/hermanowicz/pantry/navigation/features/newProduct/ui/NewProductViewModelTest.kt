@@ -5,7 +5,7 @@ import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
-import com.hermanowicz.pantry.domain.product.SaveProductsUseCase
+import com.hermanowicz.pantry.domain.product.SaveProductsAndCreateNotificationsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.nhaarman.mockitokotlin2.mock
@@ -23,7 +23,7 @@ class NewProductViewModelTest {
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase = mockk()
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase = mockk()
-    private val saveProductsUseCase: SaveProductsUseCase = mockk()
+    private val saveProductsAndCreateNotificationsUseCase: SaveProductsAndCreateNotificationsUseCase = mockk()
 
     private val databaseMode = DatabaseMode.LOCAL
     private val ownCategories =
@@ -38,9 +38,9 @@ class NewProductViewModelTest {
         savedStateHandle["barcode"] = "0"
         coEvery { observeDatabaseModeUseCase() } returns flowOf(databaseMode)
         coEvery { observeAllOwnCategoriesUseCase(DatabaseMode.LOCAL) } returns flowOf(ownCategories)
-        coEvery { saveProductsUseCase(any()) } returns mockProductIdList
+        coEvery { saveProductsAndCreateNotificationsUseCase(any()) } returns mockProductIdList
         viewModel = NewProductViewModel(
-            saveProductsUseCase = saveProductsUseCase,
+            saveProductsAndCreateNotificationsUseCase = saveProductsAndCreateNotificationsUseCase,
             getMainCategoriesUseCase = mock(),
             getDetailCategoriesUseCase = mock(),
             observeAllOwnCategoriesUseCase = observeAllOwnCategoriesUseCase,

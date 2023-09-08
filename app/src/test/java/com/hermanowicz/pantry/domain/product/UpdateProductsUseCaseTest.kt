@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.mockito.Mockito.doNothing
 
 class UpdateProductsUseCaseTest {
 

@@ -1,6 +1,5 @@
 package com.hermanowicz.pantry.utils
 
-import android.Manifest
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
@@ -11,9 +10,7 @@ import android.os.Build
 import android.os.Environment
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import com.hermanowicz.pantry.MainActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before

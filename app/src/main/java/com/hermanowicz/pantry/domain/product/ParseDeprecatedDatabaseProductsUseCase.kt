@@ -4,8 +4,8 @@ import android.content.Context
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.category.GetDetailCategoryUseCase
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.enums.Taste
+import com.hermanowicz.pantry.domain.product.utils.GetMainCategoryString.Companion.getMainCategoryFromResourcesFromProduct
+import com.hermanowicz.pantry.domain.product.utils.GetTasteString.Companion.getTasteStringFromResourcesForProduct
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -16,8 +16,8 @@ class ParseDeprecatedDatabaseProductsUseCase @Inject constructor(
     override fun invoke(products: List<Product>, ownCategories: List<Category>): List<Product> {
         val parsedProducts: MutableList<Product> = mutableListOf()
         products.forEach { product ->
-            val taste = getTaste(product)
-            val mainCategory = getMainCategory(product)
+            val taste = getTasteStringFromResourcesForProduct(context, product)
+            val mainCategory = getMainCategoryFromResourcesFromProduct(context, product)
             val detailCategory = getDetailCategoryUseCase(ownCategories, product)
             parsedProducts.add(
                 product.copy(
@@ -28,21 +28,5 @@ class ParseDeprecatedDatabaseProductsUseCase @Inject constructor(
             )
         }
         return parsedProducts.toList()
-    }
-
-    private fun getTaste(product: Product): String {
-        return try {
-            context.getString(enumValueOf<Taste>(product.taste).nameResId)
-        } catch (e: Exception) {
-            product.taste
-        }
-    }
-
-    private fun getMainCategory(product: Product): String {
-        return try {
-            context.getString(enumValueOf<MainCategories>(product.mainCategory).nameResId)
-        } catch (e: Exception) {
-            product.mainCategory
-        }
     }
 }

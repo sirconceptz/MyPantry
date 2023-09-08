@@ -10,11 +10,11 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class SaveProductsUseCaseTest {
+class SaveProductsAndCreateNotificationsUseCaseTest {
 
     private val productRepository: ProductRepository = mock()
     private val notificationRepository: NotificationRepository = mock()
-    private val useCase = SaveProductsUseCase(productRepository, notificationRepository)
+    private val useCase = SaveProductsAndCreateNotificationsUseCase(productRepository, notificationRepository)
 
     @Test
     fun `test invoke saves products and creates notifications`() = runTest {

@@ -6,7 +6,7 @@ import com.hermanowicz.pantry.di.repository.ProductRepository
 import com.hermanowicz.pantry.di.repository.StorageLocationRepository
 import javax.inject.Inject
 
-class DeleteUserAccountUseCase @Inject constructor(
+class DeleteUserAccountAndDataUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val storageLocationRepository: StorageLocationRepository
