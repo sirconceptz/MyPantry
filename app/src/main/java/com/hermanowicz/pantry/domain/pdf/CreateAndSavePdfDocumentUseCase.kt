@@ -14,7 +14,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class CreatePdfDocumentUseCase @Inject constructor(
+class CreateAndSavePdfDocumentUseCase @Inject constructor(
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase,
     private val getFileNameUseCase: GetFileNameUseCase,
     @ApplicationContext private val context: Context

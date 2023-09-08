@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hermanowicz.pantry.data.model.AppSettings
-import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
+import com.hermanowicz.pantry.domain.account.DeleteUserAccountAndDataUseCase
 import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
@@ -44,7 +44,7 @@ class SettingsViewModelTest {
     private val mockValidateEmailUseCase: ValidateEmailUseCase = mockk()
     private val mockExportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase = mockk()
     private val mockFetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase = mockk()
-    private val mockDeleteUserAccountUseCase: DeleteUserAccountUseCase = mockk()
+    private val mockDeleteUserAccountAndDataUseCase: DeleteUserAccountAndDataUseCase = mockk()
     private val mockCheckIsUserLoggedUseCase: CheckIsUserLoggedUseCase = mockk()
     private val mockReCreateNotificationsForAllProductsUseCase: ReCreateNotificationsForAllProductsUseCase =
         mockk()
@@ -78,7 +78,7 @@ class SettingsViewModelTest {
             mockValidateEmailUseCase,
             mockExportDatabaseToCloudUseCase,
             mockFetchUserEmailOrUnloggedUseCase,
-            mockDeleteUserAccountUseCase,
+            mockDeleteUserAccountAndDataUseCase,
             mockCheckIsUserLoggedUseCase,
             mockReCreateNotificationsForAllProductsUseCase
         )

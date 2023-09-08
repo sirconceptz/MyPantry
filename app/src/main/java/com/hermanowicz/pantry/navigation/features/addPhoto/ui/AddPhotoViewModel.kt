@@ -10,7 +10,7 @@ import com.hermanowicz.pantry.domain.photo.DecodePhotoFromGalleryUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.GetPhotoFileNameUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
-import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
+import com.hermanowicz.pantry.domain.product.GetProductListByIdsUseCase
 import com.hermanowicz.pantry.domain.product.UpdatePhotoInProductListUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.addPhoto.state.AddPhotoUiState
@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddPhotoViewModel @Inject constructor(
-    private val getProductListByIdsProductsUseCase: GetProductListByIdsProductsUseCase,
+    private val getProductListByIdsUseCase: GetProductListByIdsUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val createAndGetPhotoFileUseCase: CreateAndGetPhotoFileUseCase,
     private val getPhotoFileNameUseCase: GetPhotoFileNameUseCase,
@@ -58,7 +58,7 @@ class AddPhotoViewModel @Inject constructor(
             try {
                 observeDatabaseModeUseCase().flatMapLatest { databaseMode ->
                     this@AddPhotoViewModel.databaseMode = databaseMode
-                    getProductListByIdsProductsUseCase(
+                    getProductListByIdsUseCase(
                         databaseMode,
                         productIdList
                     )

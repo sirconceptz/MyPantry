@@ -7,7 +7,7 @@ import com.hermanowicz.pantry.domain.photo.DecodePhotoFromGalleryUseCase
 import com.hermanowicz.pantry.domain.photo.FetchPhotoBitmapUseCase
 import com.hermanowicz.pantry.domain.photo.GetPhotoFileNameUseCase
 import com.hermanowicz.pantry.domain.photo.SetPhotoFileUseCase
-import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
+import com.hermanowicz.pantry.domain.product.GetProductListByIdsUseCase
 import com.hermanowicz.pantry.domain.product.UpdatePhotoInProductListUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.addPhoto.ui.AddPhotoViewModel
@@ -36,7 +36,7 @@ class AddPhotoViewModelTest {
     private lateinit var viewModel: AddPhotoViewModel
 
     // Mocks
-    private val getProductListByIdsProductsUseCase = mockk<GetProductListByIdsProductsUseCase>()
+    private val getProductListByIdsUseCase = mockk<GetProductListByIdsUseCase>()
     private val observeDatabaseModeUseCase = mockk<ObserveDatabaseModeUseCase>()
     private val createAndGetPhotoFileUseCase = mockk<CreateAndGetPhotoFileUseCase>()
     private val getPhotoFileNameUseCase = mockk<GetPhotoFileNameUseCase>()
@@ -68,7 +68,7 @@ class AddPhotoViewModelTest {
         )
         every { observeDatabaseModeUseCase() } returns flowOf(testDatabaseMode)
         coEvery {
-            getProductListByIdsProductsUseCase(
+            getProductListByIdsUseCase(
                 testDatabaseMode,
                 testProductIdList
             )
@@ -77,7 +77,7 @@ class AddPhotoViewModelTest {
         every { getPhotoFileNameUseCase() } returns testPhotoFileName
 
         viewModel = AddPhotoViewModel(
-            getProductListByIdsProductsUseCase,
+            getProductListByIdsUseCase,
             observeDatabaseModeUseCase,
             createAndGetPhotoFileUseCase,
             getPhotoFileNameUseCase,
@@ -92,7 +92,7 @@ class AddPhotoViewModelTest {
     @After
     fun cleanup() {
         clearMocks(
-            getProductListByIdsProductsUseCase,
+            getProductListByIdsUseCase,
             observeDatabaseModeUseCase,
             createAndGetPhotoFileUseCase,
             getPhotoFileNameUseCase,

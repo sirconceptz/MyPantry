@@ -4,11 +4,11 @@ import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.di.repository.PhotoRepository
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.nhaarman.mockitokotlin2.any
-import org.junit.Test
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 class UpdatePhotoInProductListUseCaseTest {
 

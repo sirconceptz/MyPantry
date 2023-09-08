@@ -8,8 +8,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 class CheckIsErrorWasDisplayedUseCaseTest {
     private lateinit var repository: ErrorAlertSystemRepository
@@ -42,7 +42,7 @@ class CheckIsErrorWasDisplayedUseCaseTest {
     @Test
     fun `test when error code is not found in the list`() {
         // Mock the behavior of the repository to return a list of error codes
-        val errorCodesFlow: Flow<List<Int>> = flowOf(listOf(1,2))
+        val errorCodesFlow: Flow<List<Int>> = flowOf(listOf(1, 2))
         `when`(repository.observeAllDisplayedErrors()).thenReturn(errorCodesFlow)
 
         // Mock the behavior of getErrorCodeUseCase

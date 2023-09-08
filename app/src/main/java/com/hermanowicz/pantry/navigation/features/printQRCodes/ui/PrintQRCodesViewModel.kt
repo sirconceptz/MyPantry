@@ -3,8 +3,8 @@ package com.hermanowicz.pantry.navigation.features.printQRCodes.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hermanowicz.pantry.domain.pdf.CreatePdfDocumentUseCase
-import com.hermanowicz.pantry.domain.product.GetProductListByIdsProductsUseCase
+import com.hermanowicz.pantry.domain.pdf.CreateAndSavePdfDocumentUseCase
+import com.hermanowicz.pantry.domain.product.GetProductListByIdsUseCase
 import com.hermanowicz.pantry.domain.settings.FetchQrCodeSizeUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
 import com.hermanowicz.pantry.navigation.features.printQRCodes.state.PrintQRCodesUiState
@@ -23,9 +23,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PrintQRCodesViewModel @Inject constructor(
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
-    private val getProductListByIdsProductsUseCase: GetProductListByIdsProductsUseCase,
+    private val getProductListByIdsUseCase: GetProductListByIdsUseCase,
     private val fetchQrCodeSizeUseCase: FetchQrCodeSizeUseCase,
-    private val createPdfDocumentUseCase: CreatePdfDocumentUseCase,
+    private val createAndSavePdfDocumentUseCase: CreateAndSavePdfDocumentUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -46,7 +46,7 @@ class PrintQRCodesViewModel @Inject constructor(
                     observeDatabaseModeUseCase(),
                     fetchQrCodeSizeUseCase()
                 ) { databaseMode, qrCodeSize ->
-                    getProductListByIdsProductsUseCase(
+                    getProductListByIdsUseCase(
                         databaseMode,
                         productIdList
                     ).collect { products ->
@@ -67,7 +67,7 @@ class PrintQRCodesViewModel @Inject constructor(
 
     fun onPrintCodesPermissionGranted() {
         viewModelScope.launch(Dispatchers.IO) {
-            val fileName = createPdfDocumentUseCase(uiState.value.productList)
+            val fileName = createAndSavePdfDocumentUseCase(uiState.value.productList)
             _uiState.update {
                 it.copy(
                     pdfFileName = fileName,
@@ -79,7 +79,7 @@ class PrintQRCodesViewModel @Inject constructor(
 
     fun onSharePdfDocumentPermissionGranted() {
         viewModelScope.launch(Dispatchers.IO) {
-            val fileName = createPdfDocumentUseCase(uiState.value.productList)
+            val fileName = createAndSavePdfDocumentUseCase(uiState.value.productList)
             _uiState.update {
                 it.copy(
                     pdfFileName = fileName,

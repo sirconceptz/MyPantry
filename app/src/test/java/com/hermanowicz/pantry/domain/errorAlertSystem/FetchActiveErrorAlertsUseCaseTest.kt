@@ -36,7 +36,6 @@ class FetchActiveErrorAlertsUseCaseTest {
         assertEquals(expectedErrorAlerts, result)
     }
 
-
     @Test
     fun `test fetchActiveErrorAlertsUseCase when repository returns an empty list`() {
         coEvery { errorAlertSystemRepository.fetchAllRemoteErrors() } returns emptyList()

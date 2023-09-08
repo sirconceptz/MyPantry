@@ -10,7 +10,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-
 class ParseDeprecatedDatabaseProductsUseCaseTest {
 
     private val context: Context = mock()

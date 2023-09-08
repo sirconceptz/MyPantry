@@ -3,7 +3,7 @@ package com.hermanowicz.pantry.navigation.features.settings.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.AppSettings
-import com.hermanowicz.pantry.domain.account.DeleteUserAccountUseCase
+import com.hermanowicz.pantry.domain.account.DeleteUserAccountAndDataUseCase
 import com.hermanowicz.pantry.domain.settings.ClearDatabaseUseCase
 import com.hermanowicz.pantry.domain.settings.ExportDatabaseToCloudUseCase
 import com.hermanowicz.pantry.domain.settings.FetchUserEmailOrUnloggedUseCase
@@ -33,7 +33,7 @@ class SettingsViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase,
     private val fetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase,
-    private val deleteUserAccountUseCase: DeleteUserAccountUseCase,
+    private val deleteUserAccountAndDataUseCase: DeleteUserAccountAndDataUseCase,
     private val checkIsUserLoggedUseCase: CheckIsUserLoggedUseCase,
     private val reCreateNotificationsForAllProductsUseCase: ReCreateNotificationsForAllProductsUseCase
 ) : ViewModel() {
@@ -306,7 +306,7 @@ class SettingsViewModel @Inject constructor(
 
     fun onConfirmDeleteAccount() {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteUserAccountUseCase()
+            deleteUserAccountAndDataUseCase()
         }
         showDeleteAccountDialog(false)
     }

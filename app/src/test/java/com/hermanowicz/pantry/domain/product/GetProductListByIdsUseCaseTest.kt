@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
-class GetProductListByIdsProductsUseCaseTest {
+class GetProductListByIdsUseCaseTest {
 
     private val observeAllProductsUseCase: ObserveAllProductsUseCase = mock()
-    private val useCase = GetProductListByIdsProductsUseCase(observeAllProductsUseCase)
+    private val useCase = GetProductListByIdsUseCase(observeAllProductsUseCase)
 
     @Test
     fun `test invoke returns filtered products based on provided product ID list`() = runBlocking {
