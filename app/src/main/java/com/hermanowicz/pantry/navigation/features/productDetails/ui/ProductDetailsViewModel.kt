@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
@@ -27,8 +28,10 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -67,34 +70,22 @@ class ProductDetailsViewModel @Inject constructor(
         fetchProducts(productId)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun fetchProducts(productId: Int) {
-        // _uiState.value = ProductDetailsUiState.Loading
+        lateinit var databaseMode: DatabaseMode
+        lateinit var ownCategories: List<Category>
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                observeDatabaseModeUseCase().collect { databaseMode ->
-                    observeAllProductsUseCase(databaseMode).collect { products ->
-                        observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
-                            val parsedProducts =
-                                parseDeprecatedDatabaseProductsUseCase(products, ownCategories)
-                            if (checkIsProductsHashcodeCorrectUseCase(
-                                    productId,
-                                    productHashcode,
-                                    products
-                                )
-                            ) {
-                                updateProductState(productId, parsedProducts)
-                                setPhotoPreviewIfPhotoExist(products, databaseMode)
-                            } else {
-                                if (!state.value.onNavigateToMyPantry) {
-                                    _uiState.value =
-                                        ProductDetailsUiState.Error("No correct product")
-                                } else {
-                                    _uiState.value = ProductDetailsUiState.Loading
-                                }
-                            }
-                        }
-                    }
+                observeDatabaseModeUseCase().flatMapLatest {
+                    databaseMode = it
+                    observeAllOwnCategoriesUseCase(databaseMode)
                 }
+                    .flatMapLatest {
+                        ownCategories = it
+                        observeAllProductsUseCase(databaseMode)
+                    }.collect { products ->
+                        updateProductUiState(products, ownCategories, productId, databaseMode)
+                    }
             } catch (e: Exception) {
                 _uiState.value = ProductDetailsUiState.Error(e.toString())
                 Timber.e(e.message)
@@ -102,7 +93,33 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun updateProductState(
+    private fun updateProductUiState(
+        products: List<Product>,
+        ownCategories: List<Category>,
+        productId: Int,
+        databaseMode: DatabaseMode
+    ) {
+        val parsedProducts =
+            parseDeprecatedDatabaseProductsUseCase(products, ownCategories)
+        if (checkIsProductsHashcodeCorrectUseCase(
+                productId,
+                productHashcode,
+                products
+            )
+        ) {
+            setProductsInState(productId, parsedProducts)
+            setPhotoPreviewIfPhotoExist(products, databaseMode)
+        } else {
+            if (!state.value.onNavigateToMyPantry) {
+                _uiState.value =
+                    ProductDetailsUiState.Error("No correct product")
+            } else {
+                _uiState.value = ProductDetailsUiState.Loading
+            }
+        }
+    }
+
+    private fun setProductsInState(
         productId: Int,
         parsedProducts: List<Product>
     ) {

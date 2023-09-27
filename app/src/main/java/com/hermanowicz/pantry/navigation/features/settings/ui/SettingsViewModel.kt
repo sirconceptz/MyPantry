@@ -11,7 +11,7 @@ import com.hermanowicz.pantry.domain.settings.ObserveAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
-import com.hermanowicz.pantry.domain.utils.CheckIsUserLoggedUseCase
+import com.hermanowicz.pantry.domain.utils.FetchUidIfUserLoggedUseCase
 import com.hermanowicz.pantry.navigation.features.settings.state.SettingsState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
@@ -34,7 +34,7 @@ class SettingsViewModel @Inject constructor(
     private val exportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase,
     private val fetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase,
     private val deleteUserAccountAndDataUseCase: DeleteUserAccountAndDataUseCase,
-    private val checkIsUserLoggedUseCase: CheckIsUserLoggedUseCase,
+    private val fetchUidIfUserLoggedUseCase: FetchUidIfUserLoggedUseCase,
     private val reCreateNotificationsForAllProductsUseCase: ReCreateNotificationsForAllProductsUseCase
 ) : ViewModel() {
     private val _settingsState = MutableStateFlow(SettingsState())
@@ -60,7 +60,7 @@ class SettingsViewModel @Inject constructor(
                         emailNotificationsCheckboxEnabled = isEmailNotificationsCheckboxEnabled(
                             appSettings.emailForNotifications
                         ),
-                        isUserLogged = checkIsUserLoggedUseCase()
+                        isUserLogged = fetchUidIfUserLoggedUseCase()?.isNotEmpty() ?: false
                     )
                 }
                 disableOnlineFeaturesIfUnlogged()
@@ -274,7 +274,7 @@ class SettingsViewModel @Inject constructor(
         _settingsState.update {
             it.copy(
                 userEmailOrUnlogged = fetchUserEmailOrUnloggedUseCase(),
-                isUserLogged = checkIsUserLoggedUseCase()
+                isUserLogged = fetchUidIfUserLoggedUseCase()?.isNotEmpty() ?: false
             )
         }
         disableOnlineFeaturesIfUnlogged()
@@ -312,7 +312,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun disableOnlineFeaturesIfUnlogged() {
-        val isUserLogged = checkIsUserLoggedUseCase()
+        val isUserLogged = fetchUidIfUserLoggedUseCase()?.isNotEmpty() ?: false
         if (!isUserLogged) {
             onChangeDatabaseMode(DatabaseMode.LOCAL.name)
         }
