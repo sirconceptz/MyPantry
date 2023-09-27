@@ -1,15 +1,15 @@
 buildscript {
     ext {
         compose_version = '1.5.0-beta01'
-        dagger_hilt_version = '2.46.1'
+        dagger_hilt_version = '2.48'
         hilt_navigation_version = '1.0.0'
-        nav_version = "2.5.3"
+        nav_version = "2.7.3"
         room_version = '2.5.2'
         datastore_version = '1.0.0'
         reveal_version = '1.0.3'
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.android.tools.build:gradle:8.1.1'
         classpath 'com.google.firebase:perf-plugin:1.4.2'
     }
@@ -17,9 +17,10 @@ buildscript {
 plugins {
     id 'com.android.application' version '8.1.1' apply false
     id 'com.android.library' version '8.1.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.0' apply false
-    id 'com.google.dagger.hilt.android' version '2.44' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.10' apply false
+    id 'com.google.dagger.hilt.android' version '2.48' apply false
     id "org.jlleitschuh.gradle.ktlint" version '11.3.2' apply false
+    id 'com.google.devtools.ksp' version '1.9.0-1.0.13' apply false
 }
 subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint" // Version should be inherited from parent

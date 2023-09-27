@@ -14,7 +14,8 @@ import com.hermanowicz.pantry.data.local.model.StorageLocationEntity
         StorageLocationEntity::class,
         ErrorEntity::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class LocalDb : RoomDatabase() {
     abstract fun productDao(): ProductDao
