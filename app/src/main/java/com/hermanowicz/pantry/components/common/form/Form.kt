@@ -19,22 +19,23 @@ import com.hermanowicz.pantry.components.common.radiogroup.ProductTasteRadioGrou
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabel
 import com.hermanowicz.pantry.components.common.textfield.TextFieldAndLabelError
 import com.hermanowicz.pantry.components.common.textfield.TextFieldDoubleAndLabel
-import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
-import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.PickerType
+import com.hermanowicz.pantry.utils.ProductState
 import com.hermanowicz.pantry.utils.enums.Taste
 
 @Composable
-fun NewProductForm(
-    productDataState: NewProductState,
+fun ProductForm(
+    productDataState: ProductState,
     onNameChange: (String) -> Unit,
     showMainCategoryDropdown: (Boolean) -> Unit,
     onMainCategoryChange: (String) -> Unit,
     showDetailCategoryDropdown: (Boolean) -> Unit,
     onDetailCategoryChange: (String) -> Unit,
+    showStorageLocationDropdown: (Boolean) -> Unit,
+    onStorageLocationChange: (String) -> Unit,
     onExpirationDateChange: (DatePickerData) -> Unit,
     onProductionDateChange: (DatePickerData) -> Unit,
     onQuantityChange: (String) -> Unit,
@@ -50,7 +51,8 @@ fun NewProductForm(
     onTasteSelect: (String) -> Unit,
     onCleanTasteRadioGroup: () -> Unit,
     mainCategoryItemList: Map<String, String>,
-    detailCategoryItemList: Map<String, String>
+    detailCategoryItemList: Map<String, String>,
+    storageLocationItemList: Map<String, String>
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -81,6 +83,15 @@ fun NewProductForm(
             onChange = onDetailCategoryChange,
             visibleDropdown = productDataState.showDetailCategoryDropdown,
             onDismiss = { showDetailCategoryDropdown(false) }
+        )
+        DropdownCard(
+            textLeft = stringResource(id = R.string.storage_location),
+            mapKey = productDataState.storageLocation,
+            itemMap = storageLocationItemList,
+            onClick = { showStorageLocationDropdown(true) },
+            onChange = onStorageLocationChange,
+            visibleDropdown = productDataState.showStorageLocationDropdown,
+            onDismiss = { showStorageLocationDropdown(false) }
         )
         DatePickerPrimary(
             labelText = stringResource(id = R.string.expiration_date),
@@ -157,130 +168,6 @@ fun NewProductForm(
 }
 
 @Composable
-fun EditProductForm(
-    productDataState: EditProductDataState,
-    onNameChange: (String) -> Unit,
-    showMainCategoryDropdown: (Boolean) -> Unit,
-    onMainCategoryChange: (String) -> Unit,
-    showDetailCategoryDropdown: (Boolean) -> Unit,
-    onDetailCategoryChange: (String) -> Unit,
-    onExpirationDateChange: (DatePickerData) -> Unit,
-    onProductionDateChange: (DatePickerData) -> Unit,
-    onQuantityChange: (String) -> Unit,
-    onCompositionChange: (String) -> Unit,
-    onHealingPropertiesChange: (String) -> Unit,
-    onDosageChange: (String) -> Unit,
-    onWeightChange: (String) -> Unit,
-    onVolumeChange: (String) -> Unit,
-    onIsVegeChange: (Boolean) -> Unit,
-    onIsBioChange: (Boolean) -> Unit,
-    onHasSugarChange: (Boolean) -> Unit,
-    onHasSaltChange: (Boolean) -> Unit,
-    onTasteSelect: (String) -> Unit,
-    onCleanTasteRadioGroup: () -> Unit,
-    mainCategoryItemList: Map<String, String>,
-    detailCategoryItemList: Map<String, String>
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium)
-    ) {
-        TextFieldAndLabel(
-            textfieldText = productDataState.name,
-            labelText = stringResource(id = R.string.name),
-            textEvent = onNameChange,
-            placeholder = stringResource(id = R.string.name)
-        )
-        DropdownCard(
-            textLeft = stringResource(id = R.string.main_category),
-            mapKey = productDataState.mainCategory,
-            itemMap = mainCategoryItemList,
-            onClick = { showMainCategoryDropdown(true) },
-            onChange = onMainCategoryChange,
-            visibleDropdown = productDataState.showMainCategoryDropdown,
-            onDismiss = { showMainCategoryDropdown(false) }
-        )
-        DropdownCard(
-            textLeft = stringResource(id = R.string.detail_category),
-            mapKey = productDataState.detailCategory,
-            itemMap = detailCategoryItemList,
-            onClick = { showDetailCategoryDropdown(true) },
-            onChange = onDetailCategoryChange,
-            visibleDropdown = productDataState.showDetailCategoryDropdown,
-            onDismiss = { showDetailCategoryDropdown(false) }
-        )
-        DatePickerPrimary(
-            labelText = stringResource(id = R.string.expiration_date),
-            dateToDisplay = productDataState.expirationDate,
-            datePickerData = productDataState.expirationDatePickerData,
-            onChangeDate = onExpirationDateChange,
-            pickerType = PickerType.ALL
-        )
-        DatePickerPrimary(
-            labelText = stringResource(id = R.string.production_date),
-            dateToDisplay = productDataState.productionDate,
-            datePickerData = productDataState.productionDatePickerData,
-            onChangeDate = onProductionDateChange,
-            pickerType = PickerType.ALL
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.newQuantity,
-            labelText = stringResource(id = R.string.quantity),
-            textEvent = onQuantityChange,
-            placeholder = stringResource(id = R.string.quantity)
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.composition,
-            labelText = stringResource(id = R.string.composition),
-            textEvent = onCompositionChange,
-            placeholder = stringResource(id = R.string.composition)
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.healingProperties,
-            labelText = stringResource(id = R.string.healing_properties),
-            textEvent = onHealingPropertiesChange,
-            placeholder = stringResource(id = R.string.healing_properties)
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.dosage,
-            labelText = stringResource(id = R.string.dosage),
-            textEvent = onDosageChange,
-            placeholder = stringResource(id = R.string.dosage)
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.weight,
-            labelText = stringResource(id = R.string.weight),
-            textEvent = onWeightChange,
-            placeholder = stringResource(id = R.string.weight),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-        )
-        TextFieldAndLabel(
-            textfieldText = productDataState.volume,
-            labelText = stringResource(id = R.string.volume),
-            textEvent = onVolumeChange,
-            placeholder = stringResource(id = R.string.volume),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-        )
-        ProductDetailsAttributesCard(
-            isVege = productDataState.isVege,
-            isBio = productDataState.isBio,
-            hasSugar = productDataState.hasSugar,
-            hasSalt = productDataState.hasSalt,
-            onIsVegeChange = onIsVegeChange,
-            onIsBioChange = onIsBioChange,
-            onHasSugarChange = onHasSugarChange,
-            onHasSaltChange = onHasSaltChange
-        )
-        ProductTasteRadioGroup(
-            itemList = Taste.toPairList(),
-            selectedItem = productDataState.taste,
-            onSelect = onTasteSelect,
-            onCleanAll = onCleanTasteRadioGroup
-        )
-    }
-}
-
-@Composable
 fun FilterProductForm(
     filterProductDataState: FilterProductDataState,
     onNameChange: (String) -> Unit,
@@ -288,6 +175,8 @@ fun FilterProductForm(
     onMainCategoryChange: (String) -> Unit,
     showDetailCategoryDropdown: (Boolean) -> Unit,
     onDetailCategoryChange: (String) -> Unit,
+    showStorageLocationDropdown: (Boolean) -> Unit,
+    onStorageLocationChange: (String) -> Unit,
     onExpirationDateMinChange: (DatePickerData) -> Unit,
     onExpirationDateMaxChange: (DatePickerData) -> Unit,
     onProductionDateMinChange: (DatePickerData) -> Unit,
@@ -309,7 +198,8 @@ fun FilterProductForm(
     showHasSaltDropdown: (Boolean) -> Unit,
     onTasteSelect: (selected: String, bool: Boolean) -> Unit,
     mainCategoryItemList: Map<String, String>,
-    detailCategoryItemList: Map<String, String>
+    detailCategoryItemList: Map<String, String>,
+    storageLocationItemList: Map<String, String>
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -338,6 +228,15 @@ fun FilterProductForm(
             onChange = onDetailCategoryChange,
             visibleDropdown = filterProductDataState.showDetailCategoryDropdown,
             onDismiss = { showDetailCategoryDropdown(false) }
+        )
+        DropdownCard(
+            textLeft = stringResource(id = R.string.storage_location),
+            mapKey = filterProductDataState.storageLocation,
+            itemMap = storageLocationItemList,
+            onClick = { showStorageLocationDropdown(true) },
+            onChange = onStorageLocationChange,
+            visibleDropdown = filterProductDataState.showStorageLocationDropdown,
+            onDismiss = { showStorageLocationDropdown(false) }
         )
         DatePickerDouble(
             labelText = stringResource(id = R.string.expiration_date),

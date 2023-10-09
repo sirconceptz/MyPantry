@@ -177,13 +177,13 @@ fun ProductDetailsView(groupProduct: GroupProduct, state: ProductDetailsState) {
         )
         DividerCardInside()
         ProductDetailItem(
-            label = stringResource(id = R.string.production_date),
-            value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.productionDate)
+            label = stringResource(id = R.string.storage_location),
+            value = groupProduct.product.storageLocation
         )
         DividerCardInside()
         ProductDetailItem(
-            label = stringResource(id = R.string.storage_locations),
-            value = groupProduct.product.storageLocation
+            label = stringResource(id = R.string.production_date),
+            value = DateAndTimeConverter.dateToVisibleWithYear(groupProduct.product.productionDate)
         )
         DividerCardInside()
         ProductDetailItem(

@@ -4,18 +4,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetDetailCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.GetStorageLocationsMapUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
-import com.hermanowicz.pantry.utils.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.storageLocations.StorageLocations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,11 +34,12 @@ class EditProductViewModel @Inject constructor(
     private val getGroupProductByIdUseCase: GetGroupProductByIdUseCase,
     private val updateProductsUseCase: UpdateProductsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val getDetailCategoriesUseCase: GetDetailCategoriesUseCase,
+    private val getStorageLocationsMapUseCase: GetStorageLocationsMapUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
+    private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val savedStateHandle: SavedStateHandle,
-    private val fetchDatabaseModeUseCase: ObserveDatabaseModeUseCase
 ) : ViewModel() {
     private val _productDataState = MutableStateFlow(EditProductDataState())
     var productDataState: StateFlow<EditProductDataState> = _productDataState.asStateFlow()
@@ -45,6 +49,7 @@ class EditProductViewModel @Inject constructor(
 
     init {
         fetchOwnCategories()
+        fetchStorageLocations()
         fetchProductData(productId)
     }
 
@@ -58,9 +63,19 @@ class EditProductViewModel @Inject constructor(
         }
     }
 
+    fun fetchStorageLocations() {
+        viewModelScope.launch(Dispatchers.IO) {
+            observeDatabaseModeUseCase().collect { databaseMode ->
+                observeAllStorageLocationsUseCase(databaseMode).collect { storageLocations ->
+                    _productDataState.update { it.copy(storageLocations = storageLocations) }
+                }
+            }
+        }
+    }
+
     fun fetchProductData(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            fetchDatabaseModeUseCase().collect { databaseMode ->
+            observeDatabaseModeUseCase().collect { databaseMode ->
                 observeAllProductsUseCase(databaseMode).collect { products ->
                     updateProductState(productId, products)
                 }
@@ -73,25 +88,27 @@ class EditProductViewModel @Inject constructor(
         products: List<Product>
     ) {
         val groupProduct = getGroupProductByIdUseCase(productId, products)
-        _productDataState.value = EditProductDataState(
-            name = groupProduct.product.name,
-            expirationDate = groupProduct.product.expirationDate,
-            productionDate = groupProduct.product.productionDate,
-            composition = groupProduct.product.composition,
-            oldQuantity = groupProduct.quantity.toString(),
-            newQuantity = groupProduct.quantity.toString(),
-            healingProperties = groupProduct.product.healingProperties,
-            dosage = groupProduct.product.dosage,
-            hasSugar = groupProduct.product.hasSugar,
-            hasSalt = groupProduct.product.hasSalt,
-            isVege = groupProduct.product.isVege,
-            isBio = groupProduct.product.isBio,
-            weight = groupProduct.product.weight.toString(),
-            volume = groupProduct.product.volume.toString(),
-            taste = groupProduct.product.taste,
-            hashCode = groupProduct.product.hashCode,
-            productsIdList = groupProduct.idList
-        )
+        _productDataState.update {
+            it.copy(
+                name = groupProduct.product.name,
+                expirationDate = groupProduct.product.expirationDate,
+                productionDate = groupProduct.product.productionDate,
+                composition = groupProduct.product.composition,
+                quantity = groupProduct.quantity.toString(),
+                newQuantity = groupProduct.quantity.toString(),
+                healingProperties = groupProduct.product.healingProperties,
+                dosage = groupProduct.product.dosage,
+                hasSugar = groupProduct.product.hasSugar,
+                hasSalt = groupProduct.product.hasSalt,
+                isVege = groupProduct.product.isVege,
+                isBio = groupProduct.product.isBio,
+                weight = groupProduct.product.weight.toString(),
+                volume = groupProduct.product.volume.toString(),
+                taste = groupProduct.product.taste,
+                hashCode = groupProduct.product.hashCode,
+                productsIdList = groupProduct.idList
+            )
+        }
     }
 
     fun onSaveClick() {
@@ -111,17 +128,22 @@ class EditProductViewModel @Inject constructor(
     fun updateProducts() {
         var mainCategory = ""
         var detailCategory = ""
+        var storageLocation = ""
         if (productDataState.value.mainCategory != MainCategories.CHOOSE.name) {
             mainCategory = productDataState.value.mainCategory
         }
         if (productDataState.value.detailCategory != MainCategories.CHOOSE.name) {
             detailCategory = productDataState.value.detailCategory
         }
+        if (productDataState.value.storageLocation != StorageLocations.CHOOSE.name) {
+            storageLocation = productDataState.value.storageLocation
+        }
         val product = Product(
             id = productId,
             name = productDataState.value.name,
             mainCategory = mainCategory,
             detailCategory = detailCategory,
+            storageLocation = storageLocation,
             expirationDate = productDataState.value.expirationDate,
             productionDate = productDataState.value.productionDate,
             composition = productDataState.value.composition,
@@ -140,7 +162,7 @@ class EditProductViewModel @Inject constructor(
             updateProductsUseCase(
                 product,
                 productDataState.value.productsIdList,
-                productDataState.value.oldQuantity.toIntOrNull() ?: 1,
+                productDataState.value.quantity.toIntOrNull() ?: 1,
                 productDataState.value.newQuantity.toIntOrNull() ?: 1
             )
         }
@@ -185,6 +207,10 @@ class EditProductViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun onStorageLocationChange(storageLocation: String) {
+        _productDataState.update { it.copy(storageLocation = storageLocation) }
     }
 
     fun onCompositionChange(composition: String) {
@@ -243,6 +269,10 @@ class EditProductViewModel @Inject constructor(
         _productDataState.update { it.copy(showDetailCategoryDropdown = show) }
     }
 
+    fun showStorageLocationDropdown(show: Boolean) {
+        _productDataState.update { it.copy(showStorageLocationDropdown = show) }
+    }
+
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
@@ -266,9 +296,15 @@ class EditProductViewModel @Inject constructor(
     }
 
     fun getDetailCategories(): Map<String, String> {
-        return getDetailsCategoriesUseCase(
+        return getDetailCategoriesUseCase(
             productDataState.value.ownCategories,
             productDataState.value.mainCategory
+        )
+    }
+
+    fun getStorageLocations(): Map<String, String> {
+        return getStorageLocationsMapUseCase(
+            productDataState.value.storageLocations
         )
     }
 

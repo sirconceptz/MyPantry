@@ -33,6 +33,7 @@
     <string name="all">Alle</string>
     <string name="main_category">Hauptkategorie</string>
     <string name="detail_category">Detailkategorie</string>
+    <string name="storage_location">Lagerraum</string>
     <string name="cancel">Stornieren</string>
     <string name="add_new_storage_location">Einen neuen Speicherort hinzufügen</string>
     <string name="add_new_category">Neue Kategorie hinzufügen</string>

@@ -33,6 +33,7 @@
     <string name="all">Všechno</string>
     <string name="main_category">Hlavní kategorie</string>
     <string name="detail_category">Kategorie detailů</string>
+    <string name="storage_location">Umístění skladu</string>
     <string name="cancel">Zrušení</string>
     <string name="add_new_storage_location">Přidat nové umístění úložiště</string>
     <string name="add_new_category">Přidat novou kategorii</string>

@@ -35,7 +35,11 @@ fun DropdownCard(
     visibleDropdown: Boolean,
     onDismiss: () -> Unit
 ) {
-    val textRight = itemMap.getValue(mapKey)
+    val textRight = try {
+        itemMap.getValue(mapKey)
+    } catch (e: NoSuchElementException) {
+        mapKey
+    }
 
     Column {
         Text(text = textLeft)

@@ -2,11 +2,14 @@ package com.hermanowicz.pantry.navigation.features.myPantry.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetDetailCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.CheckIsErrorWasDisplayedUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.FetchActiveErrorAlertsUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.SaveErrorAsDisplayedUseCase
@@ -14,6 +17,8 @@ import com.hermanowicz.pantry.domain.product.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductListUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.GetStorageLocationsMapUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
 import com.hermanowicz.pantry.navigation.features.myPantry.state.ErrorAlertSystemState
 import com.hermanowicz.pantry.navigation.features.myPantry.state.MyPantryModel
@@ -22,6 +27,7 @@ import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
 import com.hermanowicz.pantry.utils.RegexFormats
 import com.hermanowicz.pantry.utils.enums.Taste
+import com.hermanowicz.pantry.utils.enums.storageLocations.StorageLocations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,8 +46,11 @@ import javax.inject.Inject
 class MyPantryViewModel @Inject constructor(
     private val getGroupProductListUseCase: GetGroupProductListUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
+    private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val getDetailCategoriesUseCase: GetDetailCategoriesUseCase,
+    private val getStorageLocationsMapUseCase: GetStorageLocationsMapUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val getFilteredProductListUseCase: GetFilteredProductListUseCase,
     private val fetchActiveErrorAlertsUseCase: FetchActiveErrorAlertsUseCase,
@@ -56,6 +65,11 @@ class MyPantryViewModel @Inject constructor(
         _filterProductDataState.asStateFlow()
 
     private lateinit var products: List<Product>
+
+    init {
+        enableErrorAlertSystem()
+        fetchOwnCategoriesAndStorageLocations()
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<MyPantryProductsUiState> = observeDatabaseModeUseCase()
@@ -84,8 +98,33 @@ class MyPantryViewModel @Inject constructor(
             initialValue = MyPantryProductsUiState.Loading
         )
 
-    init {
-        enableErrorAlertSystem()
+    fun fetchOwnCategoriesAndStorageLocations() {
+        viewModelScope.launch {
+            observeDatabaseModeUseCase().collect { databaseMode ->
+                observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
+                    updateOwnCategoriesState(ownCategories)
+                    observeAllStorageLocationsUseCase(databaseMode).collect { storageLocations ->
+                        updateStorageLocationState(storageLocations)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateStorageLocationState(storageLocations: List<StorageLocation>) {
+        _filterProductDataState.update {
+            it.copy(
+                storageLocations = storageLocations
+            )
+        }
+    }
+
+    private fun updateOwnCategoriesState(ownCategories: List<Category>) {
+        _filterProductDataState.update {
+            it.copy(
+                ownCategories = ownCategories
+            )
+        }
     }
 
     fun onCleanClick() {
@@ -103,13 +142,17 @@ class MyPantryViewModel @Inject constructor(
     }
 
     fun onSearchClick() {
+        var storageLocation = ""
+        if (filterProductDataState.value.storageLocation != StorageLocations.CHOOSE.name) {
+            storageLocation = filterProductDataState.value.storageLocation
+        }
         _filterProductDataState.update {
             it.copy(
                 filterProduct = FilterProduct(
                     name = filterProductDataState.value.name,
                     mainCategory = filterProductDataState.value.mainCategory,
                     detailCategory = filterProductDataState.value.detailCategory,
-                    storageLocation = filterProductDataState.value.storageLocation,
+                    storageLocation = storageLocation,
                     expirationDateMin = filterProductDataState.value.expirationDateMin,
                     expirationDateMax = filterProductDataState.value.expirationDateMax,
                     productionDateMin = filterProductDataState.value.productionDateMin,
@@ -288,6 +331,10 @@ class MyPantryViewModel @Inject constructor(
         }
     }
 
+    fun showStorageLocationDropdown(show: Boolean) {
+        _filterProductDataState.update { it.copy(showStorageLocationDropdown = show) }
+    }
+
     fun showFilterHasSaltDropdown(show: Boolean) {
         _filterProductDataState.update { it.copy(showHasSaltDropdown = show) }
     }
@@ -318,14 +365,28 @@ class MyPantryViewModel @Inject constructor(
         }
     }
 
+    fun onFilterStorageLocationChange(storageLocation: String) {
+        _filterProductDataState.update {
+            it.copy(
+                storageLocation = storageLocation
+            )
+        }
+    }
+
     fun getFilterMainCategories(): Map<String, String> {
         return getMainCategoriesUseCase()
     }
 
     fun getFilterDetailCategories(): Map<String, String> {
-        return getDetailsCategoriesUseCase(
+        return getDetailCategoriesUseCase(
             filterProductDataState.value.ownCategories,
             filterProductDataState.value.mainCategory
+        )
+    }
+
+    fun getStorageLocations(): Map<String, String> {
+        return getStorageLocationsMapUseCase(
+            filterProductDataState.value.storageLocations
         )
     }
 

@@ -2,10 +2,12 @@ package com.hermanowicz.pantry.navigation.features.filterProduct.state
 
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.FilterProduct
+import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.utils.DatePickerData
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.pantry.utils.enums.storageLocations.StorageLocations
 
 data class FilterProductDataState(
     val name: String = "",
@@ -14,9 +16,10 @@ data class FilterProductDataState(
     var productionDateMinPickerData: DatePickerData = DatePickerData(),
     var productionDateMaxPickerData: DatePickerData = DatePickerData(),
     var ownCategories: List<Category> = emptyList(),
+    var storageLocations: List<StorageLocation> = emptyList(),
     var mainCategory: String = MainCategories.CHOOSE.name,
     var detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
-    val storageLocation: String = "",
+    val storageLocation: String = StorageLocations.CHOOSE.name,
     val expirationDateMin: String = "",
     val expirationDateMax: String = "",
     val productionDateMin: String = "",
@@ -41,6 +44,7 @@ data class FilterProductDataState(
     var showErrorWrongName: Boolean = false,
     var showMainCategoryDropdown: Boolean = false,
     var showDetailCategoryDropdown: Boolean = false,
+    var showStorageLocationDropdown: Boolean = false,
     var showIsVegeDropdown: Boolean = false,
     var showIsBioDropdown: Boolean = false,
     var showHasSugarDropdown: Boolean = false,

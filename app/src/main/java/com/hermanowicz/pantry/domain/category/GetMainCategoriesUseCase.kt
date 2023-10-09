@@ -1,7 +1,7 @@
 package com.hermanowicz.pantry.domain.category
 
 import android.content.Context
-import com.hermanowicz.pantry.utils.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

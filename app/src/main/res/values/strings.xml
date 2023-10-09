@@ -33,6 +33,7 @@
     <string name="all">All</string>
     <string name="main_category">Main category</string>
     <string name="detail_category">Detail category</string>
+    <string name="storage_location">Storage location</string>
     <string name="cancel">Cancel</string>
     <string name="add_new_storage_location">Add new storage location</string>
     <string name="add_new_category">Add new category</string>

@@ -1,6 +1,6 @@
 package com.hermanowicz.pantry.domain.product.utils
 
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.ChooseCategoryTypes
 
 class IsDetailCategoryValid {
     companion object {
@@ -8,7 +8,7 @@ class IsDetailCategoryValid {
             productDetailCategory: String,
             filterProductDetailCategory: String
         ): Boolean {
-            return filterProductDetailCategory == ChooseCategoryTypes.CHOOSE.name || filterProductDetailCategory.isEmpty() || productDetailCategory == filterProductDetailCategory || productDetailCategory.isEmpty()
+            return filterProductDetailCategory == ChooseCategoryTypes.CHOOSE.name || filterProductDetailCategory.isEmpty() || productDetailCategory == filterProductDetailCategory
         }
     }
 }

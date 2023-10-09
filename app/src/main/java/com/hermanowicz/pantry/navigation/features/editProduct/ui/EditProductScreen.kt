@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hermanowicz.pantry.R
 import com.hermanowicz.pantry.components.common.button.ButtonPrimary
-import com.hermanowicz.pantry.components.common.form.EditProductForm
+import com.hermanowicz.pantry.components.common.form.ProductForm
 import com.hermanowicz.pantry.components.common.topBarScaffold.TopBarScaffold
 import com.hermanowicz.pantry.ui.theme.LocalSpacing
 
@@ -56,13 +56,15 @@ fun EditProductScreen(
                 .padding(horizontal = LocalSpacing.current.medium)
         ) {
             item {
-                EditProductForm(
+                ProductForm(
                     productDataState,
                     onNameChange = { viewModel.onNameChange(it) },
                     onMainCategoryChange = { viewModel.onMainCategoryChange(it) },
                     showDetailCategoryDropdown = { viewModel.showDetailCategoryDropdown(!productDataState.showDetailCategoryDropdown) },
                     onDetailCategoryChange = { viewModel.onDetailCategoryChange(it) },
+                    showStorageLocationDropdown = { viewModel.showStorageLocationDropdown(it) },
                     onExpirationDateChange = { viewModel.onExpirationDateChange(it) },
+                    onStorageLocationChange = { viewModel.onStorageLocationChange(it) },
                     onProductionDateChange = { viewModel.onProductionDateChange(it) },
                     onQuantityChange = { viewModel.onQuantityChange(it) },
                     onCompositionChange = { viewModel.onCompositionChange(it) },
@@ -77,6 +79,7 @@ fun EditProductScreen(
                     showMainCategoryDropdown = { viewModel.showMainCategoryDropdown(it) },
                     mainCategoryItemList = viewModel.getMainCategories(),
                     detailCategoryItemList = viewModel.getDetailCategories(),
+                    storageLocationItemList = viewModel.getStorageLocations(),
                     onTasteSelect = { viewModel.onTasteSelect(it) },
                     onCleanTasteRadioGroup = { viewModel.onTasteSelect("") }
                 )

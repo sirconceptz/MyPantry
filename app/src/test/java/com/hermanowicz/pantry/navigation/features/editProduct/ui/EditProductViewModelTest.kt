@@ -5,13 +5,15 @@ import androidx.lifecycle.SavedStateHandle
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetDetailCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductByIdUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.UpdateProductsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.GetStorageLocationsMapUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.navigation.features.editProduct.state.EditProductDataState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import io.mockk.coEvery
@@ -42,8 +44,10 @@ class EditProductViewModelTest {
     private lateinit var getGroupProductByIdUseCase: GetGroupProductByIdUseCase
     private lateinit var updateProductsUseCase: UpdateProductsUseCase
     private lateinit var getMainCategoriesUseCase: GetMainCategoriesUseCase
-    private lateinit var getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase
+    private lateinit var getDetailCategoriesUseCase: GetDetailCategoriesUseCase
+    private lateinit var getStorageLocationsMapUseCase: GetStorageLocationsMapUseCase
     private lateinit var observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase
+    private lateinit var observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase
     private lateinit var observeDatabaseModeUseCase: ObserveDatabaseModeUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
@@ -65,8 +69,10 @@ class EditProductViewModelTest {
         getGroupProductByIdUseCase = mockk()
         updateProductsUseCase = mockk()
         getMainCategoriesUseCase = mockk()
-        getDetailsCategoriesUseCase = mockk()
+        getDetailCategoriesUseCase = mockk()
+        getStorageLocationsMapUseCase = mockk()
         observeAllOwnCategoriesUseCase = mockk()
+        observeAllStorageLocationsUseCase = mockk()
         observeDatabaseModeUseCase = mockk()
         savedStateHandle = mockk()
 
@@ -82,11 +88,12 @@ class EditProductViewModelTest {
             getGroupProductByIdUseCase,
             updateProductsUseCase,
             getMainCategoriesUseCase,
-            getDetailsCategoriesUseCase,
+            getDetailCategoriesUseCase,
+            getStorageLocationsMapUseCase,
             observeAllOwnCategoriesUseCase,
+            observeAllStorageLocationsUseCase,
             observeDatabaseModeUseCase,
-            savedStateHandle,
-            observeDatabaseModeUseCase
+            savedStateHandle
         )
 
         Dispatchers.setMain(testDispatcher)
