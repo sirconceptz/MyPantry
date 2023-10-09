@@ -2,7 +2,7 @@ package com.hermanowicz.pantry.domain.product.utils
 
 import android.content.Context
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.utils.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
 
 class GetMainCategoryString {
     companion object {

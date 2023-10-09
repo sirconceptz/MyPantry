@@ -2,7 +2,7 @@ import android.content.Context
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.domain.category.GetDetailCategoryUseCase
-import com.hermanowicz.pantry.utils.category.detailCategory.StoreProductsCategoryTypes
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.StoreProductsCategoryTypes
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals

@@ -1,6 +1,6 @@
 package com.hermanowicz.pantry.domain.product.utils
 
-import com.hermanowicz.pantry.utils.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
 
 class IsMainCategoryValid {
     companion object {
@@ -8,7 +8,7 @@ class IsMainCategoryValid {
             productMainCategory: String,
             filterProductMainCategory: String
         ): Boolean {
-            return filterProductMainCategory == MainCategories.CHOOSE.name || filterProductMainCategory.isEmpty() || productMainCategory == filterProductMainCategory || productMainCategory.isEmpty()
+            return filterProductMainCategory == MainCategories.CHOOSE.name || filterProductMainCategory.isEmpty() || productMainCategory == filterProductMainCategory
         }
     }
 }

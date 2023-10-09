@@ -4,8 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
 import com.hermanowicz.pantry.data.model.errorAlertSystem.ErrorAlert
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.GetDetailCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
+import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.CheckIsErrorWasDisplayedUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.FetchActiveErrorAlertsUseCase
 import com.hermanowicz.pantry.domain.errorAlertSystem.SaveErrorAsDisplayedUseCase
@@ -13,6 +14,8 @@ import com.hermanowicz.pantry.domain.product.GetFilteredProductListUseCase
 import com.hermanowicz.pantry.domain.product.GetGroupProductListUseCase
 import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.GetStorageLocationsMapUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.navigation.features.filterProduct.state.FilterProductDataState
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.Taste
@@ -38,8 +41,11 @@ class MyPantryViewModelTest {
     private lateinit var viewModel: MyPantryViewModel
     private val getGroupProductListUseCase: GetGroupProductListUseCase = mockk()
     private val observeAllProductsUseCase: ObserveAllProductsUseCase = mockk()
+    private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase = mockk()
+    private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase = mockk()
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase = mockk()
-    private val getDetailsCategoriesUseCase: GetDetailsCategoriesUseCase = mockk()
+    private val getDetailCategoriesUseCase: GetDetailCategoriesUseCase = mockk()
+    private val getStorageLocationsMapUseCase: GetStorageLocationsMapUseCase = mockk()
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase = mockk()
     private val getFilteredProductListUseCase: GetFilteredProductListUseCase = mockk()
     private val fetchActiveErrorAlertsUseCase: FetchActiveErrorAlertsUseCase = mockk()
@@ -72,8 +78,11 @@ class MyPantryViewModelTest {
         viewModel = MyPantryViewModel(
             getGroupProductListUseCase,
             observeAllProductsUseCase,
+            observeAllOwnCategoriesUseCase,
+            observeAllStorageLocationsUseCase,
             getMainCategoriesUseCase,
-            getDetailsCategoriesUseCase,
+            getDetailCategoriesUseCase,
+            getStorageLocationsMapUseCase,
             observeDatabaseModeUseCase,
             getFilteredProductListUseCase,
             fetchActiveErrorAlertsUseCase,

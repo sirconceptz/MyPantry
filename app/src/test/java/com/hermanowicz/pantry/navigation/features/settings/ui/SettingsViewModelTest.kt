@@ -10,7 +10,7 @@ import com.hermanowicz.pantry.domain.settings.ObserveAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ReCreateNotificationsForAllProductsUseCase
 import com.hermanowicz.pantry.domain.settings.UpdateAppSettingsUseCase
 import com.hermanowicz.pantry.domain.settings.ValidateEmailUseCase
-import com.hermanowicz.pantry.domain.utils.CheckIsUserLoggedUseCase
+import com.hermanowicz.pantry.domain.utils.FetchUidIfUserLoggedUseCase
 import com.hermanowicz.pantry.utils.enums.CameraMode
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.hermanowicz.pantry.utils.enums.EmailValidation
@@ -45,7 +45,7 @@ class SettingsViewModelTest {
     private val mockExportDatabaseToCloudUseCase: ExportDatabaseToCloudUseCase = mockk()
     private val mockFetchUserEmailOrUnloggedUseCase: FetchUserEmailOrUnloggedUseCase = mockk()
     private val mockDeleteUserAccountAndDataUseCase: DeleteUserAccountAndDataUseCase = mockk()
-    private val mockCheckIsUserLoggedUseCase: CheckIsUserLoggedUseCase = mockk()
+    private val fetchUidIfUserLoggedUseCase: FetchUidIfUserLoggedUseCase = mockk()
     private val mockReCreateNotificationsForAllProductsUseCase: ReCreateNotificationsForAllProductsUseCase =
         mockk()
 
@@ -69,7 +69,7 @@ class SettingsViewModelTest {
         coEvery { mockUpdateAppSettingsUseCase(any()) } returns Unit
         coEvery { mockValidateEmailUseCase(userEmail) } returns EmailValidation.VALID
         coEvery { mockReCreateNotificationsForAllProductsUseCase(DatabaseMode.LOCAL, DatabaseMode.ONLINE) } returns Unit
-        coEvery { mockCheckIsUserLoggedUseCase() } returns isUserLogged
+        coEvery { fetchUidIfUserLoggedUseCase() } returns "5"
         Dispatchers.setMain(testDispatcher)
         viewModel = SettingsViewModel(
             mockObserveAppSettingsUseCase,
@@ -79,7 +79,7 @@ class SettingsViewModelTest {
             mockExportDatabaseToCloudUseCase,
             mockFetchUserEmailOrUnloggedUseCase,
             mockDeleteUserAccountAndDataUseCase,
-            mockCheckIsUserLoggedUseCase,
+            fetchUidIfUserLoggedUseCase,
             mockReCreateNotificationsForAllProductsUseCase
         )
     }

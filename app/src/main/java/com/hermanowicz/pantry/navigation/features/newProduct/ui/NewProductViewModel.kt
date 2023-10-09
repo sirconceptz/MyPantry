@@ -3,9 +3,11 @@ package com.hermanowicz.pantry.navigation.features.newProduct.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.domain.category.GetDetailsCategoriesUseCase
+import com.hermanowicz.pantry.data.model.StorageLocation
+import com.hermanowicz.pantry.domain.category.GetDetailCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.CheckQuantityIsValidUseCase
@@ -14,13 +16,16 @@ import com.hermanowicz.pantry.domain.product.ObserveAllProductsUseCase
 import com.hermanowicz.pantry.domain.product.SaveProductsAndCreateNotificationsUseCase
 import com.hermanowicz.pantry.domain.scanner.CheckBarcodeIsEmptyUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.GetStorageLocationsMapUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.domain.utils.CheckFormatIsNumberUseCase
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductState
 import com.hermanowicz.pantry.navigation.features.newProduct.state.NewProductUiState
 import com.hermanowicz.pantry.utils.DateAndTimeConverter
 import com.hermanowicz.pantry.utils.DatePickerData
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.ChooseCategoryTypes
+import com.hermanowicz.pantry.utils.enums.storageLocations.StorageLocations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,11 +39,13 @@ import javax.inject.Inject
 class NewProductViewModel @Inject constructor(
     private val saveProductsAndCreateNotificationsUseCase: SaveProductsAndCreateNotificationsUseCase,
     private val getMainCategoriesUseCase: GetMainCategoriesUseCase,
-    private val getDetailCategoriesUseCase: GetDetailsCategoriesUseCase,
+    private val getDetailCategoriesUseCase: GetDetailCategoriesUseCase,
+    private val getStorageLocationsMapUseCase: GetStorageLocationsMapUseCase,
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase,
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val fetchDatabaseModeUseCase: ObserveDatabaseModeUseCase,
     private val observeAllProductsUseCase: ObserveAllProductsUseCase,
+    private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase,
     private val getGroupProductListByBarcodeUseCase: GetGroupProductListByBarcodeUseCase,
     private val checkBarcodeIsEmptyUseCase: CheckBarcodeIsEmptyUseCase,
     private val checkFormatIsNumberUseCase: CheckFormatIsNumberUseCase,
@@ -64,10 +71,21 @@ class NewProductViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             observeDatabaseModeUseCase().collect { databaseMode ->
                 observeAllOwnCategoriesUseCase(databaseMode).collect { ownCategories ->
-                    _productDataState.update { it.copy(ownCategories = ownCategories) }
+                    updateOwnCategoriesState(ownCategories)
+                    observeAllStorageLocationsUseCase(databaseMode).collect { storageLocations ->
+                        updateStorageLocationState(storageLocations)
+                    }
                 }
             }
         }
+    }
+
+    private fun updateOwnCategoriesState(ownCategories: List<Category>) {
+        _productDataState.update { it.copy(ownCategories = ownCategories) }
+    }
+
+    private fun updateStorageLocationState(storageLocations: List<StorageLocation>) {
+        _productDataState.update { it.copy(storageLocations = storageLocations) }
     }
 
     private fun fetchProductData(barcode: String) {
@@ -92,6 +110,7 @@ class NewProductViewModel @Inject constructor(
             expirationDate = groupProduct.product.expirationDate,
             productionDate = groupProduct.product.productionDate,
             composition = groupProduct.product.composition,
+            storageLocation = groupProduct.product.storageLocation,
             quantity = groupProduct.quantity.toString(),
             healingProperties = groupProduct.product.healingProperties,
             dosage = groupProduct.product.dosage,
@@ -120,6 +139,7 @@ class NewProductViewModel @Inject constructor(
                             expirationDate = groupProduct.product.expirationDate,
                             productionDate = groupProduct.product.productionDate,
                             composition = groupProduct.product.composition,
+                            storageLocation = groupProduct.product.storageLocation,
                             quantity = groupProduct.quantity.toString(),
                             healingProperties = groupProduct.product.healingProperties,
                             dosage = groupProduct.product.dosage,
@@ -209,16 +229,21 @@ class NewProductViewModel @Inject constructor(
     private suspend fun saveProducts(): List<Long> {
         var mainCategory = ""
         var detailCategory = ""
+        var storageLocation = ""
         if (productDataState.value.mainCategory != MainCategories.CHOOSE.name) {
             mainCategory = productDataState.value.mainCategory
         }
         if (productDataState.value.detailCategory != MainCategories.CHOOSE.name) {
             detailCategory = productDataState.value.detailCategory
         }
+        if (productDataState.value.storageLocation != StorageLocations.CHOOSE.name) {
+            storageLocation = productDataState.value.storageLocation
+        }
         var product = Product(
             name = productDataState.value.name,
             mainCategory = mainCategory,
             detailCategory = detailCategory,
+            storageLocation = storageLocation,
             expirationDate = productDataState.value.expirationDate,
             productionDate = productDataState.value.productionDate,
             composition = productDataState.value.composition,
@@ -255,6 +280,10 @@ class NewProductViewModel @Inject constructor(
             productDataState.value.ownCategories,
             productDataState.value.mainCategory
         )
+    }
+
+    fun getStorageLocations(): Map<String, String> {
+        return getStorageLocationsMapUseCase(productDataState.value.storageLocations)
     }
 
     fun onNameChange(name: String) {
@@ -337,6 +366,10 @@ class NewProductViewModel @Inject constructor(
         _productDataState.update { it.copy(showDetailCategoryDropdown = show) }
     }
 
+    fun showStorageLocationDropdown(show: Boolean) {
+        _productDataState.update { it.copy(showStorageLocationDropdown = show) }
+    }
+
     fun onMainCategoryChange(mainCategory: String) {
         _productDataState.update {
             it.copy(
@@ -352,6 +385,15 @@ class NewProductViewModel @Inject constructor(
             it.copy(
                 detailCategory = detailCategory,
                 showDetailCategoryDropdown = false
+            )
+        }
+    }
+
+    fun onStorageLocationChange(storageLocation: String) {
+        _productDataState.update {
+            it.copy(
+                storageLocation = storageLocation,
+                showStorageLocationDropdown = false
             )
         }
     }

@@ -1,6 +1,6 @@
 import android.content.Context
 import com.hermanowicz.pantry.domain.category.GetMainCategoriesUseCase
-import com.hermanowicz.pantry.utils.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever

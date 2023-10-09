@@ -1,8 +1,8 @@
 package com.hermanowicz.pantry.data.model
 
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.ChooseCategoryTypes
 
 data class FilterProduct(
     val name: String = "",

@@ -2,10 +2,10 @@ package com.hermanowicz.pantry.domain.product
 
 import com.hermanowicz.pantry.data.model.FilterProduct
 import com.hermanowicz.pantry.data.model.Product
-import com.hermanowicz.pantry.utils.category.MainCategories
-import com.hermanowicz.pantry.utils.category.detailCategory.ChooseCategoryTypes
 import com.hermanowicz.pantry.utils.enums.ProductAttributesValueType
 import com.hermanowicz.pantry.utils.enums.Taste
+import com.hermanowicz.pantry.utils.enums.category.MainCategories
+import com.hermanowicz.pantry.utils.enums.category.detailCategory.ChooseCategoryTypes
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import java.text.SimpleDateFormat

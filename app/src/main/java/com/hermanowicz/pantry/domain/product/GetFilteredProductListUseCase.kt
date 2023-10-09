@@ -7,6 +7,7 @@ import com.hermanowicz.pantry.domain.product.utils.IsExpirationDateInRange.Compa
 import com.hermanowicz.pantry.domain.product.utils.IsMainCategoryValid.Companion.isMainCategoryValid
 import com.hermanowicz.pantry.domain.product.utils.IsProductAttributesValid.Companion.isProductAttributesValid
 import com.hermanowicz.pantry.domain.product.utils.IsProductDateInRange.Companion.isProductionDateInRange
+import com.hermanowicz.pantry.domain.product.utils.IsStorageLocationValid.Companion.isStorageLocationValid
 import com.hermanowicz.pantry.domain.product.utils.IsTasteValid.Companion.isTasteValid
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class GetFilteredProductListUseCase @Inject constructor() :
                 ) && isDetailCategoryValid(
                         product.detailCategory,
                         filterProduct.detailCategory
-                    ) && product.storageLocation.contains(filterProduct.storageLocation) && product.composition.contains(
+                    ) && isStorageLocationValid(product.storageLocation, filterProduct.storageLocation) && product.composition.contains(
                         filterProduct.composition
                     ) && product.healingProperties.contains(filterProduct.healingProperties) && product.dosage.contains(
                         filterProduct.dosage

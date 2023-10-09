@@ -4,9 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import com.hermanowicz.pantry.data.model.Category
 import com.hermanowicz.pantry.data.model.GroupProduct
 import com.hermanowicz.pantry.data.model.Product
+import com.hermanowicz.pantry.data.model.StorageLocation
 import com.hermanowicz.pantry.domain.category.ObserveAllOwnCategoriesUseCase
 import com.hermanowicz.pantry.domain.product.SaveProductsAndCreateNotificationsUseCase
 import com.hermanowicz.pantry.domain.settings.ObserveDatabaseModeUseCase
+import com.hermanowicz.pantry.domain.storageLocation.ObserveAllStorageLocationsUseCase
 import com.hermanowicz.pantry.utils.enums.DatabaseMode
 import com.nhaarman.mockitokotlin2.mock
 import io.mockk.coEvery
@@ -23,6 +25,7 @@ class NewProductViewModelTest {
     private val savedStateHandle: SavedStateHandle = SavedStateHandle()
     private val observeDatabaseModeUseCase: ObserveDatabaseModeUseCase = mockk()
     private val observeAllOwnCategoriesUseCase: ObserveAllOwnCategoriesUseCase = mockk()
+    private val observeAllStorageLocationsUseCase: ObserveAllStorageLocationsUseCase = mockk()
     private val saveProductsAndCreateNotificationsUseCase: SaveProductsAndCreateNotificationsUseCase = mockk()
 
     private val databaseMode = DatabaseMode.LOCAL
@@ -31,6 +34,11 @@ class NewProductViewModelTest {
             Category(id = 1, name = "Test category 1", description = "Xyz"),
             Category(id = 2, name = "Test category 2", description = "Xyz")
         )
+    private val storageLocations =
+        listOf(
+            StorageLocation(id = 1, name = "Test storage location 1", description = "Xyz"),
+            StorageLocation(id = 2, name = "Test storage location 2", description = "Xyz")
+        )
     private val mockProductIdList = listOf(1L, 2L)
 
     @Before
@@ -38,15 +46,18 @@ class NewProductViewModelTest {
         savedStateHandle["barcode"] = "0"
         coEvery { observeDatabaseModeUseCase() } returns flowOf(databaseMode)
         coEvery { observeAllOwnCategoriesUseCase(DatabaseMode.LOCAL) } returns flowOf(ownCategories)
+        coEvery { observeAllStorageLocationsUseCase(DatabaseMode.LOCAL) } returns flowOf(storageLocations)
         coEvery { saveProductsAndCreateNotificationsUseCase(any()) } returns mockProductIdList
         viewModel = NewProductViewModel(
             saveProductsAndCreateNotificationsUseCase = saveProductsAndCreateNotificationsUseCase,
             getMainCategoriesUseCase = mock(),
             getDetailCategoriesUseCase = mock(),
+            getStorageLocationsMapUseCase = mock(),
             observeAllOwnCategoriesUseCase = observeAllOwnCategoriesUseCase,
             observeDatabaseModeUseCase = observeDatabaseModeUseCase,
             fetchDatabaseModeUseCase = mock(),
             observeAllProductsUseCase = mock(),
+            observeAllStorageLocationsUseCase = observeAllStorageLocationsUseCase,
             getGroupProductListByBarcodeUseCase = mock(),
             checkBarcodeIsEmptyUseCase = mock(),
             checkFormatIsNumberUseCase = mock(),
