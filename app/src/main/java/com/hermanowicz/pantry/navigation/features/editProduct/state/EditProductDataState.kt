@@ -20,7 +20,7 @@ data class EditProductDataState(
     override var mainCategory: String = MainCategories.CHOOSE.name,
     override var detailCategory: String = ChooseCategoryTypes.CHOOSE.name,
     override val storageLocation: String = StorageLocations.CHOOSE.name,
-    val newQuantity: String = "",
+    val oldQuantity: String = "",
     override val quantity: String = "0",
     override val expirationDate: String = "",
     override val productionDate: String = "",

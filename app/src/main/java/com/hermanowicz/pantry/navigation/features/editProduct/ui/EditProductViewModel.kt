@@ -95,7 +95,7 @@ class EditProductViewModel @Inject constructor(
                 productionDate = groupProduct.product.productionDate,
                 composition = groupProduct.product.composition,
                 quantity = groupProduct.quantity.toString(),
-                newQuantity = groupProduct.quantity.toString(),
+                oldQuantity = groupProduct.quantity.toString(),
                 healingProperties = groupProduct.product.healingProperties,
                 dosage = groupProduct.product.dosage,
                 hasSugar = groupProduct.product.hasSugar,
@@ -162,8 +162,8 @@ class EditProductViewModel @Inject constructor(
             updateProductsUseCase(
                 product,
                 productDataState.value.productsIdList,
-                productDataState.value.quantity.toIntOrNull() ?: 1,
-                productDataState.value.newQuantity.toIntOrNull() ?: 1
+                productDataState.value.oldQuantity.toIntOrNull() ?: 1,
+                productDataState.value.quantity.toIntOrNull() ?: 1
             )
         }
         onNavigateToMyPantry(true)
@@ -203,7 +203,7 @@ class EditProductViewModel @Inject constructor(
         if (quantity.matches(RegexFormats.NUMBER.regex) || quantity.isEmpty()) {
             _productDataState.update {
                 it.copy(
-                    newQuantity = quantity
+                    quantity = quantity
                 )
             }
         }
